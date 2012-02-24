@@ -6,14 +6,26 @@ namespace SharpXMPP.Client
 {
     public class Iq : XElement
     {
-        public enum IqType
+        public enum IqTypes
         {
             Get, Set, Result, Error
         }
-        public Iq(IqType type, string id = "") : base("iq")
+
+        private IqTypes _type;
+
+        public IqTypes IqType 
+        { 
+            get { return _type; }
+            set
+            {
+                _type = value;
+                SetAttributeValue("type", value.ToString("g").ToLower()); 
+            }
+        }
+        public Iq(IqTypes type, string id = "") : base("iq")
         {
-           SetAttributeValue("type", type.ToString("g").ToLower()); 
-           SetAttributeValue("id", string.IsNullOrEmpty(id) ? DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture) : id);
+            IqType = type;
+            SetAttributeValue("id", string.IsNullOrEmpty(id) ? DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture) : id);
         }
     }
 }

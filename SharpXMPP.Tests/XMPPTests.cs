@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharpXMPP.Client;
 
 namespace SharpXMPP.Tests
@@ -18,6 +19,15 @@ namespace SharpXMPP.Tests
             TestJID(new JID("_vt@xmpp.ru/ololo"), "_vt", "xmpp.ru", "ololo");
             TestJID(new JID("icq.jabber.ru"), string.Empty, "icq.jabber.ru", null);
             TestJID(new JID("vasya@icq.org"), "vasya", "icq.org", null);
+            Assert.AreEqual("vasya@icq.org", new JID("vasya@icq.org").ToString());
+            Assert.AreEqual("icq.org", new JID("icq.org").ToString());
+            Assert.AreEqual("icq.org/registered", new JID("icq.org/registered").ToString());
         }
+        [TestMethod]
+        public void DNSTests()
+        {
+            DnsResolver.ResolveXMPPClient("gmail.com").ForEach(r => Trace.WriteLine(r.Host + ":" + r.Port));
+        }
+
     }
 }

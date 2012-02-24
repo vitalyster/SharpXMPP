@@ -69,6 +69,7 @@
     <Compile Include="Client\JID.cs" />
     <Compile Include="Client\Message.cs" />
     <Compile Include="Client\Presence.cs" />
+    <Compile Include="DnsResolver.cs" />
     <Compile Include="Roster\RosterItem.cs" />
     <Compile Include="Client\Iq.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

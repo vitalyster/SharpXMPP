@@ -32,10 +32,25 @@
 
         public string Resource { get; set; }
 
-        public string BareJid 
-        { 
+        public string BareJid
+        {
             get { return string.IsNullOrEmpty(User) ? Domain : string.Format("{0}@{1}", User, Domain); }
         }
-        
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </returns>
+        /// <filterpriority>2</filterpriority>
+        public override string ToString()
+        {
+            if (User == string.Empty)
+            {
+                return BareJid;
+            }
+            return Resource == null ? BareJid : string.Format("{0}/{1}", BareJid, Resource);
+        }
     }
 }
