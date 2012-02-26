@@ -1,11 +1,12 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace SharpXMPP.Stream
 {
     [XmlRoot("features", Namespace = "http://etherx.jabber.org/streams")]
     public class Features
     {
-        [XmlElement("starttls", Namespace = "urn:ietf:params:xml:ns:xmpp-tls", IsNullable = true)]
+        [XmlElement("starttls", Namespace = Namespaces.XmppTls, IsNullable = true)]
         public StartTls Tls { get; set; }
         [XmlArray(ElementName = "mechanisms", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
         [XmlArrayItem(ElementName = "mechanism")]
@@ -19,6 +20,7 @@ namespace SharpXMPP.Stream
         public bool IsRequired { get; set; }
         
         [XmlElement("required")]
+        [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
         public string Required 
         { 
             get { return IsRequired ? "" : null; } 

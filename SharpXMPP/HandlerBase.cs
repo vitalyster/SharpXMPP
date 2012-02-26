@@ -28,11 +28,9 @@ namespace SharpXMPP
 
         public override void Handle(Iq element)
         {
-            if (NextHandler == null)
-            {
-                if (element.IqType == Iq.IqTypes.get || element.IqType == Iq.IqTypes.set)
+            if (NextHandler != null) return;
+            if (element.IqType == Iq.IqTypes.get || element.IqType == Iq.IqTypes.set)
                 Connection.Send(element.Error());
-            }
         }
     }
 }
