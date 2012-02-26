@@ -114,8 +114,8 @@ namespace SharpXMPP
                 iq.Add(bind);
                 Send(iq);
                 var el4 = NextElement();
-                var jid = el4.Element("bind").Element(XNamespace.Get(Namespaces.XmppBind) + "jid");
-                var sess = new XElement(Namespaces.XmppSession + "session");
+                var jid = el4.Element(XNamespace.Get(Namespaces.XmppBind) + "bind").Element(XNamespace.Get(Namespaces.XmppBind) + "jid");
+                var sess = new XElement(XNamespace.Get(Namespaces.XmppSession) + "session");
                 var sessIq = new Iq(Client.Iq.IqTypes.set);
                 sessIq.Add(sess);
                 Send(sessIq);
