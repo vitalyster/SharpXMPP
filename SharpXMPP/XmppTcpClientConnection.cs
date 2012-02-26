@@ -1,12 +1,9 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -114,13 +111,15 @@ namespace SharpXMPP
                 iq.Add(bind);
                 Send(iq);
                 var el4 = NextElement();
-                var jid = el4.Element(XNamespace.Get(Namespaces.XmppBind) + "bind").Element(XNamespace.Get(Namespaces.XmppBind) + "jid");
+                var jid = el4.Element(XNamespace.Get(Namespaces.XmppBind) + "bind");
+                if (jid == null)
+                    OnConnectionFailed(new ConnFailedArgs {Message = "bind failed"});
                 var sess = new XElement(XNamespace.Get(Namespaces.XmppSession) + "session");
                 var sessIq = new Iq(Client.Iq.IqTypes.set);
                 sessIq.Add(sess);
                 Send(sessIq);
                 var el5 = NextElement();
-                ConnectionJID = new JID(jid.Value);
+                ConnectionJID = new JID(jid.Element(XNamespace.Get(Namespaces.XmppBind) + "jid").Value);
                 OnSignedIn(new SignedInArgs {ConnectionJID = ConnectionJID});
                 if (InitialPresence)
                     Send(new Presence());
@@ -134,6 +133,10 @@ namespace SharpXMPP
                                                                  if (el.Name.LocalName.Equals("iq"))
                                                                  {
                                                                      OnIq(Client.Iq.CreateFrom(el));
+                                                                 }
+                                                                 if (el.Name.LocalName.Equals("message"))
+                                                                 {
+                                                                     OnMessage(Client.Message.CreateFrom(el));
                                                                  }
                                                                      
                                                              }

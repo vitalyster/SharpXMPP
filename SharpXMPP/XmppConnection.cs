@@ -63,6 +63,15 @@ namespace SharpXMPP
             Iq(this, e);
         }
 
+        public delegate void MessageHandler(object sender, Message e);
+
+        public event MessageHandler Message = delegate { };
+
+        protected void OnMessage(Message e)
+        {
+            Message(this, e);
+        }
+
         public T Deserealize<T>(XElement input)
         {
             return (T)new XmlSerializer(typeof(T)).Deserialize(input.CreateReader());
