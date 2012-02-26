@@ -70,9 +70,11 @@
     <Compile Include="Client\Message.cs" />
     <Compile Include="Client\Presence.cs" />
     <Compile Include="DnsResolver.cs" />
+    <Compile Include="HandlerBase.cs" />
     <Compile Include="Roster\RosterItem.cs" />
     <Compile Include="Client\Iq.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stream\Error.cs" />
     <Compile Include="Stream\Features.cs" />
     <Compile Include="XmppTcpClientConnection.cs" />
     <Compile Include="XmppConnection.cs" />

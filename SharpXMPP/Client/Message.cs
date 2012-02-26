@@ -4,7 +4,7 @@ namespace SharpXMPP.Client
 {
     public class Message : XElement
     {
-        public Message() : base("message")
+        public Message() : base("{jabber:client}message")
         {
             
         }

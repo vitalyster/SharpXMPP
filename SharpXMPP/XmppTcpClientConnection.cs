@@ -1,5 +1,7 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -31,16 +33,27 @@ namespace SharpXMPP
             _client = new TcpClient();
             _client.Connect(addresses.ToArray(), 5222); // TODO: check ports
             ConnectionStream = _client.GetStream();
+            Iq += (sender, iq) => new SharpXMPP.IqHandler(this).Handle(iq);
         }
 
         public System.IO.Stream ConnectionStream;
 
         protected XmlReader Reader;
+        protected XmlWriter Writer;
 
-        protected void RestartReader()
+        protected void RestartXmlStreams()
         {
-            var init = "<stream:stream xmlns=\"jabber:client\" xmlns:stream=\"http://etherx.jabber.org/streams\" to=\""+ ConnectionJID.Domain + "\" version=\"1.0\">";
-            ConnectionStream.Write(Encoding.UTF8.GetBytes(init), 0, init.Length);
+            var xws = new XmlWriterSettings {ConformanceLevel = ConformanceLevel.Fragment, OmitXmlDeclaration = true};
+            Writer = XmlWriter.Create(ConnectionStream, xws);
+            //Writer.WriteStartDocument();
+            Writer.WriteStartElement("stream", "stream", "http://etherx.jabber.org/streams");
+            Writer.WriteAttributeString("xmlns", "jabber:client");
+            Writer.WriteAttributeString("version", "1.0");
+            Writer.WriteAttributeString("to", ConnectionJID.Domain);
+            Writer.WriteRaw("");
+            Writer.Flush();
+            //var init = "<stream:stream xmlns=\"jabber:client\" xmlns:stream=\"http://etherx.jabber.org/streams\" to=\""+ ConnectionJID.Domain + "\" version=\"1.0\">";
+            //ConnectionStream.Write(Encoding.UTF8.GetBytes(init), 0, init.Length);
             var xrs = new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Fragment };
             Reader = XmlReader.Create(ConnectionStream, xrs);
 
@@ -61,19 +74,19 @@ namespace SharpXMPP
         public override void Send(XElement data)
         {
             OnElement(new ElementArgs { Stanza = data, IsInput = false });
-            var bytes = Encoding.UTF8.GetBytes(data.ToString());
-            ConnectionStream.Write(bytes, 0, bytes.Length);
+            data.WriteTo(Writer);
+            Writer.WriteRaw("");
+            Writer.Flush();
         }
 
         public void Close()
         {
-            const string data = "</stream:stream>";
-            ConnectionStream.Write(Encoding.UTF8.GetBytes(data), 0, data.Length);
+            Writer.WriteEndElement();
         }
 
         public override void MainLoop()
         {
-            RestartReader();
+            RestartXmlStreams();
             var features = Deserealize<Features>(NextElement());
             if (features == null) return;
             Send(new XElement("{urn:ietf:params:xml:ns:xmpp-tls}starttls"));
@@ -82,7 +95,7 @@ namespace SharpXMPP
             {
                 ConnectionStream = new SslStream(ConnectionStream, true);
                 ((SslStream)ConnectionStream).AuthenticateAsClient(ConnectionJID.Domain);
-                RestartReader();
+                RestartXmlStreams();
                 NextElement();
             }
 
@@ -94,19 +107,19 @@ namespace SharpXMPP
             var el2 = NextElement();
             if (el2.Name.LocalName == "success")
             {
-                RestartReader();
+                RestartXmlStreams();
                 var el3 = NextElement();
                 var bind = new XElement("{urn:ietf:params:xml:ns:xmpp-bind}bind");
                 var resource = new XElement("{urn:ietf:params:xml:ns:xmpp-bind}resource")
                                    {Value = ConnectionJID.Resource};
                 bind.Add(resource);
-                var iq = new Iq(Iq.IqTypes.Set);
+                var iq = new Iq(Client.Iq.IqTypes.set);
                 iq.Add(bind);
                 Send(iq);
                 var el4 = NextElement();
                 var jid = el4.Element("{urn:ietf:params:xml:ns:xmpp-bind}bind").Element("{urn:ietf:params:xml:ns:xmpp-bind}jid");
                 var sess = new XElement("{urn:ietf:params:xml:ns:xmpp-session}session");
-                var sessIq = new Iq(Iq.IqTypes.Set);
+                var sessIq = new Iq(Client.Iq.IqTypes.set);
                 sessIq.Add(sess);
                 Send(sessIq);
                 var el5 = NextElement();
@@ -120,7 +133,12 @@ namespace SharpXMPP
                                                          {
                                                              try
                                                              {
-                                                                 NextElement();
+                                                                 var el = NextElement();
+                                                                 if (el.Name.LocalName.Equals("iq"))
+                                                                 {
+                                                                     OnIq(Client.Iq.CreateFrom(el));
+                                                                 }
+                                                                     
                                                              }
                                                              catch (Exception e)
                                                              {

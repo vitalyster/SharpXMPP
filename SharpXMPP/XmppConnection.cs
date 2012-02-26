@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -26,35 +27,40 @@ namespace SharpXMPP
     {
         public JID ConnectionJID { get; set; }
 
-        
         public delegate void ConnectionFailedHandler(object sender, ConnFailedArgs e);
 
-        public event ConnectionFailedHandler ConnectionFailed;
+        public event ConnectionFailedHandler ConnectionFailed = delegate {};
 
-        public void OnConnectionFailed(ConnFailedArgs e)
+        protected void OnConnectionFailed(ConnFailedArgs e)
         {
-            var handler = ConnectionFailed;
-            if (handler != null) handler(this, e);
-        }
-
-        public delegate void ElementHandler(object sender, ElementArgs e);
-
-        public event ElementHandler Element;
-
-        public void OnElement(ElementArgs e)
-        {
-            var handler = Element;
-            if (handler != null) handler(this, e);
+            ConnectionFailed(this, e);
         }
 
         public delegate void SignedInHandler(object sender, SignedInArgs e);
 
-        public event SignedInHandler SignedIn;
+        public event SignedInHandler SignedIn = delegate {};
 
-        public void OnSignedIn(SignedInArgs e)
+        protected void OnSignedIn(SignedInArgs e)
         {
-            SignedInHandler handler = SignedIn;
-            if (handler != null) handler(this, e);
+            SignedIn(this, e);
+        }
+
+        public delegate void ElementHandler(object sender, ElementArgs e);
+
+        public event ElementHandler Element = delegate {};
+
+        protected void OnElement(ElementArgs e)
+        {
+            Element(this, e);
+        }
+
+        public delegate void IqHandler(object sender, Iq e);
+
+        public event IqHandler Iq = delegate {};
+
+        protected void OnIq(Iq e)
+        {
+            Iq(this, e);
         }
 
         public T Deserealize<T>(XElement input)

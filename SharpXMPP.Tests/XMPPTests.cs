@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharpXMPP.Client;
+using SharpXMPP.Stream;
 
 namespace SharpXMPP.Tests
 {
@@ -27,6 +30,15 @@ namespace SharpXMPP.Tests
         public void DNSTests()
         {
             DnsResolver.ResolveXMPPClient("gmail.com").ForEach(r => Trace.WriteLine(r.Host + ":" + r.Port));
+        }
+
+        [TestMethod]
+        public void Serialization()
+        {
+            var errorinput =
+                XElement.Parse("<stream:error xmlns:stream=\"http://etherx.jabber.org/streams\"><not-well-formed xmlns=\"urn:ietf:params:xml:ns:xmpp-streams\" /></stream:error>");
+            var error = (Error)new XmlSerializer(typeof(Error)).Deserialize(errorinput.CreateReader());
+            Assert.AreEqual(Stream.StreamError.NotWellFormed, error.ErrorType);
         }
 
     }
