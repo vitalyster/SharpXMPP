@@ -112,6 +112,12 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpXMPP\SharpXMPP.csproj">
+      <Project>{E305C10B-4580-4CB9-9AFA-966C4FE1065C}</Project>
+      <Name>SharpXMPP</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
