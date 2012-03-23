@@ -4,7 +4,8 @@ namespace SharpXMPP.Client
 {
     public class Message : XElement
     {
-        public Message() : base("{jabber:client}message")
+        public Message()
+            : base(XNamespace.Get(Namespaces.JabberClient) + "message")
         {
             
         }

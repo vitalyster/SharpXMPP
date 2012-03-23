@@ -26,13 +26,13 @@ namespace SharpXMPP.Client
                 SetAttributeValue("type", value); 
             }
         }
-        public Iq(IqTypes type, string id = "") : base("{jabber:client}iq")
+        public Iq(IqTypes type, string id = "") : base(XNamespace.Get(Namespaces.JabberClient) + "iq")
         {
             IqType = type;
             SetAttributeValue("id", string.IsNullOrEmpty(id) ? DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture) : id);
         }
 
-        public Iq() : base("{jabber:client}iq") {}
+        public Iq() : base(XNamespace.Get(Namespaces.JabberClient) + "iq") { }
         
         public Iq Reply()
         {

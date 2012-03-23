@@ -4,7 +4,8 @@ namespace SharpXMPP.Client
 {
     public class Presence : XElement
     {
-        public Presence() : base("{jabber:client}presence")
+        public Presence()
+            : base(XNamespace.Get(Namespaces.JabberClient) + "presence")
         {
             
         }
