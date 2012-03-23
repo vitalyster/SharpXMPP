@@ -75,6 +75,11 @@
     <Compile Include="Roster\RosterItem.cs" />
     <Compile Include="Client\Iq.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SASL\Elements\SASLAuth.cs" />
+    <Compile Include="SASL\Elements\SASLChallenge.cs" />
+    <Compile Include="SASL\Elements\SASLFailure.cs" />
+    <Compile Include="SASL\Elements\SASLResponse.cs" />
+    <Compile Include="SASL\Elements\SASLSuccess.cs" />
     <Compile Include="SASL\SASLHandler.cs" />
     <Compile Include="SASL\SASLPlainHandler.cs" />
     <Compile Include="Stream\Error.cs" />

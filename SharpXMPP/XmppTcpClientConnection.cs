@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Linq;
 using SharpXMPP.Client;
 using SharpXMPP.SASL;
+using SharpXMPP.SASL.Elements;
 using SharpXMPP.Stream;
 
 namespace SharpXMPP
@@ -120,7 +121,7 @@ namespace SharpXMPP
             }
             // TODO: implement other methods
             var authenticator = SASLHandler.Create(null, ConnectionJID, _password);
-            var auth = new XElement(XNamespace.Get(Namespaces.XmppSasl) + "auth");
+            var auth = new SASLAuth();
             auth.SetAttributeValue("mechanism", authenticator.SASLMethod);
             auth.SetValue(authenticator.Initiate());
             Send(auth);
