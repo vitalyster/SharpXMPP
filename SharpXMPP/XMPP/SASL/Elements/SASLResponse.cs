@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace SharpXMPP.SASL.Elements
+namespace SharpXMPP.XMPP.SASL.Elements
 {
     public class SASLResponse : XElement
     {
