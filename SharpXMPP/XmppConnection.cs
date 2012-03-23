@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using System.Xml.Serialization;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Client.Elements;
@@ -21,12 +18,12 @@ namespace SharpXMPP
 
     public class SignedInArgs
     {
-        public JID ConnectionJID { get; set; }
+        public JID Jid { get; set; }
     }
 
     public abstract class XmppConnection
     {
-        public JID ConnectionJID { get; set; }
+        public JID Jid { get; set; }
 
         public delegate void ConnectionFailedHandler(object sender, ConnFailedArgs e);
 

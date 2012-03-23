@@ -24,10 +24,10 @@ namespace SharpXMPP
 
         public XmppTcpClientConnection(JID jid, string password)
         {
-            ConnectionJID = jid;
+            Jid = jid;
             _password = password;
             var addresses = new List<IPAddress>();
-            DNS.ResolveXMPPClient(ConnectionJID.Domain).ForEach(d => addresses.AddRange(Dns.GetHostAddresses(d.Host)));
+            DNS.ResolveXMPPClient(Jid.Domain).ForEach(d => addresses.AddRange(Dns.GetHostAddresses(d.Host)));
             _client = new TcpClient();
             _client.Connect(addresses.ToArray(), 5222); // TODO: check ports
             ConnectionStream = _client.GetStream();
@@ -46,7 +46,7 @@ namespace SharpXMPP
             Writer.WriteStartElement("stream", "stream", Namespaces.Streams);
             Writer.WriteAttributeString("xmlns", Namespaces.JabberClient);
             Writer.WriteAttributeString("version", "1.0");
-            Writer.WriteAttributeString("to", ConnectionJID.Domain);
+            Writer.WriteAttributeString("to", Jid.Domain);
             Writer.WriteRaw("");
             Writer.Flush();
             var xrs = new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Fragment };
@@ -114,12 +114,12 @@ namespace SharpXMPP
             if (res.Name.LocalName == "proceed")
             {
                 ConnectionStream = new SslStream(ConnectionStream, true);
-                ((SslStream)ConnectionStream).AuthenticateAsClient(ConnectionJID.Domain);
+                ((SslStream)ConnectionStream).AuthenticateAsClient(Jid.Domain);
                 RestartXmlStreams();
                 NextElement();
             }
             // TODO: implement other methods
-            var authenticator = SASLHandler.Create(null, ConnectionJID, _password);
+            var authenticator = SASLHandler.Create(null, Jid, _password);
             var auth = new SASLAuth();
             auth.SetAttributeValue("mechanism", authenticator.SASLMethod);
             auth.SetValue(authenticator.Initiate());
@@ -134,7 +134,7 @@ namespace SharpXMPP
             RestartXmlStreams();
             NextElement(); // skip features
             var bind = new XElement(XNamespace.Get(Namespaces.XmppBind) + "bind");
-            var resource = new XElement(XNamespace.Get(Namespaces.XmppBind) + "resource") { Value = ConnectionJID.Resource };
+            var resource = new XElement(XNamespace.Get(Namespaces.XmppBind) + "resource") { Value = Jid.Resource };
             bind.Add(resource);
             var iq = new Iq(XMPP.Client.Elements.Iq.IqTypes.set);
             iq.Add(bind);
@@ -148,8 +148,8 @@ namespace SharpXMPP
             sessIq.Add(sess);
             Send(sessIq);
             NextElement(); // skip session result
-            ConnectionJID = new JID(jid.Element(XNamespace.Get(Namespaces.XmppBind) + "jid").Value);
-            OnSignedIn(new SignedInArgs { ConnectionJID = ConnectionJID });
+            Jid = new JID(jid.Element(XNamespace.Get(Namespaces.XmppBind) + "jid").Value);
+            OnSignedIn(new SignedInArgs { Jid = Jid });
             if (InitialPresence)
                 Send(new Presence());
             SessionLoop();
