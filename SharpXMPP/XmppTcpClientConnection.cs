@@ -10,9 +10,10 @@ using System.Xml.Linq;
 using SharpXMPP.SASL;
 using SharpXMPP.SASL.Elements;
 using SharpXMPP.XMPP;
-using SharpXMPP.XMPP.Elements;
+using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.SASL;
 using SharpXMPP.XMPP.Stream;
+using SharpXMPP.XMPP.Stream.Elements;
 
 namespace SharpXMPP
 {
@@ -91,11 +92,11 @@ namespace SharpXMPP
                     var el = NextElement();
                     if (el.Name.LocalName.Equals("iq"))
                     {
-                        OnIq(XMPP.Elements.Iq.CreateFrom(el));
+                        OnIq(XMPP.Client.Elements.Iq.CreateFrom(el));
                     }
                     if (el.Name.LocalName.Equals("message"))
                     {
-                        OnMessage(XMPP.Elements.Message.CreateFrom(el));
+                        OnMessage(XMPP.Client.Elements.Message.CreateFrom(el));
                     }
 
                 }
@@ -139,7 +140,7 @@ namespace SharpXMPP
             var bind = new XElement(XNamespace.Get(Namespaces.XmppBind) + "bind");
             var resource = new XElement(XNamespace.Get(Namespaces.XmppBind) + "resource") { Value = ConnectionJID.Resource };
             bind.Add(resource);
-            var iq = new Iq(XMPP.Elements.Iq.IqTypes.set);
+            var iq = new Iq(XMPP.Client.Elements.Iq.IqTypes.set);
             iq.Add(bind);
             Send(iq);
             var el4 = NextElement();
@@ -147,7 +148,7 @@ namespace SharpXMPP
             if (jid == null)
                 OnConnectionFailed(new ConnFailedArgs { Message = "bind failed" });
             var sess = new XElement(XNamespace.Get(Namespaces.XmppSession) + "session");
-            var sessIq = new Iq(XMPP.Elements.Iq.IqTypes.set);
+            var sessIq = new Iq(XMPP.Client.Elements.Iq.IqTypes.set);
             sessIq.Add(sess);
             Send(sessIq);
             NextElement(); // skip session result

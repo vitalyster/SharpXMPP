@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace SharpXMPP.XMPP.Elements
+namespace SharpXMPP.XMPP.Client.Elements
 {
     public class Presence : XElement
     {

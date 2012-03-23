@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace SharpXMPP.XMPP.Stream
+namespace SharpXMPP.XMPP.Stream.Elements
 {
     [XmlRoot("error", Namespace = Namespaces.Streams)]
     public class Error

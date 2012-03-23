@@ -4,7 +4,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using SharpXMPP.XMPP;
-using SharpXMPP.XMPP.Elements;
+using SharpXMPP.XMPP.Client.Elements;
 
 namespace SharpXMPP
 {

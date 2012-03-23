@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Xml.Linq;
 
-namespace SharpXMPP.XMPP.Elements
+namespace SharpXMPP.XMPP.Client.Elements
 {
     public class Iq : XElement
     {

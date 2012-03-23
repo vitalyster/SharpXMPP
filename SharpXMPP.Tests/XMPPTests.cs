@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Stream;
+using SharpXMPP.XMPP.Stream.Elements;
 
 namespace SharpXMPP.Tests
 {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace SharpXMPP.XMPP.Stream
+namespace SharpXMPP.XMPP.Stream.Elements
 {
     [XmlRoot("features", Namespace = Namespaces.Streams)]
     public class Features
