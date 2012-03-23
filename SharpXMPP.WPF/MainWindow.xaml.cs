@@ -31,7 +31,7 @@ namespace SharpXMPP.WPF
         {
             client = new XmppTcpClientConnection(new JID(textBox1.Text), passwordBox1.Password );
             client.Element += (o, args) => Dispatcher.Invoke((Action)(() => listBox1.Items.Add(args.Stanza.ToString())));
-            ThreadPool.QueueUserWorkItem((o) => client.MainLoop());
+            ThreadPool.QueueUserWorkItem((o) => client.Connect());
         }
     }
 }

@@ -30,7 +30,18 @@
 
         public string Domain { get; set; }
 
-        public string Resource { get; set; }
+        private string _resource;
+        public string Resource 
+        { 
+            get
+            {
+                return _resource ?? "SharpXMPP";
+            } 
+            set
+            {
+                _resource = value;
+            }
+        }
 
         public string BareJid
         {

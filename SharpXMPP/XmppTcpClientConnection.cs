@@ -79,7 +79,32 @@ namespace SharpXMPP
             Writer.WriteEndElement();
         }
 
-        public override void MainLoop()
+        protected void SessionLoop()
+        {
+            while (true)
+            {
+                try
+                {
+                    var el = NextElement();
+                    if (el.Name.LocalName.Equals("iq"))
+                    {
+                        OnIq(Client.Iq.CreateFrom(el));
+                    }
+                    if (el.Name.LocalName.Equals("message"))
+                    {
+                        OnMessage(Client.Message.CreateFrom(el));
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    OnConnectionFailed(new ConnFailedArgs { Message = e.Message });
+                    break;
+                }
+            }
+        }
+
+        public override void Connect()
         {
             RestartXmlStreams();
             var features = Deserealize<Features>(NextElement());
@@ -107,7 +132,7 @@ namespace SharpXMPP
             } while (authResponse.Name.LocalName != "success");
 
             RestartXmlStreams();
-            var el3 = NextElement();
+            NextElement(); // skip features
             var bind = new XElement(XNamespace.Get(Namespaces.XmppBind) + "bind");
             var resource = new XElement(XNamespace.Get(Namespaces.XmppBind) + "resource") { Value = ConnectionJID.Resource };
             bind.Add(resource);
@@ -122,36 +147,12 @@ namespace SharpXMPP
             var sessIq = new Iq(Client.Iq.IqTypes.set);
             sessIq.Add(sess);
             Send(sessIq);
-            var el5 = NextElement();
+            NextElement(); // skip session result
             ConnectionJID = new JID(jid.Element(XNamespace.Get(Namespaces.XmppBind) + "jid").Value);
             OnSignedIn(new SignedInArgs { ConnectionJID = ConnectionJID });
             if (InitialPresence)
                 Send(new Presence());
-            var task = Task.Factory.StartNew(() =>
-                                                 {
-                                                     while (true)
-                                                     {
-                                                         try
-                                                         {
-                                                             var el = NextElement();
-                                                             if (el.Name.LocalName.Equals("iq"))
-                                                             {
-                                                                 OnIq(Client.Iq.CreateFrom(el));
-                                                             }
-                                                             if (el.Name.LocalName.Equals("message"))
-                                                             {
-                                                                 OnMessage(Client.Message.CreateFrom(el));
-                                                             }
-
-                                                         }
-                                                         catch (Exception e)
-                                                         {
-                                                             OnConnectionFailed(new ConnFailedArgs { Message = e.Message });
-                                                             break;
-                                                         }
-                                                     }
-                                                 });
-            task.Wait();
+            SessionLoop();
         }
 
     }

@@ -82,6 +82,6 @@ namespace SharpXMPP
 
         public abstract void Send(XElement data);
 
-        public abstract void MainLoop();
+        public abstract void Connect();
     }
 }
