@@ -3,17 +3,17 @@ using System.Xml.Serialization;
 
 namespace SharpXMPP.Stream
 {
-    [XmlRoot("features", Namespace = "http://etherx.jabber.org/streams")]
+    [XmlRoot("features", Namespace = Namespaces.Streams)]
     public class Features
     {
         [XmlElement("starttls", Namespace = Namespaces.XmppTls, IsNullable = true)]
         public StartTls Tls { get; set; }
-        [XmlArray(ElementName = "mechanisms", Namespace = "urn:ietf:params:xml:ns:xmpp-sasl")]
+        [XmlArray(ElementName = "mechanisms", Namespace = Namespaces.XmppSasl)]
         [XmlArrayItem(ElementName = "mechanism")]
         public Mechanism[] Mechanisms { get; set; }
     }
 
-    [XmlRoot("starttls", Namespace = "urn:ietf:params:xml:ns:xmpp-tls", IsNullable = true)]
+    [XmlRoot("starttls", Namespace = Namespaces.XmppTls, IsNullable = true)]
     public class StartTls
     {
         [XmlIgnore]
