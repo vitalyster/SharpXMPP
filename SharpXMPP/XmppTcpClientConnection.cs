@@ -119,7 +119,7 @@ namespace SharpXMPP
                 NextElement();
             }
             // TODO: implement other methods
-            var authenticator = SASLHandlerBase.Create(null, ConnectionJID, _password);
+            var authenticator = SASLHandler.Create(null, ConnectionJID, _password);
             var auth = new XElement(XNamespace.Get(Namespaces.XmppSasl) + "auth");
             auth.SetAttributeValue("mechanism", authenticator.SASLMethod);
             auth.SetValue(authenticator.Initiate());

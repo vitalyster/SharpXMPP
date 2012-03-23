@@ -6,7 +6,7 @@ using SharpXMPP.Client;
 
 namespace SharpXMPP.SASL
 {
-    public abstract class SASLHandlerBase
+    public abstract class SASLHandler
     {
         public string SASLMethod { get; set; }
         public JID ClientJID { get; set; }
@@ -15,7 +15,7 @@ namespace SharpXMPP.SASL
 
         public abstract string NextChallenge(byte[] previousResponse);
 
-        public static SASLHandlerBase Create(string[] availableMethods, JID clientJID, string password)
+        public static SASLHandler Create(string[] availableMethods, JID clientJID, string password)
         {
             return new SASLPlainHandler { ClientJID = clientJID, Password = password};
         }

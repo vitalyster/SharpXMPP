@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SharpXMPP.SASL
 {
-    public class SASLPlainHandler : SASLHandlerBase
+    public class SASLPlainHandler : SASLHandler
     {
         public  SASLPlainHandler()
         {
