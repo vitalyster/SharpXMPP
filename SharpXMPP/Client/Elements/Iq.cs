@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Linq;
 
-namespace SharpXMPP.Client
+namespace SharpXMPP.Client.Elements
 {
     public class Iq : XElement
     {
