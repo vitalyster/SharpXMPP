@@ -30,7 +30,7 @@ namespace SharpXMPP.Tests
         [TestMethod]
         public void DNSTests()
         {
-            DnsResolver.ResolveXMPPClient("gmail.com").ForEach(r => Trace.WriteLine(r.Host + ":" + r.Port));
+            DNS.ResolveXMPPClient("gmail.com").ForEach(r => Trace.WriteLine(r.Host + ":" + r.Port));
         }
 
         [TestMethod]

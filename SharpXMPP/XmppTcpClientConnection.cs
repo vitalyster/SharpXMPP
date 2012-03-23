@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-using SharpXMPP.SASL;
 using SharpXMPP.SASL.Elements;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.SASL;
-using SharpXMPP.XMPP.Stream;
 using SharpXMPP.XMPP.Stream.Elements;
 
 namespace SharpXMPP
@@ -31,7 +27,7 @@ namespace SharpXMPP
             ConnectionJID = jid;
             _password = password;
             var addresses = new List<IPAddress>();
-            DnsResolver.ResolveXMPPClient(ConnectionJID.Domain).ForEach(d => addresses.AddRange(Dns.GetHostAddresses(d.Host)));
+            DNS.ResolveXMPPClient(ConnectionJID.Domain).ForEach(d => addresses.AddRange(Dns.GetHostAddresses(d.Host)));
             _client = new TcpClient();
             _client.Connect(addresses.ToArray(), 5222); // TODO: check ports
             ConnectionStream = _client.GetStream();

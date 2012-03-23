@@ -69,7 +69,7 @@
     <Compile Include="XMPP\JID.cs" />
     <Compile Include="XMPP\Client\Elements\Message.cs" />
     <Compile Include="XMPP\Client\Elements\Presence.cs" />
-    <Compile Include="DnsResolver.cs" />
+    <Compile Include="DNS.cs" />
     <Compile Include="HandlerBase.cs" />
     <Compile Include="Namespaces.cs" />
     <Compile Include="XMPP\Roster\Elements\RosterItem.cs" />

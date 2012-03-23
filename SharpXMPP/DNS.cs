@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SharpXMPP
 {
@@ -18,7 +17,7 @@ namespace SharpXMPP
     }
 
 
-    public static class DnsResolver
+    public static class DNS
     {
         private static IPAddress[] GetDnsAddresses()
         {
@@ -40,22 +39,17 @@ namespace SharpXMPP
             var client = new TcpClient();
             client.Connect(GetDnsAddresses(), 53);
             var stream = client.GetStream();
-            var task = Task.Factory.StartNew(() =>
-                                                 {
+            var message = EncodeQuery(domain);
+            var lengthPrefix = IPAddress.HostToNetworkOrder((short)message.Length);
+            var lengthPrefixBytes = BitConverter.GetBytes(lengthPrefix);
+            stream.Write(lengthPrefixBytes, 0, 2);
+            stream.Write(message, 0, message.Length);
 
-                                                     var message = EncodeQuery(domain);
-                                                     var lengthPrefix = IPAddress.HostToNetworkOrder((short)message.Length);
-                                                     var lengthPrefixBytes = BitConverter.GetBytes(lengthPrefix);
-                                                     stream.Write(lengthPrefixBytes, 0, 2);
-                                                     stream.Write(message, 0, message.Length);
-
-                                                     var responseLengthBytes = new byte[2];
-                                                     stream.Read(responseLengthBytes, 0, 2);
-                                                     var responseMessage = new byte[IPAddress.NetworkToHostOrder(BitConverter.ToInt16(responseLengthBytes, 0))];
-                                                     stream.Read(responseMessage, 0, responseMessage.Length);
-                                                     result = Decode(responseMessage);
-                                                 });
-            task.Wait();
+            var responseLengthBytes = new byte[2];
+            stream.Read(responseLengthBytes, 0, 2);
+            var responseMessage = new byte[IPAddress.NetworkToHostOrder(BitConverter.ToInt16(responseLengthBytes, 0))];
+            stream.Read(responseMessage, 0, responseMessage.Length);
+            result = Decode(responseMessage);
             return result;
         }
 
