@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace SharpXMPP.Stream
 {
-    [XmlRoot("error", Namespace = "http://etherx.jabber.org/streams")]
+    [XmlRoot("error", Namespace = Namespaces.Streams)]
     public class Error
     {
         public StreamError ErrorType;
@@ -14,9 +14,9 @@ namespace SharpXMPP.Stream
 
     public enum StreamError
     {
-        [XmlElement("invalid-namespace", Namespace = "urn:ietf:params:xml:ns:xmpp-streams")]
+        [XmlElement("invalid-namespace", Namespace = Namespaces.StanzaErrors)]
         InvalidNamespace,
-        [XmlElement("not-well-formed", Namespace = "urn:ietf:params:xml:ns:xmpp-streams")]
+        [XmlElement("not-well-formed", Namespace = Namespaces.StanzaErrors)]
         NotWellFormed
     }
 }
