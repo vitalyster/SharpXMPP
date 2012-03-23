@@ -2,8 +2,8 @@
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SharpXMPP.Client;
-using SharpXMPP.Stream;
+using SharpXMPP.XMPP;
+using SharpXMPP.XMPP.Stream;
 
 namespace SharpXMPP.Tests
 {
@@ -38,7 +38,7 @@ namespace SharpXMPP.Tests
             var errorinput =
                 XElement.Parse("<stream:error xmlns:stream=\"http://etherx.jabber.org/streams\"><not-well-formed xmlns=\"urn:ietf:params:xml:ns:xmpp-streams\" /></stream:error>");
             var error = (Error)new XmlSerializer(typeof(Error)).Deserialize(errorinput.CreateReader());
-            Assert.AreEqual(Stream.StreamError.NotWellFormed, error.ErrorType);
+            Assert.AreEqual(StreamError.NotWellFormed, error.ErrorType);
         }
 
     }

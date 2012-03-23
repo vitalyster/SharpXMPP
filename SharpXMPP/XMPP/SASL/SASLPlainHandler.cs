@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
-namespace SharpXMPP.SASL
+namespace SharpXMPP.XMPP.SASL
 {
     public class SASLPlainHandler : SASLHandler
     {

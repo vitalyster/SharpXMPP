@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace SharpXMPP.Client.Elements
+namespace SharpXMPP.XMPP.Elements
 {
     public class Message : XElement
     {

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SharpXMPP.Client;
+﻿using SharpXMPP.SASL;
 
-namespace SharpXMPP.SASL
+namespace SharpXMPP.XMPP.SASL
 {
     public abstract class SASLHandler
     {

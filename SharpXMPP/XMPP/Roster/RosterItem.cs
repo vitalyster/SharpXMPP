@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace SharpXMPP.Roster
+namespace SharpXMPP.XMPP.Roster
 {
     [XmlRoot(ElementName = "query", Namespace = "jabber:iq:roster")]
     public class Roster

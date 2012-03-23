@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
-namespace SharpXMPP.Stream
+namespace SharpXMPP.XMPP.Stream
 {
     [XmlRoot("error", Namespace = Namespaces.Streams)]
     public class Error

@@ -66,24 +66,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\JID.cs" />
-    <Compile Include="Client\Elements\Message.cs" />
-    <Compile Include="Client\Elements\Presence.cs" />
+    <Compile Include="XMPP\JID.cs" />
+    <Compile Include="XMPP\Elements\Message.cs" />
+    <Compile Include="XMPP\Elements\Presence.cs" />
     <Compile Include="DnsResolver.cs" />
     <Compile Include="HandlerBase.cs" />
     <Compile Include="Namespaces.cs" />
-    <Compile Include="Roster\RosterItem.cs" />
-    <Compile Include="Client\Elements\Iq.cs" />
+    <Compile Include="XMPP\Roster\RosterItem.cs" />
+    <Compile Include="XMPP\Elements\Iq.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SASL\Elements\SASLAuth.cs" />
-    <Compile Include="SASL\Elements\SASLChallenge.cs" />
-    <Compile Include="SASL\Elements\SASLFailure.cs" />
-    <Compile Include="SASL\Elements\SASLResponse.cs" />
-    <Compile Include="SASL\Elements\SASLSuccess.cs" />
-    <Compile Include="SASL\SASLHandler.cs" />
-    <Compile Include="SASL\SASLPlainHandler.cs" />
-    <Compile Include="Stream\Error.cs" />
-    <Compile Include="Stream\Features.cs" />
+    <Compile Include="XMPP\SASL\Elements\SASLAuth.cs" />
+    <Compile Include="XMPP\SASL\Elements\SASLChallenge.cs" />
+    <Compile Include="XMPP\SASL\Elements\SASLFailure.cs" />
+    <Compile Include="XMPP\SASL\Elements\SASLResponse.cs" />
+    <Compile Include="XMPP\SASL\Elements\SASLSuccess.cs" />
+    <Compile Include="XMPP\SASL\SASLHandler.cs" />
+    <Compile Include="XMPP\SASL\SASLPlainHandler.cs" />
+    <Compile Include="XMPP\Stream\Error.cs" />
+    <Compile Include="XMPP\Stream\Features.cs" />
     <Compile Include="XmppTcpClientConnection.cs" />
     <Compile Include="XmppConnection.cs" />
   </ItemGroup>

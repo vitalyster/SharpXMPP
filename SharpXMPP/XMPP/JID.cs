@@ -1,4 +1,4 @@
-﻿namespace SharpXMPP.Client
+﻿namespace SharpXMPP.XMPP
 {
     public class JID
     {

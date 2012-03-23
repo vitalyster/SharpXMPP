@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using SharpXMPP.Client;
-using SharpXMPP.Client.Elements;
+using SharpXMPP.XMPP.Elements;
 
 namespace SharpXMPP
 {
