@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Xml;
 using System.Xml.Linq;
 using SharpXMPP.XMPP;
+using SharpXMPP.XMPP.Bind.Elements;
 using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.SASL;
 using SharpXMPP.XMPP.SASL.Elements;
@@ -133,9 +134,7 @@ namespace SharpXMPP
 
             RestartXmlStreams();
             NextElement(); // skip features
-            var bind = new XElement(XNamespace.Get(Namespaces.XmppBind) + "bind");
-            var resource = new XElement(XNamespace.Get(Namespaces.XmppBind) + "resource") { Value = Jid.Resource };
-            bind.Add(resource);
+            var bind = new Bind(Jid.Resource);
             var iq = new Iq(XMPP.Client.Elements.Iq.IqTypes.set);
             iq.Add(bind);
             Send(iq);

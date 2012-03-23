@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="XMPP\Bind\Elements\Bind.cs" />
     <Compile Include="XMPP\JID.cs" />
     <Compile Include="XMPP\Client\Elements\Message.cs" />
     <Compile Include="XMPP\Client\Elements\Presence.cs" />
