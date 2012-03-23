@@ -5,10 +5,10 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Xml;
 using System.Xml.Linq;
-using SharpXMPP.SASL.Elements;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.SASL;
+using SharpXMPP.XMPP.SASL.Elements;
 using SharpXMPP.XMPP.Stream.Elements;
 
 namespace SharpXMPP
@@ -88,11 +88,11 @@ namespace SharpXMPP
                     var el = NextElement();
                     if (el.Name.LocalName.Equals("iq"))
                     {
-                        OnIq(XMPP.Client.Elements.Iq.CreateFrom(el));
+                        OnIq(new Iq(el));
                     }
                     if (el.Name.LocalName.Equals("message"))
                     {
-                        OnMessage(XMPP.Client.Elements.Message.CreateFrom(el));
+                        OnMessage(new Message(el));
                     }
 
                 }

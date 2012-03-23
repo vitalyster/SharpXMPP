@@ -32,6 +32,13 @@ namespace SharpXMPP.XMPP.Client.Elements
         }
 
         public Iq() : base(XNamespace.Get(Namespaces.JabberClient) + "iq") { }
+
+        public Iq(XElement element) : this((IqTypes)Enum.Parse(typeof(IqTypes), element.Attribute("type").Value))
+        {
+            ReplaceAttributes(element.Attributes());
+            ReplaceNodes(element.Nodes());
+            Attribute("xmlns").Remove();
+        }
         
         public Iq Reply()
         {
@@ -49,15 +56,6 @@ namespace SharpXMPP.XMPP.Client.Elements
             var error = new XElement("error", new XElement(XNamespace.Get(Namespaces.StanzaErrors) + "service-unavailable"));
             error.SetAttributeValue("type", "cancel");
             result.Add(error);
-            return result;
-        }
-
-        public static Iq CreateFrom(XElement element)
-        {
-            var result = new Iq((IqTypes)Enum.Parse(typeof (IqTypes), element.Attribute("type").Value));
-            result.ReplaceAttributes(element.Attributes());
-            result.ReplaceNodes(element.Nodes());
-            result.Attribute("xmlns").Remove();
             return result;
         }
     }

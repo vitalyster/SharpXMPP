@@ -10,13 +10,11 @@ namespace SharpXMPP.XMPP.Client.Elements
             
         }
 
-        public static Message CreateFrom(XElement element)
+        public Message(XElement element) : this()
         {
-            var result = new Message();
-            result.ReplaceAttributes(element.Attributes());
-            result.ReplaceNodes(element.Nodes());
-            result.Attribute("xmlns").Remove();
-            return result;
+            ReplaceAttributes(element.Attributes());
+            ReplaceNodes(element.Nodes());
+            Attribute("xmlns").Remove();
         }
     }
 }
