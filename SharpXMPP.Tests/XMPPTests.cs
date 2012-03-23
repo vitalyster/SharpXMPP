@@ -38,8 +38,7 @@ namespace SharpXMPP.Tests
         {
             var errorinput =
                 XElement.Parse("<stream:error xmlns:stream=\"http://etherx.jabber.org/streams\"><not-well-formed xmlns=\"urn:ietf:params:xml:ns:xmpp-streams\" /></stream:error>");
-            var error = (Error)new XmlSerializer(typeof(Error)).Deserialize(errorinput.CreateReader());
-            Assert.AreEqual(StreamError.NotWellFormed, error.ErrorType);
+            Assert.AreEqual(StreamErrorType.NotWellFormed, ((Error)errorinput).ErrorType);
         }
 
     }

@@ -1,6 +1,4 @@
-﻿using SharpXMPP.SASL;
-
-namespace SharpXMPP.XMPP.SASL
+﻿namespace SharpXMPP.XMPP.SASL
 {
     public abstract class SASLHandler
     {
