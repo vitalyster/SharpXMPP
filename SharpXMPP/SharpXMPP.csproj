@@ -75,11 +75,14 @@
     <Compile Include="Roster\RosterItem.cs" />
     <Compile Include="Client\Iq.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SASL\SASLHandlerBase.cs" />
+    <Compile Include="SASL\SASLPlainHandler.cs" />
     <Compile Include="Stream\Error.cs" />
     <Compile Include="Stream\Features.cs" />
     <Compile Include="XmppTcpClientConnection.cs" />
     <Compile Include="XmppConnection.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using SharpXMPP.Client;
+using SharpXMPP.SASL;
 using SharpXMPP.Stream;
 
 namespace SharpXMPP
@@ -40,7 +41,7 @@ namespace SharpXMPP
 
         protected void RestartXmlStreams()
         {
-            var xws = new XmlWriterSettings {ConformanceLevel = ConformanceLevel.Fragment, OmitXmlDeclaration = true};
+            var xws = new XmlWriterSettings { ConformanceLevel = ConformanceLevel.Fragment, OmitXmlDeclaration = true };
             Writer = XmlWriter.Create(ConnectionStream, xws);
             Writer.WriteStartElement("stream", "stream", Namespaces.Streams);
             Writer.WriteAttributeString("xmlns", Namespaces.JabberClient);
@@ -92,67 +93,65 @@ namespace SharpXMPP
                 RestartXmlStreams();
                 NextElement();
             }
-
+            // TODO: implement other methods
+            var authenticator = SASLHandlerBase.Create(null, ConnectionJID, _password);
             var auth = new XElement(XNamespace.Get(Namespaces.XmppSasl) + "auth");
-            auth.SetAttributeValue("mechanism", "PLAIN");
-            auth.SetValue(
-                Convert.ToBase64String(Encoding.UTF8.GetBytes(ConnectionJID.BareJid + '\0' + ConnectionJID.User + '\0' + _password)));
+            auth.SetAttributeValue("mechanism", authenticator.SASLMethod);
+            auth.SetValue(authenticator.Initiate());
             Send(auth);
-            var el2 = NextElement();
-            if (el2.Name.LocalName == "success")
+            XElement authResponse;
+            do
             {
-                RestartXmlStreams();
-                var el3 = NextElement();
-                var bind = new XElement(XNamespace.Get(Namespaces.XmppBind) + "bind");
-                var resource = new XElement(XNamespace.Get(Namespaces.XmppBind) + "resource")
-                                   {Value = ConnectionJID.Resource};
-                bind.Add(resource);
-                var iq = new Iq(Client.Iq.IqTypes.set);
-                iq.Add(bind);
-                Send(iq);
-                var el4 = NextElement();
-                var jid = el4.Element(XNamespace.Get(Namespaces.XmppBind) + "bind");
-                if (jid == null)
-                    OnConnectionFailed(new ConnFailedArgs {Message = "bind failed"});
-                var sess = new XElement(XNamespace.Get(Namespaces.XmppSession) + "session");
-                var sessIq = new Iq(Client.Iq.IqTypes.set);
-                sessIq.Add(sess);
-                Send(sessIq);
-                var el5 = NextElement();
-                ConnectionJID = new JID(jid.Element(XNamespace.Get(Namespaces.XmppBind) + "jid").Value);
-                OnSignedIn(new SignedInArgs {ConnectionJID = ConnectionJID});
-                if (InitialPresence)
-                    Send(new Presence());
-                var task = Task.Factory.StartNew(() =>
+                authResponse = NextElement();
+                // TODO: challenge loop
+            } while (authResponse.Name.LocalName != "success");
+
+            RestartXmlStreams();
+            var el3 = NextElement();
+            var bind = new XElement(XNamespace.Get(Namespaces.XmppBind) + "bind");
+            var resource = new XElement(XNamespace.Get(Namespaces.XmppBind) + "resource") { Value = ConnectionJID.Resource };
+            bind.Add(resource);
+            var iq = new Iq(Client.Iq.IqTypes.set);
+            iq.Add(bind);
+            Send(iq);
+            var el4 = NextElement();
+            var jid = el4.Element(XNamespace.Get(Namespaces.XmppBind) + "bind");
+            if (jid == null)
+                OnConnectionFailed(new ConnFailedArgs { Message = "bind failed" });
+            var sess = new XElement(XNamespace.Get(Namespaces.XmppSession) + "session");
+            var sessIq = new Iq(Client.Iq.IqTypes.set);
+            sessIq.Add(sess);
+            Send(sessIq);
+            var el5 = NextElement();
+            ConnectionJID = new JID(jid.Element(XNamespace.Get(Namespaces.XmppBind) + "jid").Value);
+            OnSignedIn(new SignedInArgs { ConnectionJID = ConnectionJID });
+            if (InitialPresence)
+                Send(new Presence());
+            var task = Task.Factory.StartNew(() =>
+                                                 {
+                                                     while (true)
                                                      {
-                                                         while (true)
+                                                         try
                                                          {
-                                                             try
+                                                             var el = NextElement();
+                                                             if (el.Name.LocalName.Equals("iq"))
                                                              {
-                                                                 var el = NextElement();
-                                                                 if (el.Name.LocalName.Equals("iq"))
-                                                                 {
-                                                                     OnIq(Client.Iq.CreateFrom(el));
-                                                                 }
-                                                                 if (el.Name.LocalName.Equals("message"))
-                                                                 {
-                                                                     OnMessage(Client.Message.CreateFrom(el));
-                                                                 }
-                                                                     
+                                                                 OnIq(Client.Iq.CreateFrom(el));
                                                              }
-                                                             catch (Exception e)
+                                                             if (el.Name.LocalName.Equals("message"))
                                                              {
-                                                                 OnConnectionFailed(new ConnFailedArgs { Message = e.Message });
-                                                                 break;
+                                                                 OnMessage(Client.Message.CreateFrom(el));
                                                              }
+
                                                          }
-                                                     });
-                task.Wait();
-            }
-            else
-            {
-                OnConnectionFailed(new ConnFailedArgs { Message = "not-authorized" });
-            }
+                                                         catch (Exception e)
+                                                         {
+                                                             OnConnectionFailed(new ConnFailedArgs { Message = e.Message });
+                                                             break;
+                                                         }
+                                                     }
+                                                 });
+            task.Wait();
         }
 
     }
