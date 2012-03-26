@@ -34,11 +34,11 @@ namespace SharpXMPP.Tests
         }
 
         [TestMethod]
-        public void Serialization()
+        public void PayloadTests()
         {
             var errorinput =
                 XElement.Parse("<stream:error xmlns:stream=\"http://etherx.jabber.org/streams\"><not-well-formed xmlns=\"urn:ietf:params:xml:ns:xmpp-streams\" /></stream:error>");
-            Assert.AreEqual(StreamErrorType.NotWellFormed, ((Error)errorinput).ErrorType);
+            var payload  = new Payload(errorinput.Element(XNamespace.Get("urn:ietf:params:xml:ns:xmpp-streams") + "not-well-formed"));
         }
 
     }

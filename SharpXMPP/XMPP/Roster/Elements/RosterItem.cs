@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace SharpXMPP.XMPP.Roster
+namespace SharpXMPP.XMPP.Roster.Elements
 {
     [XmlRoot(ElementName = "query", Namespace = "jabber:iq:roster")]
-    public class Roster
+    public class Roster : Payload
     {
-        public Roster()
+        public Roster() : base(XNamespace.Get("jabber:iq:roster") + "query")
         {
+            
             Items = new List<RosterItem>();
         }
         [XmlElement(ElementName = "item")]

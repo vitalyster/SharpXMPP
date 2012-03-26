@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace SharpXMPP.XMPP.Stream.Elements
 {
     [XmlRoot("error", Namespace = Namespaces.Streams)]
-    public class Error : XElement
+    public class Error : Payload
     {
         public Error()
             : base(XNamespace.Get(Namespaces.Streams) + "error")

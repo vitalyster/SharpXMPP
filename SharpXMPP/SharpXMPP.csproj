@@ -73,6 +73,7 @@
     <Compile Include="DNS.cs" />
     <Compile Include="HandlerBase.cs" />
     <Compile Include="Namespaces.cs" />
+    <Compile Include="XMPP\Payload.cs" />
     <Compile Include="XMPP\Roster\Elements\RosterItem.cs" />
     <Compile Include="XMPP\Client\Elements\Iq.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
