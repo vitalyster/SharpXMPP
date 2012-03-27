@@ -2,22 +2,25 @@
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace SharpXMPP.XMPP.Roster.Elements
+namespace SharpXMPP.XMPP.Client.Roster.Elements
 {
-    [XmlRoot(ElementName = "query", Namespace = "jabber:iq:roster")]
-    public class Roster : Payload
+    public class Roster : XElement
     {
         public Roster() : base(XNamespace.Get("jabber:iq:roster") + "query")
         {
-            
-            Items = new List<RosterItem>();
+            Items = new RosterItem[1];
         }
-        [XmlElement(ElementName = "item")]
-        public List<RosterItem> Items { get; set; }
+
+        [XmlArrayItem(ElementName = "item", Namespace = "jabber:iq:roster")]
+        public RosterItem[] Items { get; set; }
     }
-    [XmlRoot("item")]
-    public class RosterItem
+    public class RosterItem : XElement
     {
+        public RosterItem() : base(XNamespace.Get("jabber:iq:roster") + "item")
+        {
+            
+        }
+
         [XmlAttribute("jid")]
         public string JID { get; set; }
         [XmlAttribute("name")]

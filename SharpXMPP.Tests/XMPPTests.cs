@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -34,11 +36,20 @@ namespace SharpXMPP.Tests
         }
 
         [TestMethod]
-        public void PayloadTests()
+        public void StanzaTests()
         {
-            var errorinput =
-                XElement.Parse("<stream:error xmlns:stream=\"http://etherx.jabber.org/streams\"><not-well-formed xmlns=\"urn:ietf:params:xml:ns:xmpp-streams\" /></stream:error>");
-            var payload  = new Payload(errorinput.Element(XNamespace.Get("urn:ietf:params:xml:ns:xmpp-streams") + "not-well-formed"));
+            const string xmldata = "<stream:error xmlns:stream=\"http://etherx.jabber.org/streams\"><not-well-formed xmlns=\"urn:ietf:params:xml:ns:xmpp-streams\" /></stream:error>";
+            var errorinput = XElement.Parse(xmldata);
+            var payload  = Stanza.Clone<Error>(errorinput);
+            Assert.AreEqual(StreamErrorType.NotWellFormed, payload.ErrorType);
+
+            var error = new Error {ErrorType = StreamErrorType.NotWellFormed};
+            // Remove all namespace attributes.
+            error.DescendantsAndSelf().Attributes().Where(n => n.IsNamespaceDeclaration).Remove();
+
+            // Specify that the namespace will be serialized with a namespace prefix of 'b'.
+            error.Add(new XAttribute(XNamespace.Xmlns + "stream", Namespaces.Streams));
+            Assert.AreEqual(payload.ToString(), Stanza.Clone<Error>(XElement.Parse(error.ToString())).ToString());
         }
 
     }

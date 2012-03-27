@@ -1,24 +1,53 @@
-﻿using System.Xml.Linq;
-using System.Xml.Serialization;
+﻿using System.Linq;
+using System.Xml.Linq;
 
 namespace SharpXMPP.XMPP.Stream.Elements
 {
-    [XmlRoot("error", Namespace = Namespaces.Streams)]
-    public class Error : Payload
+    public class Error : Stanza
     {
         public Error()
             : base(XNamespace.Get(Namespaces.Streams) + "error")
         {
 
         }
-        public StreamErrorType ErrorType;
+        public StreamErrorType ErrorType
+        {
+            get
+            {
+                var payload = Elements().FirstOrDefault();
+                switch (payload.Name.LocalName)
+                {
+                    case "not-well-formed":
+                        return StreamErrorType.NotWellFormed;
+                    case "invalid-namespace":
+                        return StreamErrorType.InvalidNamespace;
+                }
+                return StreamErrorType.Unknown;
+            }
+            set
+            {
+                XName xname;
+                switch(value)
+                {
+                    case StreamErrorType.InvalidNamespace:
+                        xname = XNamespace.Get(Namespaces.StreamErrors) + "invalid-namespace";
+                        break;
+                    case StreamErrorType.NotWellFormed:
+                        xname = XNamespace.Get(Namespaces.StreamErrors) + "not-well-formed";
+                        break;
+                    default:
+                        xname = XNamespace.Get(Namespaces.StreamErrors) + "service-unavailable";
+                        break;
+                }
+                ReplaceNodes(new Stanza(xname));
+            }
+        }
     }
 
     public enum StreamErrorType
     {
-        [XmlElement("invalid-namespace", Namespace = Namespaces.StanzaErrors)]
+        Unknown,
         InvalidNamespace,
-        [XmlElement("not-well-formed", Namespace = Namespaces.StanzaErrors)]
         NotWellFormed
     }
 }

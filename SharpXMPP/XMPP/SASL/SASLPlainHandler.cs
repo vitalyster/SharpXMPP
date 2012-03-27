@@ -15,7 +15,7 @@ namespace SharpXMPP.XMPP.SASL
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(ClientJID.BareJid + '\0' + ClientJID.User + '\0' + Password));
         }
 
-        public override string NextChallenge(byte[] previousResponse)
+        public override string NextChallenge(string previousResponse)
         {
             return string.Empty;
         }

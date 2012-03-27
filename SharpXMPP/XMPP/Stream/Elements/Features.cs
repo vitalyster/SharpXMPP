@@ -1,37 +1,35 @@
-﻿using System.ComponentModel;
-using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace SharpXMPP.XMPP.Stream.Elements
 {
-    [XmlRoot("features", Namespace = Namespaces.Streams)]
-    public class Features
+    public class Features : Stanza
     {
-        [XmlElement("starttls", Namespace = Namespaces.XmppTls, IsNullable = true)]
-        public StartTls Tls { get; set; }
-        [XmlArray(ElementName = "mechanisms", Namespace = Namespaces.XmppSasl)]
-        [XmlArrayItem(ElementName = "mechanism")]
-        public Mechanism[] Mechanisms { get; set; }
-    }
-
-    [XmlRoot("starttls", Namespace = Namespaces.XmppTls, IsNullable = true)]
-    public class StartTls
-    {
-        [XmlIgnore]
-        public bool IsRequired { get; set; }
-        
-        [XmlElement("required")]
-        [EditorBrowsable(EditorBrowsableState.Never), Browsable(false)]
-        public string Required 
-        { 
-            get { return IsRequired ? "" : null; } 
-            set { IsRequired = (value != null); } 
+        public Features() : base(XNamespace.Get(Namespaces.Streams) + "features")
+        {
+            
         }
-    }
-    
-    [XmlRoot("mechanism")]
-    public class Mechanism
-    {
-        [XmlText]
-        public string Value { get; set; }
+        
+        public bool TlsRequired
+        {
+            get
+            {
+                var tls = Element(XNamespace.Get(Namespaces.XmppTls) + "starttls");
+                if (tls != null)
+                {
+                    return tls.Attribute("required") != null;
+                }
+                return false;
+            }
+        }
+        public List<string> SaslMechanisms
+        {
+            get
+            {
+                var mechs = Element(XNamespace.Get(Namespaces.XmppSasl) + "mechanisms");
+                return mechs != null ? mechs.Elements(XNamespace.Get(Namespaces.XmppSasl) + "mechanism").Select(e => e.Value).ToList() : new List<string>();
+            }
+        }
     }
 }

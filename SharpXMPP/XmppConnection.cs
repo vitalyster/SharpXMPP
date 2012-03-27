@@ -70,12 +70,6 @@ namespace SharpXMPP
             Message(this, e);
         }
 
-        public static T Deserealize<T>(XElement input)
-        {
-            return (T)new XmlSerializer(typeof(T)).Deserialize(input.CreateReader());
-        }
-
-        
         public abstract XElement NextElement();
 
         public abstract void Send(XElement data);

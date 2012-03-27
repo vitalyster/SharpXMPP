@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace SharpXMPP.XMPP.Client.Elements
 {
-    public class Iq : XElement
+    public class Iq : Stanza
     {
         public enum IqTypes
         {
@@ -33,13 +33,6 @@ namespace SharpXMPP.XMPP.Client.Elements
 
         public Iq() : base(XNamespace.Get(Namespaces.JabberClient) + "iq") { }
 
-        public Iq(XElement element) : this((IqTypes)Enum.Parse(typeof(IqTypes), element.Attribute("type").Value))
-        {
-            ReplaceAttributes(element.Attributes());
-            ReplaceNodes(element.Nodes());
-            Attribute("xmlns").Remove();
-        }
-        
         public Iq Reply()
         {
             IqType = IqTypes.result;

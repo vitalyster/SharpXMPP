@@ -1,6 +1,6 @@
 ﻿using SharpXMPP.XMPP.Client.Elements;
 
-namespace SharpXMPP
+namespace SharpXMPP.XMPP.Client
 {
     public abstract class IqHandlerBase
     {

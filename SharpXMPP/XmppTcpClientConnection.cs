@@ -32,7 +32,7 @@ namespace SharpXMPP
             _client = new TcpClient();
             _client.Connect(addresses.ToArray(), 5222); // TODO: check ports
             ConnectionStream = _client.GetStream();
-            Iq += (sender, iq) => new SharpXMPP.IqHandler(this).Handle(iq);
+            Iq += (sender, iq) => new XMPP.Client.IqHandler(this).Handle(iq);
         }
 
         public System.IO.Stream ConnectionStream;
@@ -89,11 +89,11 @@ namespace SharpXMPP
                     var el = NextElement();
                     if (el.Name.LocalName.Equals("iq"))
                     {
-                        OnIq(new Iq(el));
+                        OnIq(Stanza.Clone<Iq>(el));
                     }
                     if (el.Name.LocalName.Equals("message"))
                     {
-                        OnMessage(new Message(el));
+                        OnMessage(Stanza.Clone<Message>(el));
                     }
 
                 }
@@ -108,30 +108,33 @@ namespace SharpXMPP
         public override void Connect()
         {
             RestartXmlStreams();
-            var features = Deserealize<Features>(NextElement());
-            if (features == null) return;
-            Send(new XElement(XNamespace.Get(Namespaces.XmppTls) + "starttls"));
-            var res = NextElement();
-            if (res.Name.LocalName == "proceed")
+            var features = Stanza.Clone<Features>(NextElement());
+            if (features.TlsRequired || true)
             {
-                ConnectionStream = new SslStream(ConnectionStream, true);
-                ((SslStream)ConnectionStream).AuthenticateAsClient(Jid.Domain);
-                RestartXmlStreams();
-                NextElement();
+                Send(new XElement(XNamespace.Get(Namespaces.XmppTls) + "starttls"));
+                var res = NextElement();
+                if (res.Name.LocalName == "proceed")
+                {
+                    ConnectionStream = new SslStream(ConnectionStream, true);
+                    ((SslStream)ConnectionStream).AuthenticateAsClient(Jid.Domain);
+                    RestartXmlStreams();
+                    NextElement();
+                }
             }
-            // TODO: implement other methods
-            var authenticator = SASLHandler.Create(null, Jid, _password);
+
+            var authenticator = SASLHandler.Create(features.SaslMechanisms, Jid, _password);
+            if (authenticator == null)
+                OnConnectionFailed(new ConnFailedArgs { Message = "supported sasl mechanism not available" });
             var auth = new SASLAuth();
             auth.SetAttributeValue("mechanism", authenticator.SASLMethod);
             auth.SetValue(authenticator.Initiate());
             Send(auth);
-            XElement authResponse;
-            do
+            var authResponse = NextElement();
+            while (authResponse.Name.LocalName != "success")
             {
+                authenticator.NextChallenge(authResponse.Value);
                 authResponse = NextElement();
-                // TODO: challenge loop
-            } while (authResponse.Name.LocalName != "success");
-
+            }
             RestartXmlStreams();
             NextElement(); // skip features
             var bind = new Bind(Jid.Resource);
