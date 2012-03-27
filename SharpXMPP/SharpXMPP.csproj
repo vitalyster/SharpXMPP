@@ -67,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="XMPP\Bind\Elements\Bind.cs" />
+    <Compile Include="XMPP\Client\Capabities\CapabilitiesManager.cs" />
+    <Compile Include="XMPP\Client\Capabities\Elements\Caps.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\DiscoInfo.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\DiscoItems.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\Identity.cs" />

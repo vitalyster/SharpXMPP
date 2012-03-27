@@ -18,9 +18,22 @@ namespace SharpXMPP.XMPP.Client.Disco.Elements
             {
                 SetElementValue(XNamespace.Get(Namespaces.DiscoInfo) + "identity", string.Empty);
                 var id = Element(XNamespace.Get(Namespaces.DiscoInfo) + "identity");
-                id.SetAttributeValue("category", value.Category );
+                id.SetAttributeValue("category", value.Category);
                 id.SetAttributeValue("type", value.IdentityType);
                 id.SetAttributeValue("name", value.IdentityName);
+            }
+        }
+
+        public string Node
+        {
+            get
+            {
+                var node = Attribute("node");
+                return node == null ? string.Empty : node.Value;
+            }
+            set
+            {
+                SetAttributeValue("node", value);
             }
         }
 

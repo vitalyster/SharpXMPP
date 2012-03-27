@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Bind.Elements;
 using SharpXMPP.XMPP.Client;
+using SharpXMPP.XMPP.Client.Capabities;
 using SharpXMPP.XMPP.Client.Disco;
 using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
@@ -30,6 +31,7 @@ namespace SharpXMPP
         public XmppTcpClientConnection(JID jid, string password)
         {
             Jid = jid;
+            
             _password = password;
             var addresses = new List<IPAddress>();
             DNS.ResolveXMPPClient(Jid.Domain).ForEach(d => addresses.AddRange(Dns.GetHostAddresses(d.Host)));
@@ -40,11 +42,7 @@ namespace SharpXMPP
             {
                 PayloadHandlers = new List<PayloadHandler>
                           {
-                              new InfoHandler(new List<string>
-                                                  {
-                                                      Namespaces.DiscoInfo,
-                                                      Namespaces.DiscoItems
-                                                  }),
+                              new InfoHandler(Capabilities),
                               new ItemsHandler()
                           }
             }.Handle(iq);
@@ -84,7 +82,7 @@ namespace SharpXMPP
 
         public override void Send(XElement data)
         {
-            OnElement(new ElementArgs { Stanza = data, IsInput = false });
+            base.Send(data);
             data.WriteTo(Writer);
             Writer.WriteRaw("");
             Writer.Flush();
@@ -174,7 +172,7 @@ namespace SharpXMPP
             Jid = new JID(jid.Element(XNamespace.Get(Namespaces.XmppBind) + "jid").Value);
             OnSignedIn(new SignedInArgs { Jid = Jid });
             if (InitialPresence)
-                Send(new Presence());
+                Send(new Presence(Capabilities));
             SessionLoop();
         }
 
