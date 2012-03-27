@@ -11,6 +11,7 @@ using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.SASL;
 using SharpXMPP.XMPP.SASL.Elements;
 using SharpXMPP.XMPP.Stream.Elements;
+using SharpXMPP.XMPP.TLS.Elements;
 
 namespace SharpXMPP
 {
@@ -111,9 +112,9 @@ namespace SharpXMPP
             var features = Stanza.Clone<Features>(NextElement());
             if (features.TlsRequired || true)
             {
-                Send(new XElement(XNamespace.Get(Namespaces.XmppTls) + "starttls"));
-                var res = NextElement();
-                if (res.Name.LocalName == "proceed")
+                Send(new StartTLS());
+                var res = Stanza.Clone<Proceed>(NextElement());
+                if (res != null)
                 {
                     ConnectionStream = new SslStream(ConnectionStream, true);
                     ((SslStream)ConnectionStream).AuthenticateAsClient(Jid.Domain);

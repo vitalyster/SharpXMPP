@@ -15,12 +15,15 @@ namespace SharpXMPP.XMPP
 
         public static T Clone<T>(XElement src) where T : XElement, new()
         {
+            
             var stanza = src as T;
             if (stanza == null)
             {
                 stanza = new T();
                 stanza.ReplaceAttributes(src.Attributes());
                 stanza.ReplaceNodes(src.Nodes());
+                if (!src.Name.Equals(stanza.Name))
+                    return null;
             }
             return stanza;
         }

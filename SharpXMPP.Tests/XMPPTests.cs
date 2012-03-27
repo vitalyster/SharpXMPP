@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Stream;
 using SharpXMPP.XMPP.Stream.Elements;
+using SharpXMPP.XMPP.TLS.Elements;
 
 namespace SharpXMPP.Tests
 {
@@ -50,6 +51,8 @@ namespace SharpXMPP.Tests
             // Specify that the namespace will be serialized with a namespace prefix of 'b'.
             error.Add(new XAttribute(XNamespace.Xmlns + "stream", Namespaces.Streams));
             Assert.AreEqual(payload.ToString(), Stanza.Clone<Error>(XElement.Parse(error.ToString())).ToString());
+            var bad = Stanza.Clone<StartTLS>(errorinput);
+            Assert.IsNull(bad);
         }
 
     }

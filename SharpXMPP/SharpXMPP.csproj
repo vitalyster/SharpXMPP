@@ -90,6 +90,8 @@
     <Compile Include="XMPP\Stream\Elements\Features.cs" />
     <Compile Include="XmppTcpClientConnection.cs" />
     <Compile Include="XmppConnection.cs" />
+    <Compile Include="XMPP\TLS\Elements\Proceed.cs" />
+    <Compile Include="XMPP\TLS\Elements\StartTLS.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
