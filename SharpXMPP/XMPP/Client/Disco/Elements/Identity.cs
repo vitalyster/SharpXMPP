@@ -1,19 +1,37 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace SharpXMPP.XMPP.Client.Disco.Elements
 {
-    public class Identity : XElement
+    public class Identity : Stanza
     {
-        public Identity() : base(XNamespace.Get(Namespaces.DiscoInfo) + "identity")
+        public Identity()
+            : base(XNamespace.Get(Namespaces.DiscoInfo) + "identity")
         {
-            
+
         }
 
-        public string Category { get; set; }
-        public string IdentityName { get; set; }
-        public string IdentityType { get; set; }
+        public string Category
+        {
+            get { return Attribute("category").Value; }
+            set
+            {
+                SetAttributeValue("category", value);
+            }
+        }
 
-        public List<string> Features { get; set; }
+        public string IdentityName
+        {
+            get { return Attribute("name").Value; }
+            set { SetAttributeValue("name", value); }
+        }
+
+        public string IdentityType
+        {
+            get { return Attribute("type").Value; }
+            set { SetAttributeValue("type", value); }
+        }
+
     }
 }

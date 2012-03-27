@@ -1,29 +1,44 @@
-﻿using SharpXMPP.XMPP.Client.Elements;
+﻿using System.Collections.Generic;
+using SharpXMPP.XMPP.Client.Elements;
 
 namespace SharpXMPP.XMPP.Client
 {
-    public abstract class IqHandlerBase
+    public abstract class PayloadHandler
+    {
+        public abstract bool Handle(XmppConnection sender, Iq element);
+    }
+
+    public class IqHandler
     {
         protected readonly XmppConnection Connection;
-
-        protected IqHandlerBase(XmppConnection connection)
+        public IqHandler(XmppConnection connection)
         {
             Connection = connection;
         }
-        public IqHandlerBase NextHandler { get; set; }
 
-        public abstract void Handle(Iq element);
-    }
+        public List<PayloadHandler> PayloadHandlers { get; set; }
 
-    public class IqHandler : IqHandlerBase
-    {
-        public IqHandler(XmppConnection connection) : base(connection)
+        public void Handle(Iq element)
         {
+            if (PayloadHandlers != null)
+            {
+                bool handled = false;
+                PayloadHandlers.ForEach( (h) =>
+                                             {
+                                                 handled |= h.Handle(Connection, element);
+                                             });
+                if (!handled)
+                    HandleError(element);
+                else
+                {
+                    return;
+                }
+            }
+            HandleError(element);
         }
 
-        public override void Handle(Iq element)
+        public void HandleError(Iq element)
         {
-            if (NextHandler != null) return;
             if (element.IqType == Iq.IqTypes.get || element.IqType == Iq.IqTypes.set)
                 Connection.Send(element.Error());
         }

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharpXMPP.XMPP;
+using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Stream;
 using SharpXMPP.XMPP.Stream.Elements;
 using SharpXMPP.XMPP.TLS.Elements;
@@ -53,6 +55,21 @@ namespace SharpXMPP.Tests
             Assert.AreEqual(payload.ToString(), Stanza.Clone<StreamError>(XElement.Parse(error.ToString())).ToString());
             var bad = Stanza.Clone<StartTLS>(errorinput);
             Assert.IsNull(bad);
+        }
+        [TestMethod]
+        public void IdentityTests()
+        {
+            var info = new DiscoInfo();
+            info.Identity = new Identity
+                                    {
+                                        IdentityName = "SharpXMPP",
+                                        IdentityType = "pc",
+                                        Category = "client"
+                                    };
+                info.Features = new List<string>
+                                    {
+                                        Namespaces.DiscoInfo
+                                    };
         }
 
     }

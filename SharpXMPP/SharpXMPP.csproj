@@ -68,7 +68,10 @@
   <ItemGroup>
     <Compile Include="XMPP\Bind\Elements\Bind.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\DiscoInfo.cs" />
+    <Compile Include="XMPP\Client\Disco\Elements\DiscoItems.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\Identity.cs" />
+    <Compile Include="XMPP\Client\Disco\Elements\ItemsHandler.cs" />
+    <Compile Include="XMPP\Client\Disco\InfoHandler.cs" />
     <Compile Include="XMPP\JID.cs" />
     <Compile Include="XMPP\Client\Elements\Message.cs" />
     <Compile Include="XMPP\Client\Elements\Presence.cs" />

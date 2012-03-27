@@ -7,6 +7,9 @@ using System.Xml;
 using System.Xml.Linq;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Bind.Elements;
+using SharpXMPP.XMPP.Client;
+using SharpXMPP.XMPP.Client.Disco;
+using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.SASL;
 using SharpXMPP.XMPP.SASL.Elements;
@@ -33,7 +36,18 @@ namespace SharpXMPP
             _client = new TcpClient();
             _client.Connect(addresses.ToArray(), 5222); // TODO: check ports
             ConnectionStream = _client.GetStream();
-            Iq += (sender, iq) => new XMPP.Client.IqHandler(this).Handle(iq);
+            Iq += (sender, iq) => new XMPP.Client.IqHandler(this)
+            {
+                PayloadHandlers = new List<PayloadHandler>
+                          {
+                              new InfoHandler(new List<string>
+                                                  {
+                                                      Namespaces.DiscoInfo,
+                                                      Namespaces.DiscoItems
+                                                  }),
+                              new ItemsHandler()
+                          }
+            }.Handle(iq);
         }
 
         public System.IO.Stream ConnectionStream;

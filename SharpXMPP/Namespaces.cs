@@ -11,5 +11,6 @@
         public const string JabberClient = "jabber:client";
         public const string StanzaErrors = "urn:ietf:params:xml:ns:xmpp-stanzas";
         public const string DiscoInfo = "http://jabber.org/protocol/disco#info";
+        public const string DiscoItems = "http://jabber.org/protocol/disco#items";
     }
 }
