@@ -41,16 +41,16 @@ namespace SharpXMPP.Tests
         {
             const string xmldata = "<stream:error xmlns:stream=\"http://etherx.jabber.org/streams\"><not-well-formed xmlns=\"urn:ietf:params:xml:ns:xmpp-streams\" /></stream:error>";
             var errorinput = XElement.Parse(xmldata);
-            var payload  = Stanza.Clone<Error>(errorinput);
+            var payload  = Stanza.Clone<StreamError>(errorinput);
             Assert.AreEqual(StreamErrorType.NotWellFormed, payload.ErrorType);
 
-            var error = new Error {ErrorType = StreamErrorType.NotWellFormed};
+            var error = new StreamError {ErrorType = StreamErrorType.NotWellFormed};
             // Remove all namespace attributes.
             error.DescendantsAndSelf().Attributes().Where(n => n.IsNamespaceDeclaration).Remove();
 
             // Specify that the namespace will be serialized with a namespace prefix of 'b'.
             error.Add(new XAttribute(XNamespace.Xmlns + "stream", Namespaces.Streams));
-            Assert.AreEqual(payload.ToString(), Stanza.Clone<Error>(XElement.Parse(error.ToString())).ToString());
+            Assert.AreEqual(payload.ToString(), Stanza.Clone<StreamError>(XElement.Parse(error.ToString())).ToString());
             var bad = Stanza.Clone<StartTLS>(errorinput);
             Assert.IsNull(bad);
         }

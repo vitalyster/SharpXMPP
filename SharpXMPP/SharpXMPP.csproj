@@ -86,7 +86,7 @@
     <Compile Include="XMPP\SASL\SASLHandler.cs" />
     <Compile Include="XMPP\SASL\SASLPlainHandler.cs" />
     <Compile Include="XMPP\Stanza.cs" />
-    <Compile Include="XMPP\Stream\Elements\Error.cs" />
+    <Compile Include="XMPP\Stream\Elements\StreamError.cs" />
     <Compile Include="XMPP\Stream\Elements\Features.cs" />
     <Compile Include="XmppTcpClientConnection.cs" />
     <Compile Include="XmppConnection.cs" />

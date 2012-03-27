@@ -3,9 +3,9 @@ using System.Xml.Linq;
 
 namespace SharpXMPP.XMPP.Stream.Elements
 {
-    public class Error : Stanza
+    public class StreamError : Stanza
     {
-        public Error()
+        public StreamError()
             : base(XNamespace.Get(Namespaces.Streams) + "error")
         {
 

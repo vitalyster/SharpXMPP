@@ -125,7 +125,10 @@ namespace SharpXMPP
 
             var authenticator = SASLHandler.Create(features.SaslMechanisms, Jid, _password);
             if (authenticator == null)
+            {
                 OnConnectionFailed(new ConnFailedArgs { Message = "supported sasl mechanism not available" });
+                return;
+            }
             var auth = new SASLAuth();
             auth.SetAttributeValue("mechanism", authenticator.SASLMethod);
             auth.SetValue(authenticator.Initiate());
@@ -145,7 +148,10 @@ namespace SharpXMPP
             var el4 = NextElement();
             var jid = el4.Element(XNamespace.Get(Namespaces.XmppBind) + "bind");
             if (jid == null)
+            {
                 OnConnectionFailed(new ConnFailedArgs { Message = "bind failed" });
+                return;
+            }
             var sess = new XElement(XNamespace.Get(Namespaces.XmppSession) + "session");
             var sessIq = new Iq(XMPP.Client.Elements.Iq.IqTypes.set);
             sessIq.Add(sess);

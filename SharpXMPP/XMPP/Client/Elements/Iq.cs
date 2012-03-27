@@ -46,7 +46,7 @@ namespace SharpXMPP.XMPP.Client.Elements
         {
             var result = Reply();
             result.IqType = IqTypes.error;
-            var error = new XElement("error", new XElement(XNamespace.Get(Namespaces.StanzaErrors) + "service-unavailable"));
+            var error = new XElement(XNamespace.Get(Namespaces.StanzaErrors) + "error", new XElement(XNamespace.Get(Namespaces.StanzaErrors) + "service-unavailable"));
             error.SetAttributeValue("type", "cancel");
             result.Add(error);
             return result;
