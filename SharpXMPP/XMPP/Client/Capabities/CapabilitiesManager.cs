@@ -23,7 +23,7 @@ namespace SharpXMPP.XMPP.Client.Capabities
             var featuresArray = features.ToArray();
             Array.Sort(featuresArray);
             Array.ForEach(featuresArray,(f) => identityString.Append(string.Format("{0}<", f)));
-            SHA1 sha = new SHA1CryptoServiceProvider();
+            SHA1 sha = new SHA1Managed();
             var resultBytes = sha.ComputeHash(Encoding.UTF8.GetBytes(identityString.ToString()));
             return Convert.ToBase64String(resultBytes);
         }

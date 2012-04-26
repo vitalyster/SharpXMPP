@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpXMPP.WPF", "SharpXMPP.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpXMPP.Console", "SharpXMPP.Console\SharpXMPP.Console.csproj", "{D6B23C1B-0EE6-4F70-BE38-D64D1C81AD08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpXMPP.WindowsPhone", "SharpXMPP.WindowsPhone\SharpXMPP.WindowsPhone.csproj", "{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = XMPP.vsmdi
@@ -62,6 +64,16 @@ Global
 		{D6B23C1B-0EE6-4F70-BE38-D64D1C81AD08}.Release|Mixed Platforms.Build.0 = Release|x86
 		{D6B23C1B-0EE6-4F70-BE38-D64D1C81AD08}.Release|x86.ActiveCfg = Release|x86
 		{D6B23C1B-0EE6-4F70-BE38-D64D1C81AD08}.Release|x86.Build.0 = Release|x86
+		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
