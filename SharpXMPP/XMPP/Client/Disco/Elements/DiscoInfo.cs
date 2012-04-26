@@ -13,7 +13,7 @@ namespace SharpXMPP.XMPP.Client.Disco.Elements
 
         public Identity Identity
         {
-            get { return Clone<Identity>(Element(XNamespace.Get(Namespaces.DiscoInfo) + "identity")); }
+            get { return Parse<Identity>(Element(XNamespace.Get(Namespaces.DiscoInfo) + "identity")); }
             set
             {
                 SetElementValue(XNamespace.Get(Namespaces.DiscoInfo) + "identity", string.Empty);

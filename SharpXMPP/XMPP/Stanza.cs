@@ -13,7 +13,7 @@ namespace SharpXMPP.XMPP
             
         }
 
-        public static T Clone<T>(XElement src) where T : XElement, new()
+        public static T Parse<T>(XElement src) where T : XElement, new()
         {
             
             var stanza = src as T;

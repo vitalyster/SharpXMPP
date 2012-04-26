@@ -10,7 +10,7 @@ namespace SharpXMPP.XMPP.Client.Disco.Elements
     {
         public override bool Handle(XmppConnection sender, Iq element)
         {
-            if (Stanza.Clone<DiscoItems>(element.Elements().FirstOrDefault()) != null)
+            if (Stanza.Parse<DiscoItems>(element.Elements().FirstOrDefault()) != null)
             {
                 sender.Send(element.Reply());
                 return true;

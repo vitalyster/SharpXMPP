@@ -15,7 +15,7 @@ namespace SharpXMPP.XMPP.Client.Disco
         }
         public override bool Handle(XmppConnection connection, Iq element)
         {
-            var info = Stanza.Clone<DiscoInfo>(element.Elements().FirstOrDefault());
+            var info = Stanza.Parse<DiscoInfo>(element.Elements().FirstOrDefault());
             if (info != null)
             {
                 if (info.Node == string.Empty || info.Node == string.Format("{0}#{1}", _capabilities.Node, _capabilities.OurHash))

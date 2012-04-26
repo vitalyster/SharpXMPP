@@ -43,33 +43,35 @@ namespace SharpXMPP.Tests
         {
             const string xmldata = "<stream:error xmlns:stream=\"http://etherx.jabber.org/streams\"><not-well-formed xmlns=\"urn:ietf:params:xml:ns:xmpp-streams\" /></stream:error>";
             var errorinput = XElement.Parse(xmldata);
-            var payload  = Stanza.Clone<StreamError>(errorinput);
+            var payload  = Stanza.Parse<StreamError>(errorinput);
             Assert.AreEqual(StreamErrorType.NotWellFormed, payload.ErrorType);
 
             var error = new StreamError {ErrorType = StreamErrorType.NotWellFormed};
             // Remove all namespace attributes.
             error.DescendantsAndSelf().Attributes().Where(n => n.IsNamespaceDeclaration).Remove();
 
-            // Specify that the namespace will be serialized with a namespace prefix of 'b'.
+            // Specify that the namespace will be serialized with a namespace prefix of 'stream'.
             error.Add(new XAttribute(XNamespace.Xmlns + "stream", Namespaces.Streams));
-            Assert.AreEqual(payload.ToString(), Stanza.Clone<StreamError>(XElement.Parse(error.ToString())).ToString());
-            var bad = Stanza.Clone<StartTLS>(errorinput);
+            Assert.AreEqual(payload.ToString(), Stanza.Parse<StreamError>(XElement.Parse(error.ToString())).ToString());
+            var bad = Stanza.Parse<StartTLS>(errorinput);
             Assert.IsNull(bad);
         }
         [TestMethod]
         public void IdentityTests()
         {
-            var info = new DiscoInfo();
-            info.Identity = new Identity
-                                    {
-                                        IdentityName = "SharpXMPP",
-                                        IdentityType = "pc",
-                                        Category = "client"
-                                    };
-                info.Features = new List<string>
-                                    {
-                                        Namespaces.DiscoInfo
-                                    };
+            var info = new DiscoInfo
+                           {
+                               Identity = new Identity
+                                              {
+                                                  IdentityName = "SharpXMPP",
+                                                  IdentityType = "pc",
+                                                  Category = "client"
+                                              },
+                               Features = new List<string>
+                                              {
+                                                  Namespaces.DiscoInfo
+                                              }
+                           };
         }
 
     }

@@ -102,11 +102,11 @@ namespace SharpXMPP
                     var el = NextElement();
                     if (el.Name.LocalName.Equals("iq"))
                     {
-                        OnIq(Stanza.Clone<Iq>(el));
+                        OnIq(Stanza.Parse<Iq>(el));
                     }
                     if (el.Name.LocalName.Equals("message"))
                     {
-                        OnMessage(Stanza.Clone<Message>(el));
+                        OnMessage(Stanza.Parse<Message>(el));
                     }
 
                 }
@@ -121,11 +121,11 @@ namespace SharpXMPP
         public override void Connect()
         {
             RestartXmlStreams();
-            var features = Stanza.Clone<Features>(NextElement());
+            var features = Stanza.Parse<Features>(NextElement());
             if (features.TlsRequired || true)
             {
                 Send(new StartTLS());
-                var res = Stanza.Clone<Proceed>(NextElement());
+                var res = Stanza.Parse<Proceed>(NextElement());
                 if (res != null)
                 {
                     ConnectionStream = new SslStream(ConnectionStream, true);
