@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,6 +12,7 @@ using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Stream;
 using SharpXMPP.XMPP.Stream.Elements;
 using SharpXMPP.XMPP.TLS.Elements;
+using SuperSocket.ClientEngine;
 
 namespace SharpXMPP.Tests
 {
@@ -74,5 +77,21 @@ namespace SharpXMPP.Tests
                            };
         }
 
+        [TestMethod]
+        public void ClientTest()
+        {
+            var client = new AsyncTcpSession(new DnsEndPoint("jabber.ru", 5222));
+            client.Connected += (sender, args) =>
+                                    {
+                                        Trace.WriteLine("Connected!");
+                                        client.Send(Encoding.UTF8.GetBytes("<stream:stream>"), 0, "<stream:stream>".Length);
+                                    };
+            client.DataReceived += (sender, args) =>
+                                       {
+                                           Trace.WriteLine(Encoding.UTF8.GetString(args.Data));
+                                       };
+            client.Connect();
+            while (true) { }
+        }
     }
 }

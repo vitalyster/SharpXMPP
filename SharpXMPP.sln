@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpXMPP.Console", "SharpX
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpXMPP.WindowsPhone", "SharpXMPP.WindowsPhone\SharpXMPP.WindowsPhone.csproj", "{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpXMPP.MangoClient", "SharpXMPP.MangoClient\SharpXMPP.MangoClient.csproj", "{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = XMPP.vsmdi
@@ -74,6 +76,20 @@ Global
 		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{776D894B-80BB-4ADA-A7FA-A7E83AAFC3A2}.Release|x86.ActiveCfg = Release|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
+		{FFFF43B1-FCF8-455D-95C5-DE6F1E5CC2D4}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -12,6 +13,7 @@ using SharpXMPP.XMPP.Client.Capabities;
 using SharpXMPP.XMPP.Client.Disco;
 using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
+using SharpXMPP.XMPP.Component.Elements;
 using SharpXMPP.XMPP.SASL;
 using SharpXMPP.XMPP.SASL.Elements;
 using SharpXMPP.XMPP.Stream.Elements;
@@ -19,24 +21,26 @@ using SharpXMPP.XMPP.TLS.Elements;
 
 namespace SharpXMPP
 {
-    public class XmppTcpClientConnection : XmppConnection
+    public abstract class XmppTcpConnection : XmppConnection
     {
 
         private readonly TcpClient _client;
 
-        private readonly string _password;
+        protected abstract int TcpPort { get; set; }
+    
+        protected readonly string Password;
 
         public bool InitialPresence { get; set; }
 
-        public XmppTcpClientConnection(JID jid, string password)
+        protected abstract IEnumerable<IPAddress> HostAddresses { get; set; }
+    
+        protected XmppTcpConnection(JID jid, string password)
         {
             Jid = jid;
             
-            _password = password;
-            var addresses = new List<IPAddress>();
-            DNS.ResolveXMPPClient(Jid.Domain).ForEach(d => addresses.AddRange(Dns.GetHostAddresses(d.Host)));
+            Password = password;
             _client = new TcpClient();
-            _client.Connect(addresses.ToArray(), 5222); // TODO: check ports
+            _client.Connect(HostAddresses.ToArray(), TcpPort); // TODO: check ports
             ConnectionStream = _client.GetStream();
             Iq += (sender, iq) => new XMPP.Client.IqHandler(this)
             {
@@ -57,20 +61,21 @@ namespace SharpXMPP
         {
             var xws = new XmlWriterSettings { ConformanceLevel = ConformanceLevel.Fragment, OmitXmlDeclaration = true };
             Writer = XmlWriter.Create(ConnectionStream, xws);
-            Writer.WriteStartElement("stream", "stream", Namespaces.Streams);
-            Writer.WriteAttributeString("xmlns", Namespaces.JabberClient);
-            Writer.WriteAttributeString("version", "1.0");
-            Writer.WriteAttributeString("to", Jid.Domain);
-            Writer.WriteRaw("");
-            Writer.Flush();
+            OpenXmppStream();
             var xrs = new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Fragment };
             Reader = XmlReader.Create(ConnectionStream, xrs);
 
         }
 
+        protected abstract void OpenXmppStream();
+
         public override XElement NextElement()
         {
             Reader.MoveToContent();
+            if (Reader.LocalName.Equals("stream") && Reader.NamespaceURI.Equals(Namespaces.Streams))
+            {
+                OnStreamStart(Reader.GetAttribute("id"));
+            }
             do
             {
                 Reader.Read();
@@ -121,6 +126,11 @@ namespace SharpXMPP
         public override void Connect()
         {
             RestartXmlStreams();
+            if (true)
+            {
+                var handshake = Stanza.Parse<Handshake>(NextElement());
+                return;
+            }
             var features = Stanza.Parse<Features>(NextElement());
             if (features.TlsRequired || true)
             {
@@ -135,7 +145,7 @@ namespace SharpXMPP
                 }
             }
 
-            var authenticator = SASLHandler.Create(features.SaslMechanisms, Jid, _password);
+            var authenticator = SASLHandler.Create(features.SaslMechanisms, Jid, Password);
             if (authenticator == null)
             {
                 OnConnectionFailed(new ConnFailedArgs { Message = "supported sasl mechanism not available" });

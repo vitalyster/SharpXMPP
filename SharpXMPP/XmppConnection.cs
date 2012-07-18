@@ -56,6 +56,15 @@ namespace SharpXMPP
             ConnectionFailed(this, e);
         }
 
+        public delegate void StreamStartHandler(object sender, string streamID);
+
+        public event StreamStartHandler StreamStart = delegate { };
+ 
+        protected void OnStreamStart(string streamID)
+        {
+            StreamStart(this, streamID);
+        }
+
         public delegate void SignedInHandler(object sender, SignedInArgs e);
 
         public event SignedInHandler SignedIn = delegate {};

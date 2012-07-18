@@ -9,6 +9,7 @@
         public const string XmppTls = "urn:ietf:params:xml:ns:xmpp-tls";
         public const string XmppSession = "urn:ietf:params:xml:ns:xmpp-session";
         public const string JabberClient = "jabber:client";
+        public const string JabberComponentAccept = "jabber:component:accept";
         public const string StanzaErrors = "urn:ietf:params:xml:ns:xmpp-stanzas";
         public const string DiscoInfo = "http://jabber.org/protocol/disco#info";
         public const string DiscoItems = "http://jabber.org/protocol/disco#items";

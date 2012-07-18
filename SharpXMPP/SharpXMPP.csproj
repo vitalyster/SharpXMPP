@@ -57,6 +57,12 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SuperSocket.ClientEngine.Common">
+      <HintPath>..\..\ClientEngine\Core\bin\Debug\SuperSocket.ClientEngine.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.ClientEngine.Core">
+      <HintPath>..\..\ClientEngine\Core\bin\Debug\SuperSocket.ClientEngine.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -66,6 +72,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PipeStream.cs" />
+    <Compile Include="XmppAsyncSocketConnection.cs" />
+    <Compile Include="XmppClientConnection.cs" />
+    <Compile Include="XmppComponentConnection.cs" />
     <Compile Include="XMPP\Bind\Elements\Bind.cs" />
     <Compile Include="XMPP\Client\Capabities\CapabilitiesManager.cs" />
     <Compile Include="XMPP\Client\Capabities\Elements\Caps.cs" />
@@ -74,6 +84,7 @@
     <Compile Include="XMPP\Client\Disco\Elements\Identity.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\ItemsHandler.cs" />
     <Compile Include="XMPP\Client\Disco\InfoHandler.cs" />
+    <Compile Include="XMPP\Component\Elements\Handshake.cs" />
     <Compile Include="XMPP\JID.cs" />
     <Compile Include="XMPP\Client\Elements\Message.cs" />
     <Compile Include="XMPP\Client\Elements\Presence.cs" />
@@ -93,7 +104,7 @@
     <Compile Include="XMPP\Stanza.cs" />
     <Compile Include="XMPP\Stream\Elements\StreamError.cs" />
     <Compile Include="XMPP\Stream\Elements\Features.cs" />
-    <Compile Include="XmppTcpClientConnection.cs" />
+    <Compile Include="XmppTcpConnection.cs" />
     <Compile Include="XmppConnection.cs" />
     <Compile Include="XMPP\TLS\Elements\Proceed.cs" />
     <Compile Include="XMPP\TLS\Elements\StartTLS.cs" />

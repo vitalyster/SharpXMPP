@@ -21,7 +21,7 @@ namespace SharpXMPP.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private XmppTcpClientConnection client;
+        private XmppComponentConnection client;
         public MainWindow()
         {
             InitializeComponent();
@@ -29,7 +29,7 @@ namespace SharpXMPP.WPF
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            client = new XmppTcpClientConnection(new JID(textBox1.Text), passwordBox1.Password) { InitialPresence = true};
+            client = new XmppComponentConnection(new JID(textBox1.Text), passwordBox1.Password) { InitialPresence = true};
             client.Element += (o, args) => Dispatcher.Invoke((Action)(() => listBox1.Items.Add(args.Stanza.ToString())));
             ThreadPool.QueueUserWorkItem((o) => client.Connect());
         }

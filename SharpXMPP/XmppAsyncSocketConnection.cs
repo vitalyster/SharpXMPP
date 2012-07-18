@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -12,12 +13,13 @@ using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.SASL;
 using SharpXMPP.XMPP.SASL.Elements;
 using SharpXMPP.XMPP.Stream.Elements;
+using SuperSocket.ClientEngine;
 
-namespace SharpXMPP.WindowsPhone
+namespace SharpXMPP
 {
     public class XmppAsyncSocketConnection : XmppConnection
     {
-        private readonly AsynchronousClient _client;
+        private readonly AsyncTcpSession _client;
         private readonly PipeStream _connectionStream;
 
         protected XmlReader Reader;
@@ -35,7 +37,7 @@ namespace SharpXMPP.WindowsPhone
 
             _connectionStream = new PipeStream { BlockLastReadBuffer = false };
             //TODO: DNS SRV
-            _client = new AsynchronousClient(jid.Domain, 5222);
+            _client = new AsyncTcpSession(new DnsEndPoint(jid.Domain, 5222));
             Iq += (sender, iq) => new XMPP.Client.IqHandler(this)
             {
                 PayloadHandlers = new List<PayloadHandler>
@@ -44,11 +46,11 @@ namespace SharpXMPP.WindowsPhone
                               new ItemsHandler()
                           }
             }.Handle(iq);
-            _client.ResponseReceived += (sender, args) =>
-                                           {
-                                               var buffer = Encoding.UTF8.GetBytes(args.Response);
-                                               _connectionStream.Write(buffer, 0, buffer.Length);
-                                           };
+            _client.DataReceived += (sender, args) =>
+                                        {
+                                            _connectionStream.Write(args.Data, 0, args.Length);
+                                        };
+            _client.Connected += (sender, args) => Connect();
             _client.Connect();
         }
 
@@ -64,10 +66,10 @@ namespace SharpXMPP.WindowsPhone
             Writer.Flush();*/
             var data = string.Format("<stream:stream xmlns:stream=\"{0}\" xmlns=\"{1}\" version=\"1.0\" to=\"{2}\">", 
                 Namespaces.Streams, Namespaces.JabberClient, Jid.Domain);
-            
+            _client.Send(Encoding.UTF8.GetBytes(data), 0, data.Length);
             var xrs = new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Fragment, IgnoreWhitespace = true};
-            Reader = XmlReader.Create(_connectionStream, xrs);
-            _client.SendData(data);
+            //Reader = XmlReader.Create(_connectionStream, xrs);
+            
         }
 
         public override XElement NextElement()
@@ -85,12 +87,12 @@ namespace SharpXMPP.WindowsPhone
         public override void Send(XElement data)
         {
             base.Send(data);
-            _client.SendData(data.ToString());
+            _client.Send(Encoding.UTF8.GetBytes(data.ToString()), 0, data.ToString().Length);
         }
 
         public void Close()
         {
-            _client.SendData("</stream:stream>");
+            _client.Send(Encoding.UTF8.GetBytes("</stream:stream>"), 0, "</stream:stream>".Length);
         }
 
         protected void SessionLoop()
