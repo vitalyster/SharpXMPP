@@ -84,6 +84,8 @@
     <Compile Include="XMPP\Client\Disco\Elements\Identity.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\ItemsHandler.cs" />
     <Compile Include="XMPP\Client\Disco\InfoHandler.cs" />
+    <Compile Include="XMPP\Client\Register\IRegistrationHandler.cs" />
+    <Compile Include="XMPP\Client\Register\XmppRegisterHandler.cs" />
     <Compile Include="XMPP\Component\Elements\Handshake.cs" />
     <Compile Include="XMPP\JID.cs" />
     <Compile Include="XMPP\Client\Elements\Message.cs" />
