@@ -61,7 +61,7 @@ namespace SharpXMPP
             Writer.WriteStartElement("stream", "stream", Namespaces.Streams);
             Writer.WriteAttributeString("xmlns", Namespaces.JabberClient);
             Writer.WriteAttributeString("version", "1.0");
-            Writer.WriteAttributeString("to", Jid.Domain);
+            Writer.WriteAttributeString("to", JID.Domain);
             Writer.WriteRaw("");
             Writer.Flush();*/
             var data = string.Format("<stream:stream xmlns:stream=\"{0}\" xmlns=\"{1}\" version=\"1.0\" to=\"{2}\">", 

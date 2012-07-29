@@ -126,11 +126,11 @@ namespace SharpXMPP
         public override void Connect()
         {
             RestartXmlStreams();
-            if (true)
+            /*if (true)
             {
                 var handshake = Stanza.Parse<Handshake>(NextElement());
                 return;
-            }
+            }*/
             var features = Stanza.Parse<Features>(NextElement());
             if (features.TlsRequired || true)
             {
@@ -158,7 +158,9 @@ namespace SharpXMPP
             var authResponse = NextElement();
             while (authResponse.Name.LocalName != "success")
             {
-                authenticator.NextChallenge(authResponse.Value);
+                var response = new SASLResponse();
+                response.SetValue(authenticator.NextChallenge(authResponse.Value));
+                Send(response);
                 authResponse = NextElement();
             }
             RestartXmlStreams();

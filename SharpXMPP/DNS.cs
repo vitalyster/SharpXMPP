@@ -37,7 +37,7 @@ namespace SharpXMPP
         {
             var result = new List<SRVRecord>();
             var client = new TcpClient();
-            client.Connect(GetDnsAddresses(), 53);
+            client.Connect(IPAddress.Parse("8.8.8.8"), 53);
             var stream = client.GetStream();
             var message = EncodeQuery(domain);
             var lengthPrefix = IPAddress.HostToNetworkOrder((short)message.Length);

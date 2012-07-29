@@ -99,6 +99,7 @@
     <Compile Include="XMPP\SASL\Elements\SASLFailure.cs" />
     <Compile Include="XMPP\SASL\Elements\SASLResponse.cs" />
     <Compile Include="XMPP\SASL\Elements\SASLSuccess.cs" />
+    <Compile Include="XMPP\SASL\SASLDigestMD5.cs" />
     <Compile Include="XMPP\SASL\SASLHandler.cs" />
     <Compile Include="XMPP\SASL\SASLPlainHandler.cs" />
     <Compile Include="XMPP\Stanza.cs" />
