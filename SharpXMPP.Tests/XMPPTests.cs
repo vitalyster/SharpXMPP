@@ -12,7 +12,6 @@ using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Stream;
 using SharpXMPP.XMPP.Stream.Elements;
 using SharpXMPP.XMPP.TLS.Elements;
-using SuperSocket.ClientEngine;
 
 namespace SharpXMPP.Tests
 {
@@ -29,11 +28,13 @@ namespace SharpXMPP.Tests
         public void JIDTests()
         {
             TestJID(new JID("_vt@xmpp.ru/ololo"), "_vt", "xmpp.ru", "ololo");
-            TestJID(new JID("icq.jabber.ru"), string.Empty, "icq.jabber.ru", null);
+            TestJID(new JID("icq.jabber.ru"), null, "icq.jabber.ru", null);
             TestJID(new JID("vasya@icq.org"), "vasya", "icq.org", null);
             Assert.AreEqual("vasya@icq.org", new JID("vasya@icq.org").ToString());
             Assert.AreEqual("icq.org", new JID("icq.org").ToString());
             Assert.AreEqual("icq.org/registered", new JID("icq.org/registered").ToString());
+            Assert.AreEqual(new JID("vasya@msn.com"), new JID("VASYA@msn.com"));
+            Assert.AreNotEqual(new JID("vasya@msn.com/QQ"), new JID("VASYA@msn.com/qq"));            
         }
         [TestMethod]
         public void DNSTests()
@@ -76,22 +77,6 @@ namespace SharpXMPP.Tests
                                               }
                            };
         }
-
-        [TestMethod]
-        public void ClientTest()
-        {
-            var client = new AsyncTcpSession(new DnsEndPoint("jabber.ru", 5222));
-            client.Connected += (sender, args) =>
-                                    {
-                                        Trace.WriteLine("Connected!");
-                                        client.Send(Encoding.UTF8.GetBytes("<stream:stream>"), 0, "<stream:stream>".Length);
-                                    };
-            client.DataReceived += (sender, args) =>
-                                       {
-                                           Trace.WriteLine(Encoding.UTF8.GetString(args.Data));
-                                       };
-            client.Connect();
-            while (true) { }
-        }
+        
     }
 }
