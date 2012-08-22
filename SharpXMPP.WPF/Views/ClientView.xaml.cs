@@ -1,44 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
-using SharpXMPP.XMPP;
 
-namespace SharpXMPP.WPF
+namespace SharpXMPP.WPF.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ClientView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ClientView : UserControl
     {
-        public delegate void MessageDelegate(string block);
-        private XmppClientConnection client;
-        public MainWindow()
+        public ClientView()
         {
             InitializeComponent();
-        }
-
-        void LogXml(XElement args)
-        {
-            Dispatcher.Invoke(new MessageDelegate(AddStanza), args.ToString());
-        }
-
-        private void Button1Click(object sender, RoutedEventArgs e)
-        {
-            client = new XmppClientConnection(new JID(textBox1.Text), passwordBox1.Password) { InitialPresence = true};
-            client.Element += (o, args) => Dispatcher.Invoke((Action)(() => LogXml(args.Stanza)));
-            ThreadPool.QueueUserWorkItem((o) => client.Connect());
         }
 
         private static Color ColorForToken(XmlToken token, string tokenText)
@@ -78,7 +52,7 @@ namespace SharpXMPP.WPF
             return color;
         }
 
-        private void AddStanza(string text)
+        private void AddStanza155661555(string text)
         {
             var tokenizer = new XmlTokenizer();
             var mode = XmlTokenizerMode.OutsideElement;
@@ -102,7 +76,7 @@ namespace SharpXMPP.WPF
                 var run = new Run { Foreground = new SolidColorBrush(colors[i]), Text = tokenTexts[i] };
                 para.Inlines.Add(run);
             }
-            doc.Blocks.Add(para);
+            /*doc.Blocks.Add(para);
             DependencyObject DO = scroll;
 
             bool val = false;
@@ -120,7 +94,7 @@ namespace SharpXMPP.WPF
                 val = true;
             }
 
-            sv.ScrollToBottom();
+            sv.ScrollToBottom();*/
         }
     }
 }
