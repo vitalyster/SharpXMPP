@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Caliburn.Micro;
 using SharpXMPP.XMPP;
@@ -8,10 +9,6 @@ namespace SharpXMPP.WPF.ViewModels
 {
     public class ClientViewModel : PropertyChangedBase
     {
-        public ClientViewModel()
-        {
-            XmlLog = new ObservableCollection<XElement>();
-        }
         private string _jid;
         public string JID
         {
@@ -34,8 +31,8 @@ namespace SharpXMPP.WPF.ViewModels
         public void ClientConnect()
         {
             Client = new XmppClientConnection(new JID(JID), Password);
-            Client.Element += (sender, args) => XmlLog.Add(args.Stanza);
-            Client.Connect();
+            Client.Element += (sender, args) => Execute.OnUIThread(() => XmlLog += args.Stanza.ToString());
+            Task.Factory.StartNew(() => Client.Connect());
         }
 
         public bool CanClientConnect
@@ -44,6 +41,11 @@ namespace SharpXMPP.WPF.ViewModels
         }
 
         public XmppClientConnection Client;
-        public ObservableCollection<XElement> XmlLog { get; set; }
+        private string _xmlLog;
+        public string XmlLog
+        {
+            get { return _xmlLog; }
+            set { _xmlLog = value; NotifyOfPropertyChange(() => XmlLog); }
+        }
     }
 }
