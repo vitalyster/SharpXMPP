@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Security;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -25,11 +26,11 @@ namespace SharpXMPP
         protected XmlReader Reader;
         
 
-        private readonly string _password;
+        private readonly SecureString _password;
 
         public bool InitialPresence { get; set; }
 
-        public XmppAsyncSocketConnection(JID jid, string password)
+        public XmppAsyncSocketConnection(JID jid, SecureString password)
         {
             Jid = jid;
 

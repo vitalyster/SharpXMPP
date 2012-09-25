@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net;
+using System.Security;
 using System.Text;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Component.Elements;
@@ -22,7 +23,7 @@ namespace SharpXMPP
             set { throw new NotImplementedException(); }
         }
 
-        public XmppComponentConnection(JID jid, string secret) : base(jid, secret)
+        public XmppComponentConnection(JID jid, SecureString secret) : base(jid, secret)
         {
             StreamStart += (sender, id) => SendHandshake(id);
         }

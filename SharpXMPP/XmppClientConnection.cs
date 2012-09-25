@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security;
 using System.Text;
 using SharpXMPP.XMPP;
 
@@ -9,7 +10,7 @@ namespace SharpXMPP
 {
     public class XmppClientConnection : XmppTcpConnection
     {
-        public XmppClientConnection(JID jid, string password)
+        public XmppClientConnection(JID jid, SecureString password)
             : base(jid, password)
         {
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace SharpXMPP.XMPP.SASL
@@ -12,7 +13,11 @@ namespace SharpXMPP.XMPP.SASL
 
         public override string Initiate()
         {
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(ClientJID.BareJid + '\0' + ClientJID.User + '\0' + Password));
+            Password.MakeReadOnly();
+            var bstr = Marshal.SecureStringToBSTR(Password);
+            var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(ClientJID.BareJid + '\0' + ClientJID.User + '\0' + Marshal.PtrToStringBSTR(bstr)));
+            Marshal.ZeroFreeBSTR(bstr);
+            return token;
         }
 
         public override string NextChallenge(string previousResponse)

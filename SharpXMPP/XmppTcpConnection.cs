@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Security;
 using System.Xml;
 using System.Xml.Linq;
 using SharpXMPP.XMPP;
@@ -26,13 +27,13 @@ namespace SharpXMPP
 
         protected abstract int TcpPort { get; set; }
     
-        protected readonly string Password;
+        protected readonly SecureString Password;
 
         public bool InitialPresence { get; set; }
 
         protected abstract IEnumerable<IPAddress> HostAddresses { get; set; }
     
-        protected XmppTcpConnection(JID jid, string password)
+        protected XmppTcpConnection(JID jid, SecureString password)
         {
             Jid = jid;
             
@@ -154,12 +155,24 @@ namespace SharpXMPP
             auth.SetValue(authenticator.Initiate());
             Send(auth);
             var authResponse = NextElement();
-            while (authResponse.Name.LocalName != "success")
+            var authSuccess = false;
+            while (!authSuccess)
             {
-                var response = new SASLResponse();
-                response.SetValue(authenticator.NextChallenge(authResponse.Value));
-                Send(response);
-                authResponse = NextElement();
+                switch (authResponse.Name.LocalName)
+                {
+                    case "success":
+                        authSuccess = true;
+                        break;
+                    case "failure":
+                        OnConnectionFailed(new ConnFailedArgs {Message = authResponse.Value});
+                        return;
+                    case "challenge":
+                        var response = new SASLResponse();
+                        response.SetValue(authenticator.NextChallenge(authResponse.Value));
+                        Send(response);
+                        authResponse = NextElement();
+                        continue;
+                }
             }
             RestartXmlStreams();
             NextElement(); // skip features

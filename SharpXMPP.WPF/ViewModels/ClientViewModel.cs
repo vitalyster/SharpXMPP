@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-using System.Xml.Linq;
+using System.Windows.Controls;
 using Caliburn.Micro;
 using SharpXMPP.XMPP;
 
 namespace SharpXMPP.WPF.ViewModels
 {
+    [Export(typeof(ClientViewModel))]
     public class ClientViewModel : PropertyChangedBase
     {
         private string _jid;
@@ -16,22 +16,12 @@ namespace SharpXMPP.WPF.ViewModels
             set { _jid = value; NotifyOfPropertyChange(() => JID); NotifyOfPropertyChange(() => CanClientConnect); }
         }
 
-        private string _password;
-
-        public string Password
+        public void SignIn(object PasswordBox)
         {
-            get { return _password; }
-            set
-            {
-                _password = value;
-                NotifyOfPropertyChange(() => Password);
-            }
-        }
-
-        public void ClientConnect()
-        {
-            Client = new XmppClientConnection(new JID(JID), Password);
-            Client.Element += (sender, args) => Execute.OnUIThread(() => XmlLog += args.Stanza.ToString());
+            var ps = PasswordBox as PasswordBox;
+            var password = ps.SecurePassword;
+            Client = new XmppClientConnection(new JID(JID), password);
+            Client.Element += (sender, args) => Execute.OnUIThread(() => XmlLog.Add(args.Stanza.ToString()));
             Task.Factory.StartNew(() => Client.Connect());
         }
 
@@ -41,10 +31,10 @@ namespace SharpXMPP.WPF.ViewModels
         }
 
         public XmppClientConnection Client;
-        private string _xmlLog;
-        public string XmlLog
+        private IObservableCollection<string> _xmlLog;
+        public IObservableCollection<string> XmlLog
         {
-            get { return _xmlLog; }
+            get { return _xmlLog ?? (_xmlLog = new BindableCollection<string>()); }
             set { _xmlLog = value; NotifyOfPropertyChange(() => XmlLog); }
         }
     }

@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" mc:Ignorable="d" 
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
              MinHeight="480" MinWidth="640" TextOptions.TextFormattingMode="Display">
     <DockPanel VerticalAlignment="Stretch">
         <StackPanel Orientation="Horizontal" Margin="5" DockPanel.Dock="Top">
@@ -11,14 +12,18 @@
             <TextBox Height="23" HorizontalAlignment="Left" x:Name="JID" Width="169" Margin="3"/>
             <Label Content="Password:" Height="28" HorizontalAlignment="Left" Name="label2" Margin="3"/>
             <PasswordBox Height="23" HorizontalAlignment="Left" x:Name="Password" Width="120" Margin="3" />
-            <Button Content="Sign in" Height="23" HorizontalAlignment="Left" x:Name="ClientConnect" Width="75" Margin="3" />
+          <Button Content="Sign in" Height="23" HorizontalAlignment="Left" Width="75" Margin="3">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="Click">
+                <cal:ActionMessage MethodName="SignIn">
+                  <cal:Parameter Value="{Binding ElementName=Password}" />
+                </cal:ActionMessage>
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+          </Button>
 
         </StackPanel>
-        <xctk:RichTextBox x:Name="XmlLog" Margin="3">
-            <xctk:RichTextBox.TextFormatter>
-                <xctk:XamlFormatter />
-            </xctk:RichTextBox.TextFormatter>
-        </xctk:RichTextBox>
+      <ListBox x:Name="XmlLog"></ListBox>
 
     </DockPanel>
 </UserControl>
