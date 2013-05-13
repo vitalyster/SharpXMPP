@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SharpXMPP.XMPP.Client.Elements;
 
 namespace SharpXMPP.XMPP.Client
@@ -22,17 +23,11 @@ namespace SharpXMPP.XMPP.Client
         {
             if (PayloadHandlers != null)
             {
-                bool handled = false;
-                PayloadHandlers.ForEach( (h) =>
-                                             {
-                                                 handled |= h.Handle(Connection, element);
-                                             });
-                if (!handled)
-                    HandleError(element);
-                else
+                if (PayloadHandlers.Any(handler => handler.Handle(Connection, element)))
                 {
                     return;
                 }
+                HandleError(element);
             }
             HandleError(element);
         }
