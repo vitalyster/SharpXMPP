@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Security;
-using System.Text;
 using SharpXMPP.XMPP;
+using SharpXMPP.XMPP.Client.Capabities;
+using SharpXMPP.XMPP.Client.Disco.Elements;
 
 namespace SharpXMPP
 {
@@ -13,6 +13,22 @@ namespace SharpXMPP
         public XmppClientConnection(JID jid, SecureString password)
             : base(jid, password)
         {
+            Capabilities = new CapabilitiesManager
+            {
+                Identity = new Identity
+                {
+                    Category = "client",
+                    IdentityType = "pc",
+                    IdentityName = "SharpXMPP"
+                },
+
+                Node = "http://bggg.net.ru/caps",
+                Features = new List<string>
+                {
+                    Namespaces.DiscoInfo,
+                    Namespaces.DiscoItems
+                }
+            };
         }
 
         protected override int TcpPort

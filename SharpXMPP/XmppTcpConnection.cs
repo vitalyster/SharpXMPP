@@ -26,18 +26,13 @@ namespace SharpXMPP
         private readonly TcpClient _client;
 
         protected abstract int TcpPort { get; set; }
-    
-        protected readonly SecureString Password;
 
         public bool InitialPresence { get; set; }
 
         protected abstract IEnumerable<IPAddress> HostAddresses { get; set; }
     
-        protected XmppTcpConnection(JID jid, SecureString password)
+        protected XmppTcpConnection(JID jid, SecureString password) :base (jid, password)
         {
-            Jid = jid;
-            
-            Password = password;
             _client = new TcpClient();
             _client.Connect(HostAddresses.ToArray(), TcpPort); // TODO: check ports
             ConnectionStream = _client.GetStream();

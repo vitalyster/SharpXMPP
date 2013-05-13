@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Security;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -77,6 +78,5 @@ namespace SharpXMPP.Tests
                                               }
                            };
         }
-        
     }
 }

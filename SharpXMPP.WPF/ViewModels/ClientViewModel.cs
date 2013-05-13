@@ -20,7 +20,7 @@ namespace SharpXMPP.WPF.ViewModels
         {
             var ps = PasswordBox as PasswordBox;
             var password = ps.SecurePassword;
-            Client = new XmppClientConnection(new JID(JID), password);
+            Client = new XmppWebSocketConnection(new JID(JID), password);
             Client.Element += (sender, args) => Execute.OnUIThread(() => XmlLog.Add(args.Stanza.ToString()));
             Task.Factory.StartNew(() => Client.Connect());
         }
@@ -30,7 +30,7 @@ namespace SharpXMPP.WPF.ViewModels
             get { return (!string.IsNullOrWhiteSpace(JID)); }
         }
 
-        public XmppClientConnection Client;
+        public XmppWebSocketConnection Client;
         private IObservableCollection<string> _xmlLog;
         public IObservableCollection<string> XmlLog
         {

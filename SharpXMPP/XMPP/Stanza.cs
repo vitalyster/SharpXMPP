@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace SharpXMPP.XMPP
@@ -26,6 +27,16 @@ namespace SharpXMPP.XMPP
                     return null;
             }
             return stanza;
+        }
+        public static XElement Parse(string src, string defaultNamespace = Namespaces.JabberClient)
+        {
+            var mngr = new XmlNamespaceManager(new NameTable());
+            mngr.AddNamespace("", defaultNamespace);
+            mngr.AddNamespace("stream", Namespaces.Streams);
+            var tr = new XmlTextReader(src, XmlNodeType.Element,
+                                       new XmlParserContext(null, mngr, null,
+                                                            XmlSpace.None));
+            return Load(tr); 
         }
     }
 }

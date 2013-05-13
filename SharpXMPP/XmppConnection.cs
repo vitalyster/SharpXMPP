@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Security;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Client.Capabities;
-using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
 
 namespace SharpXMPP
@@ -26,26 +24,14 @@ namespace SharpXMPP
 
     public abstract class XmppConnection
     {
-        protected XmppConnection()
+        protected XmppConnection(JID jid, SecureString password)
         {
-            Capabilities = new CapabilitiesManager
-            {
-                Identity = new Identity
-                {
-                    Category = "client",
-                    IdentityType = "mobile",
-                    IdentityName = "SharpXMPP"
-                },
-
-                Node = "http://bggg.net.ru/caps",
-                Features = new List<string>
-                {
-                    Namespaces.DiscoInfo,
-                    Namespaces.DiscoItems
-                }
-            };
+            Jid = jid;
+            Password = password;
         }
         public JID Jid { get; set; }
+
+        protected readonly SecureString Password;
 
         public delegate void ConnectionFailedHandler(object sender, ConnFailedArgs e);
 
@@ -101,13 +87,8 @@ namespace SharpXMPP
             Message(this, e);
         }
 
-        private CapabilitiesManager _caps;
-        public CapabilitiesManager Capabilities
-        {
-            get { return _caps ?? (_caps = new CapabilitiesManager()); }
-            set { _caps = value; }
-        }
-
+        public CapabilitiesManager Capabilities { get; set; }
+        
         public abstract XElement NextElement();
 
         public virtual void Send(XElement data)
