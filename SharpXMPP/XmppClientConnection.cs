@@ -10,7 +10,7 @@ namespace SharpXMPP
 {
     public class XmppClientConnection : XmppTcpConnection
     {
-        public XmppClientConnection(JID jid, SecureString password)
+        public XmppClientConnection(JID jid, string password)
             : base(jid, password)
         {
             Capabilities = new CapabilitiesManager

@@ -31,7 +31,7 @@ namespace SharpXMPP
 
         protected abstract IEnumerable<IPAddress> HostAddresses { get; set; }
     
-        protected XmppTcpConnection(JID jid, SecureString password) :base (jid, password)
+        protected XmppTcpConnection(JID jid, string password) :base (jid, password)
         {
             _client = new TcpClient();
             _client.Connect(HostAddresses.ToArray(), TcpPort); // TODO: check ports

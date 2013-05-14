@@ -24,14 +24,14 @@ namespace SharpXMPP
 
     public abstract class XmppConnection
     {
-        protected XmppConnection(JID jid, SecureString password)
+        protected XmppConnection(JID jid, string password)
         {
             Jid = jid;
             Password = password;
         }
         public JID Jid { get; set; }
 
-        protected readonly SecureString Password;
+        protected readonly string Password;
 
         public delegate void ConnectionFailedHandler(object sender, ConnFailedArgs e);
 

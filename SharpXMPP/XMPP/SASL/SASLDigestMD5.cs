@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Collections.Generic;
 
 namespace SharpXMPP.XMPP.SASL
 {
@@ -24,13 +25,11 @@ namespace SharpXMPP.XMPP.SASL
         {
             if (_state == 0)
             {
-                Password.MakeReadOnly();
-                var bstr = Marshal.SecureStringToBSTR(Password);
                 var challengeFields = Encoding.UTF8.GetString(Convert.FromBase64String(challenge));
-                var fields = new StringDictionary();
+                var fields = new Dictionary<string, string>();
                 foreach (var f in challengeFields.Split(','))
                 {
-                    var nextField = f.Split(new[] {'='}, 2);
+                    var nextField = f.Split(new[] {'='});
                     fields[nextField[0]] = nextField[1].Trim('"');
                 }
                 fields["username"] = ClientJID.User;
@@ -39,9 +38,8 @@ namespace SharpXMPP.XMPP.SASL
                 fields["nc"] = "00000001";
                 fields["digest-uri"] = string.Format("xmpp/{0}", fields["realm"]);
                 // fields["authzid"] = realm.connectionJid.FullJid;
-                var x = string.Format("{0}:{1}:{2}", ClientJID.User, ClientJID.Domain, Marshal.PtrToStringBSTR(bstr));
-                Marshal.ZeroFreeBSTR(bstr);
-                var md5 = new MD5CryptoServiceProvider();
+                var x = string.Format("{0}:{1}:{2}", ClientJID.User, ClientJID.Domain, Password);
+                var md5 = new MD5Managed();
                 var y = md5.ComputeHash(Encoding.UTF8.GetBytes(x));
                 var a1 = y.Concat(Encoding.UTF8.GetBytes(string.Format(":{0}:{1}", fields["nonce"], fields["cnonce"])));
                 var a2 = string.Format("AUTHENTICATE:{0}", fields["digest-uri"]);

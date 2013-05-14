@@ -11,7 +11,7 @@ namespace SharpXMPP.XMPP
         public JID(string jid)
         {
             var domainWithResource = string.Empty;
-            var jidParts = jid.Split(new[] { '@' }, 2);
+            var jidParts = jid.Split(new[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
             switch (jidParts.Length)
             {
                 case 1:
@@ -22,7 +22,7 @@ namespace SharpXMPP.XMPP
                     domainWithResource = jidParts[1];
                     break;
             }
-            var resourceParts = domainWithResource.Split(new[] { '/' }, 2);
+            var resourceParts = domainWithResource.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             switch (resourceParts.Length)
             {
                 case 1:

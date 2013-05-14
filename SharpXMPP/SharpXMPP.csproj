@@ -77,6 +77,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crypto\MD5.cs" />
+    <Compile Include="Crypto\MD5Managed.cs" />
     <Compile Include="XmppClientConnection.cs" />
     <Compile Include="XmppComponentConnection.cs" />
     <Compile Include="XmppWebSocketConnection.cs" />
@@ -117,8 +119,9 @@
     <Compile Include="XMPP\TLS\Elements\StartTLS.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.Phone.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

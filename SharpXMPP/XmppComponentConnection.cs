@@ -23,7 +23,7 @@ namespace SharpXMPP
             set { throw new NotImplementedException(); }
         }
 
-        public XmppComponentConnection(JID jid, SecureString secret) : base(jid, secret)
+        public XmppComponentConnection(JID jid, string secret) : base(jid, secret)
         {
             StreamStart += (sender, id) => SendHandshake(id);
         }

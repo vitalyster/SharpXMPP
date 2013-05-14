@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using System.IO;
 
 namespace SharpXMPP.XMPP
 {
@@ -33,7 +34,7 @@ namespace SharpXMPP.XMPP
             var mngr = new XmlNamespaceManager(new NameTable());
             mngr.AddNamespace("", defaultNamespace);
             mngr.AddNamespace("stream", Namespaces.Streams);
-            var tr = new XmlTextReader(src, XmlNodeType.Element,
+            var tr = XmlReader.Create(new StringReader(src), new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Fragment},
                                        new XmlParserContext(null, mngr, null,
                                                             XmlSpace.None));
             return Load(tr); 

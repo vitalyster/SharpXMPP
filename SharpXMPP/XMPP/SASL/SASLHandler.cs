@@ -7,12 +7,12 @@ namespace SharpXMPP.XMPP.SASL
     {
         public string SASLMethod { get; set; }
         public JID ClientJID { get; set; }
-        public SecureString Password { get; set; }
+        public string Password { get; set; }
         public abstract string Initiate();
 
         public abstract string NextChallenge(string previousResponse);
 
-        public static SASLHandler Create(List<string> availableMethods, JID clientJID, SecureString password)
+        public static SASLHandler Create(List<string> availableMethods, JID clientJID, string password)
         {
             return availableMethods.Contains("DIGEST-MD5") ? new SASLDigestMd5 { ClientJID = clientJID, Password = password} : null;
         }

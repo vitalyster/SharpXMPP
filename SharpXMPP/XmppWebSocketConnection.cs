@@ -15,6 +15,7 @@ using SharpXMPP.XMPP.SASL;
 using SharpXMPP.XMPP.SASL.Elements;
 using SharpXMPP.XMPP.Stream.Elements;
 using WebSocket4Net;
+using System.Text;
 
 namespace SharpXMPP
 {
@@ -39,7 +40,7 @@ namespace SharpXMPP
 
         private SASLHandler authenticator;
 
-        public XmppWebSocketConnection(JID jid, SecureString password)
+        public XmppWebSocketConnection(JID jid, string password)
             : base(jid, password)
         {
             Capabilities = new CapabilitiesManager
@@ -68,6 +69,7 @@ namespace SharpXMPP
             }.Handle(iq);
             _connection = new WebSocket("ws://127.0.0.1:8080/", "xmpp");
             _connection.Opened += (sender, args) =>
+
                                       {
                                           _currentState = XmppConnectionState.Connected;
                                           RestartStream();
@@ -94,6 +96,12 @@ namespace SharpXMPP
                                                         IsInput = false,
                                                         Stanza = currentStanza
                                                     });
+                                                    var error = Stanza.Parse<StreamError>(currentStanza);
+                                                    if (error != null)
+                                                    {
+                                                        OnConnectionFailed(new ConnFailedArgs { Message = error.Value });
+                                                        return;
+                                                    }
                                                     switch (_currentState)
                                                     {
                                                         case XmppConnectionState.StreamInitiated:
@@ -217,11 +225,9 @@ namespace SharpXMPP
             var mngr = new XmlNamespaceManager(new NameTable());
             mngr.AddNamespace("", defaultNamespace);
             mngr.AddNamespace("stream", Namespaces.Streams);
-            var tr = new XmlTextReader(data, XmlNodeType.Document,
-                                       new XmlParserContext(null, mngr, null,
-                                                            XmlSpace.None));
             var xrs = new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Auto };
-            var reader = XmlReader.Create(tr, xrs);
+            var reader = XmlReader.Create(new StringReader(data), xrs, new XmlParserContext(null, mngr, null,
+                                                            XmlSpace.None));
             reader.MoveToContent();
             if (reader.LocalName.Equals("stream") && reader.NamespaceURI.Equals(Namespaces.Streams))
             {
@@ -231,7 +237,7 @@ namespace SharpXMPP
 
         public void RestartStream()
         {
-            var xws = new XmlWriterSettings { ConformanceLevel = ConformanceLevel.Fragment, OmitXmlDeclaration = true };
+            var xws = new XmlWriterSettings { ConformanceLevel = ConformanceLevel.Fragment, Encoding = Encoding.UTF8};
             var sw = new StringWriter();
             var writer = XmlWriter.Create(sw, xws);
             writer.WriteStartElement("stream", "stream", Namespaces.Streams);
@@ -246,7 +252,7 @@ namespace SharpXMPP
         public string ElementToString(XElement element)
         {
             var sw = new StringWriter();
-            var xws = new XmlWriterSettings { ConformanceLevel = ConformanceLevel.Fragment, OmitXmlDeclaration = true };
+            var xws = new XmlWriterSettings { ConformanceLevel = ConformanceLevel.Fragment, OmitXmlDeclaration = true, Encoding = Encoding.UTF8 };
             var writer = XmlWriter.Create(sw, xws);
             element.WriteTo(writer);
             writer.WriteRaw("");
