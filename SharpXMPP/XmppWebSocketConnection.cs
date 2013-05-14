@@ -67,7 +67,9 @@ namespace SharpXMPP
                               new ItemsHandler()
                           }
             }.Handle(iq);
-            _connection = new WebSocket(websocketUri, "xmpp", cookies: "");
+// ReSharper disable RedundantArgumentDefaultValue
+            _connection = new WebSocket(websocketUri, "xmpp", cookies: (List<KeyValuePair<string, string>>)null);
+// ReSharper restore RedundantArgumentDefaultValue
             _connection.Opened += (sender, args) =>
 
                                       {
