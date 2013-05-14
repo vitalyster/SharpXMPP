@@ -67,7 +67,7 @@ namespace SharpXMPP
                               new ItemsHandler()
                           }
             }.Handle(iq);
-            _connection = new WebSocket(websocketUri, "xmpp");
+            _connection = new WebSocket(websocketUri, "xmpp", cookies: "");
             _connection.Opened += (sender, args) =>
 
                                       {

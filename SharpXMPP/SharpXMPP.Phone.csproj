@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crypto\MD5.cs" />
+    <Compile Include="Crypto\MD5Managed.cs" />
     <Compile Include="Properties\AssemblyInfo.Phone.cs" />
     <Compile Include="XmppWebSocketConnection.cs" />
     <Compile Include="XMPP\Bind\Elements\Bind.cs" />

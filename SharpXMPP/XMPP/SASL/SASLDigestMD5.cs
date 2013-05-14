@@ -25,7 +25,8 @@ namespace SharpXMPP.XMPP.SASL
         {
             if (_state == 0)
             {
-                var challengeFields = Encoding.UTF8.GetString(Convert.FromBase64String(challenge));
+                var challengeString = Convert.FromBase64String(challenge);
+                var challengeFields = Encoding.UTF8.GetString(challengeString, 0, challengeString.Length);
                 var fields = new Dictionary<string, string>();
                 foreach (var f in challengeFields.Split(','))
                 {

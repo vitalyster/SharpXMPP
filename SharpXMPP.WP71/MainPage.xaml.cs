@@ -20,7 +20,7 @@ namespace SharpXMPP.WP71
         public MainPage()
         {
             InitializeComponent();
-            conn = new XmppWebSocketConnection(new XMPP.JID("_vt@xmpp.ru/ph"), "secret");
+            conn = new XmppWebSocketConnection(new XMPP.JID("_vt@xmpp.ru/ph"), "", "ws://127.0.0.1:8080/");
             conn.Element += new XmppConnection.ElementHandler(conn_Element);
             conn.ConnectionFailed += new XmppConnection.ConnectionFailedHandler(conn_ConnectionFailed);
             conn.Connect();
