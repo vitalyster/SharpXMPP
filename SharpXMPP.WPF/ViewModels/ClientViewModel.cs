@@ -12,6 +12,17 @@ namespace SharpXMPP.WPF.ViewModels
     [Export(typeof(ClientViewModel))]
     public class ClientViewModel : PropertyChangedBase
     {
+        public ClientViewModel()
+        {
+            JID = Properties.Settings.Default.JID;
+            WebSocketUri = Properties.Settings.Default.WebSocketUri;
+            PropertyChanged += (sender, args) =>
+                {
+                    Properties.Settings.Default.JID = JID;
+                    Properties.Settings.Default.WebSocketUri = WebSocketUri;
+                    Properties.Settings.Default.Save();
+                };
+        }
         private string _jid;
         public string JID
         {
@@ -19,11 +30,22 @@ namespace SharpXMPP.WPF.ViewModels
             set { _jid = value; NotifyOfPropertyChange(() => JID); NotifyOfPropertyChange(() => CanClientConnect); }
         }
 
+        public string WebSocketUri
+        {
+            get { return _webSocketUri; }
+            set
+            {
+                if (value == _webSocketUri) return;
+                _webSocketUri = value;
+                NotifyOfPropertyChange(() => WebSocketUri);
+            }
+        }
+
         public void SignIn(object PasswordBox)
         {
             var ps = PasswordBox as PasswordBox;
             var password = ps.SecurePassword;
-            Client = new XmppWebSocketConnection(new JID(JID), SecureStringToString(password));
+            Client = new XmppWebSocketConnection(new JID(JID), SecureStringToString(password), WebSocketUri);
             Client.Element += (sender, args) => Execute.OnUIThread(() => XmlLog.Add(args.Stanza.ToString()));
             Task.Factory.StartNew(() => Client.Connect());
         }
@@ -35,6 +57,8 @@ namespace SharpXMPP.WPF.ViewModels
 
         public XmppWebSocketConnection Client;
         private IObservableCollection<string> _xmlLog;
+        private string _webSocketUri;
+
         public IObservableCollection<string> XmlLog
         {
             get { return _xmlLog ?? (_xmlLog = new BindableCollection<string>()); }

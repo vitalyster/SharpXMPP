@@ -40,7 +40,7 @@ namespace SharpXMPP
 
         private SASLHandler authenticator;
 
-        public XmppWebSocketConnection(JID jid, string password)
+        public XmppWebSocketConnection(JID jid, string password, string websocketUri)
             : base(jid, password)
         {
             Capabilities = new CapabilitiesManager
@@ -67,7 +67,7 @@ namespace SharpXMPP
                               new ItemsHandler()
                           }
             }.Handle(iq);
-            _connection = new WebSocket("ws://127.0.0.1:8080/", "xmpp");
+            _connection = new WebSocket(websocketUri, "xmpp");
             _connection.Opened += (sender, args) =>
 
                                       {
@@ -239,7 +239,7 @@ namespace SharpXMPP
         {
             var xws = new XmlWriterSettings { ConformanceLevel = ConformanceLevel.Fragment, Encoding = Encoding.UTF8};
             var sw = new StringWriter();
-            var writer = XmlWriter.Create(sw, xws);
+            var writer = XmlWriter.Create(sw, xws);            
             writer.WriteStartElement("stream", "stream", Namespaces.Streams);
             writer.WriteAttributeString("xmlns", Namespaces.JabberClient);
             writer.WriteAttributeString("version", "1.0");

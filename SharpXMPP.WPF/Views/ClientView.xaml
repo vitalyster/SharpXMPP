@@ -12,6 +12,8 @@
             <TextBox Height="23" HorizontalAlignment="Left" x:Name="JID" Width="169" Margin="3"/>
             <Label Content="Password:" Height="28" HorizontalAlignment="Left" Name="label2" Margin="3"/>
             <PasswordBox Height="23" HorizontalAlignment="Left" x:Name="Password" Width="120" Margin="3" />
+            <Label Content="WS URI:" Height="28" HorizontalAlignment="Left" Margin="3"/>
+            <TextBox Height="23" HorizontalAlignment="Left" x:Name="WebSocketUri" Width="169" Margin="3"/>
           <Button Content="Sign in" Height="23" HorizontalAlignment="Left" Width="75" Margin="3">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
