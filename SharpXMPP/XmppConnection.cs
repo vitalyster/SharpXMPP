@@ -88,6 +88,8 @@ namespace SharpXMPP
         }
 
         public CapabilitiesManager Capabilities { get; set; }
+
+        public SharpXMPP.XMPP.Client.IqHandler IqTracker { get; set; }
         
         public abstract XElement NextElement();
 

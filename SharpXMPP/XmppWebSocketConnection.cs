@@ -16,6 +16,7 @@ using SharpXMPP.XMPP.SASL.Elements;
 using SharpXMPP.XMPP.Stream.Elements;
 using WebSocket4Net;
 using System.Text;
+using SharpXMPP.XMPP.Client.Roster.Elements;
 
 namespace SharpXMPP
 {
@@ -59,14 +60,16 @@ namespace SharpXMPP
                     Namespaces.DiscoItems
                 }
             };
-            Iq += (sender, iq) => new XMPP.Client.IqHandler(this)
+            IqTracker = new XMPP.Client.IqHandler(this)
             {
+                ResponseHandlers = new Dictionary<string, ResponseHandler>(),
                 PayloadHandlers = new List<PayloadHandler>
                           {
                               new InfoHandler(Capabilities),
                               new ItemsHandler()
                           }
-            }.Handle(iq);
+            };
+            Iq += (sender, iq) => IqTracker.Handle(iq);
 // ReSharper disable RedundantArgumentDefaultValue
             _connection = new WebSocket(websocketUri, "xmpp", cookies: (List<KeyValuePair<string, string>>)null);
 // ReSharper restore RedundantArgumentDefaultValue
@@ -198,6 +201,7 @@ namespace SharpXMPP
                                                             OnSignedIn(new SignedInArgs {Jid = Jid});
                                                             var initPresence = new Presence(Capabilities);
                                                             Send(initPresence);
+                                                            Roster.Query(this);
                                                             _currentState = XmppConnectionState.StreamNegotiated;
                                                             break;
                                                         case XmppConnectionState.StreamNegotiated:

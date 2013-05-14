@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace SharpXMPP.XMPP
 {
@@ -28,6 +29,12 @@ namespace SharpXMPP.XMPP
                     return null;
             }
             return stanza;
+        }
+
+        public static T Deserialize<T>(XElement src) where T : new()
+        {            
+            var xs = new XmlSerializer(typeof(T));
+            return (T)xs.Deserialize(src.CreateReader());            
         }
         public static XElement Parse(string src, string defaultNamespace = Namespaces.JabberClient)
         {
