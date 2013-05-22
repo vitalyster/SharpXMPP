@@ -7,13 +7,8 @@ using System.Diagnostics;
 namespace SharpXMPP.XMPP.Client.Roster.Elements
 {
     [XmlRoot(ElementName = "query", Namespace = "jabber:iq:roster")]
-    public class Roster : XElement
+    public class Roster
     {
-        public Roster() : base(XNamespace.Get("jabber:iq:roster") + "query")
-        {
-            
-        }
-
         [XmlArray(ElementName = "item")]
         public List<RosterItem> Items { get; set; }
 
@@ -21,7 +16,7 @@ namespace SharpXMPP.XMPP.Client.Roster.Elements
         {
             var iq = new Iq(Iq.IqTypes.get);
             var query = new Roster();
-            iq.Add(query);
+            iq.Add(Stanza.Serialize<Roster>(query));
             connection.IqTracker.ResponseHandlers.Add(iq.Attribute("id").Value, ProcessResponse);
             connection.Send(iq);
         }
@@ -37,14 +32,8 @@ namespace SharpXMPP.XMPP.Client.Roster.Elements
         }
     }
     [XmlRoot(ElementName = "item", Namespace = "jabber:iq:roster")]
-    public class RosterItem : XElement
+    public class RosterItem
     {
-
-        public RosterItem()
-            : base(XNamespace.Get("jabber:iq:roster") + "item")
-        {
-        }
-
         [XmlAttribute("jid")]
         public string JID { get; set; }
         [XmlAttribute("name")]

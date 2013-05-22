@@ -199,9 +199,9 @@ namespace SharpXMPP
                                                             break;
                                                         case XmppConnectionState.StreamSessionNoOp:
                                                             OnSignedIn(new SignedInArgs {Jid = Jid});
+                                                            Roster.Query(this);
                                                             var initPresence = new Presence(Capabilities);
                                                             Send(initPresence);
-                                                            Roster.Query(this);
                                                             _currentState = XmppConnectionState.StreamNegotiated;
                                                             break;
                                                         case XmppConnectionState.StreamNegotiated:
