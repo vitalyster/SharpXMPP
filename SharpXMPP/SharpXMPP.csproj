@@ -73,7 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PipeStream.cs" />
-    <Compile Include="XmppAsyncSocketConnection.cs" />
     <Compile Include="XmppClientConnection.cs" />
     <Compile Include="XmppComponentConnection.cs" />
     <Compile Include="XMPP\Bind\Elements\Bind.cs" />
