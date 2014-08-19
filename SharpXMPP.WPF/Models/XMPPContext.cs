@@ -1,11 +1,7 @@
 ﻿using SharpXMPP.XMPP;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
-using System.Text;
 
 namespace SharpXMPP.WPF.Models
 {
@@ -29,7 +25,7 @@ namespace SharpXMPP.WPF.Models
     {
         protected override void Seed(XMPPContext context)
         {
-            var vasya = new User {JID = new XMPP.JID("vasya@xmpp.ru"), Name = "Вася" };
+            var vasya = new User {JID = new JID("vasya@xmpp.ru"), Name = "Вася" };
             var message = new Message { From = vasya.JID, Text = "Hello, world!", To = new JID("throwable@jabber.ru")};
             
             var conversation = new Conversation
@@ -47,7 +43,7 @@ namespace SharpXMPP.WPF.Models
             context.SaveChanges();
             context.Conversations.Add(conversation);
 
-            var petya = new User { JID = new XMPP.JID("petya@xmpp.ru"), Name = "Петя" };
+            var petya = new User { JID = new JID("petya@xmpp.ru"), Name = "Петя" };
             var message2 = new Message { From = petya.JID, Text = "Привет от Пети!", To = new JID("throwable@jabber.ru") };
 
             var conversation2 = new Conversation

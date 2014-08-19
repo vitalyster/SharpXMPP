@@ -1,13 +1,8 @@
 ﻿using SharpXMPP.WPF.Helpers;
 using SharpXMPP.WPF.Models;
 using SharpXMPP.XMPP;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
 using System.Windows.Data;
 
 namespace SharpXMPP.WPF.ViewModels
@@ -16,9 +11,9 @@ namespace SharpXMPP.WPF.ViewModels
     {
         public ConversationsViewModel()
         {
-            db.Conversations.Include("User").Include("Messages").Load();
-            ChatsSource = new CollectionViewSource { Source = db.Conversations.Local };
-            Chats = ChatsSource.View;
+            Db.Conversations.Include("User").Include("Messages").Load();
+            _chatsSource = new CollectionViewSource { Source = Db.Conversations.Local };
+            Chats = _chatsSource.View;
             SendMessageCommand = new DelegateCommand<Conversation>((conversation) =>
             {                
                 var message = new Message
@@ -27,19 +22,19 @@ namespace SharpXMPP.WPF.ViewModels
                     From = new JID("throwable@jabber.ru"),
                     Text = conversation.Draft
                 };
-                db.Messages.Add(message);
-                db.SaveChanges();
+                Db.Messages.Add(message);
+                Db.SaveChanges();
                 conversation.Messages.Add(message);
                 conversation.Draft = null;
-                db.SaveChanges();
+                Db.SaveChanges();
             }, ()=> true);
         }
         public JID JID { get; set; }
         
         
-        private CollectionViewSource ChatsSource;
+        private readonly CollectionViewSource _chatsSource;
 
-        public ICollectionView Chats { get; set; }
+        public ICollectionView Chats { get; private set; }
 
         public DelegateCommand<Conversation> SendMessageCommand { get; set; }
     }

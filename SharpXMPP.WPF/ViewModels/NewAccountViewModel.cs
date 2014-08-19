@@ -2,9 +2,6 @@
 using SharpXMPP.WPF.Models;
 using SharpXMPP.XMPP;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace SharpXMPP.WPF.ViewModels
@@ -12,14 +9,14 @@ namespace SharpXMPP.WPF.ViewModels
     public class NewAccountViewModel : ViewModelBase
     {
         public Action CloseAction { get; set; }
-        public Nullable<bool> DialogResult { get; set; }
+        public bool? DialogResult { get; set; }
 
         public NewAccountViewModel()
         {
             SaveAccountCommand = new DelegateCommand<RoutedEventArgs>((e) =>
             {
-                db.Accounts.Add(new Account { JID = new JID(JID), Password = Password });
-                db.SaveChanges();
+                Db.Accounts.Add(new Account { JID = new JID(JID), Password = Password });
+                Db.SaveChanges();
                 CloseAction();
                 DialogResult = true;
             }, () => true);

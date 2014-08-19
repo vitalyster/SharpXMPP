@@ -1,11 +1,5 @@
 ﻿using SharpXMPP.WPF.ViewModels;
-using SharpXMPP.XMPP;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
 
 namespace SharpXMPP.WPF.Models
 {

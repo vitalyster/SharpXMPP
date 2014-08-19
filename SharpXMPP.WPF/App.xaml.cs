@@ -1,11 +1,6 @@
 ﻿using SharpXMPP.WPF.Models;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Data.Entity;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Markup;
 
