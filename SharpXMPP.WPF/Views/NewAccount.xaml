@@ -1,0 +1,20 @@
+﻿<Window x:Class="SharpXMPP.WPF.Views.NewAccount"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewmodels="clr-namespace:SharpXMPP.WPF.ViewModels"
+        xmlns:helpers="clr-namespace:SharpXMPP.WPF.Helpers"
+        Title="NewAccount" 
+        helpers:DialogCloser.DialogResult="{Binding DialogResult}" 
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        TextOptions.TextFormattingMode="Display"
+        WindowStyle="ToolWindow">
+    <Window.DataContext>
+        <viewmodels:NewAccountViewModel />
+    </Window.DataContext>
+    <StackPanel Orientation="Vertical">
+        <TextBox TabIndex="0" Text="{Binding JID,Mode=TwoWay}" Width="200" Padding="5 5 5 5" Margin="5 5 5 5" />
+        <TextBox TabIndex="1" Text="{Binding Password,Mode=TwoWay}" Padding="5 5 5 5" Margin="5 5 5 5" />
+        <Button TabIndex="2" Content="Save" IsDefault="True" Command="{Binding SaveAccountCommand}" Padding="5 5 5 5" Margin="5 5 5 5"/>
+    </StackPanel>
+</Window>

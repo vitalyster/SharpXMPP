@@ -1,10 +1,15 @@
 ﻿namespace SharpXMPP.XMPP
 {
-    public class JID
+    public partial class JID
     {
-        public string User;
-        public string Domain;
-        public string Resource;
+        public string User { get; set; }
+        public string Domain { get; set; }
+        public string Resource { get; set; }
+
+        public JID()
+        {
+
+        }
         
         public JID(string jid)
         {
@@ -35,6 +40,11 @@
         public string FullJid
         {
             get { return string.IsNullOrEmpty(Resource) ? BareJid : string.Format(@"{0}/{1}", BareJid, Resource); }
+        }
+
+        public string ToString()
+        {
+            return FullJid;            
         }
     }
 }

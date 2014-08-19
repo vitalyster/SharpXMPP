@@ -28,7 +28,7 @@ namespace SharpXMPP.WPF
         {
             InitializeComponent();
         }
-
+        /*
         void LogXml(XElement args)
         {
             Dispatcher.Invoke(new MessageDelegate(AddStanza), args.ToString());
@@ -122,5 +122,6 @@ namespace SharpXMPP.WPF
 
             sv.ScrollToBottom();
         }
+         */
     }
 }
