@@ -1,5 +1,6 @@
 ﻿using SharpXMPP.XMPP;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
@@ -35,7 +36,7 @@ namespace SharpXMPP.WPF.Models
             {
                 Account = account,
                 User = vasya,                
-                Messages = new List<Message>
+                Messages = new ObservableCollection<Message>
                 {
                     message
                 }
@@ -54,7 +55,7 @@ namespace SharpXMPP.WPF.Models
             var conversation2 = new Conversation
             {
                 User = petya,
-                Messages = new List<Message>
+                Messages = new ObservableCollection<Message>
                 {
                     message2
                 }

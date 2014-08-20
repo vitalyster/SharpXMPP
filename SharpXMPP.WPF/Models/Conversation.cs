@@ -1,5 +1,6 @@
 ﻿using SharpXMPP.WPF.ViewModels;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SharpXMPP.WPF.Models
 {
@@ -8,7 +9,7 @@ namespace SharpXMPP.WPF.Models
         public int ConversationID { get; set; }
         public Account Account { get; set; }
         public User User { get; set; }
-        public virtual List<Message> Messages { get; set; }
+        public virtual ObservableCollection<Message> Messages { get; set; }
 
         private string _draft;
         public string Draft

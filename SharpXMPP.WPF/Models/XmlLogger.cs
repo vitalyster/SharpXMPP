@@ -17,7 +17,7 @@ namespace SharpXMPP.WPF.Models
             _connection.Element += (sender, args) =>
                                        {
                                            var raw = new RawXml {IsInput = args.IsInput, Data = args.Stanza.ToString()};
-                                           _context.Entry(raw).State = EntityState.Added;
+                                           _context.Log.Add(raw);
                                            _context.SaveChanges();
                                        };
         }

@@ -2,8 +2,10 @@
 using SharpXMPP.WPF.Models;
 using SharpXMPP.WPF.Views;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Windows;
+using System.Windows.Data;
 
 namespace SharpXMPP.WPF.ViewModels
 {
@@ -12,7 +14,7 @@ namespace SharpXMPP.WPF.ViewModels
         public AccountsListViewModel()
         {
             Db.Accounts.Load();
-            Accounts = Db.Accounts.Local;
+            Accounts = new CollectionViewSource { Source = Db.Accounts.Local }.View;
             AddAccountCommand = new DelegateCommand<RoutedEventArgs>((e) => {
                 var newaw = new NewAccount();
                 newaw.ShowDialog();
@@ -23,10 +25,11 @@ namespace SharpXMPP.WPF.ViewModels
                 {
                     Db.Accounts.Remove(account);
                     Db.SaveChanges();
+                    Accounts.Refresh();
                 }
             }, () => true);
         }
-        public ObservableCollection<Account> Accounts { get; set; }
+        public ICollectionView Accounts { get; set; }
         public DelegateCommand<RoutedEventArgs> AddAccountCommand { get; set; }
         public DelegateCommand<Account> DeleteAccountCommand { get; set; }
     }

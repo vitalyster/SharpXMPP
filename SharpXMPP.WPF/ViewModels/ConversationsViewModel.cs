@@ -5,6 +5,8 @@ using SharpXMPP.XMPP;
 using System.ComponentModel;
 using System.Data.Entity;
 using System.Windows.Data;
+using System;
+using System.Windows.Threading;
 
 namespace SharpXMPP.WPF.ViewModels
 {
@@ -13,7 +15,8 @@ namespace SharpXMPP.WPF.ViewModels
         public ConversationsViewModel()
         {
             Db.Conversations.Include("User").Include("Messages").Load();
-            Chats = Db.Conversations.Local;
+            _chatsSource = new CollectionViewSource { Source = Db.Conversations.Local };
+            Chats = _chatsSource.View;
             SendMessageCommand = new DelegateCommand<Conversation>((conversation) =>
             {                
                 var message = new Message
@@ -30,9 +33,9 @@ namespace SharpXMPP.WPF.ViewModels
             }, ()=> true);
         }
         public JID JID { get; set; }
-        
-        
-        public ObservableCollection<Conversation> Chats { get; private set; }
+
+        private CollectionViewSource _chatsSource;
+        public ICollectionView Chats { get; private set; }
 
         public DelegateCommand<Conversation> SendMessageCommand { get; set; }
     }

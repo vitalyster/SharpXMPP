@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using SharpXMPP.WPF.ViewModels;
+using System.Collections;
 using System.Windows;
 using System.Windows.Documents;
 
@@ -44,7 +45,7 @@ namespace SharpXMPP.WPF.Helpers
                 paragraph.Inlines.Clear();
                 foreach (var inline in inlines)
                 {
-                    var templateInline = paragraph.FindResource(templateName) as ArrayList;
+                    var templateInline = paragraph.FindResource(templateName) as LogCollection;
                     var span = new Span {DataContext = inline};
                     span.Inlines.Add(templateInline[0] as Inline);
                     
