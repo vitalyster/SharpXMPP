@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace SharpXMPP.XMPP.Client.Roster.Elements
 {
-    public class Roster : XElement
+    public class Roster : Stanza
     {
         public Roster() : base(XNamespace.Get("jabber:iq:roster") + "query")
         {
@@ -14,7 +14,7 @@ namespace SharpXMPP.XMPP.Client.Roster.Elements
         [XmlArrayItem(ElementName = "item", Namespace = "jabber:iq:roster")]
         public RosterItem[] Items { get; set; }
     }
-    public class RosterItem : XElement
+    public class RosterItem : Stanza
     {
         public RosterItem() : base(XNamespace.Get("jabber:iq:roster") + "item")
         {

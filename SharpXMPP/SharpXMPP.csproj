@@ -77,6 +77,8 @@
     <Compile Include="XMPP\Client\Disco\Elements\Identity.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\ItemsHandler.cs" />
     <Compile Include="XMPP\Client\Disco\InfoHandler.cs" />
+    <Compile Include="XMPP\Client\MUC\Bookmarks\BookmarksHandler.cs" />
+    <Compile Include="XMPP\Client\MUC\Bookmarks\Elements\BookmarkedCoference.cs" />
     <Compile Include="XMPP\Client\Register\IRegistrationHandler.cs" />
     <Compile Include="XMPP\Client\Register\XmppRegisterHandler.cs" />
     <Compile Include="XMPP\Component\Elements\Handshake.cs" />
