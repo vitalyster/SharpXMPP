@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using SharpXMPP.WPF.ViewModels;
 
 namespace SharpXMPP.WPF
 {
@@ -8,10 +9,10 @@ namespace SharpXMPP.WPF
     public partial class MainWindow : Window
     {
         public delegate void MessageDelegate(string block);
-        private XmppClientConnection client;
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
         }
         /*
         void LogXml(XElement args)

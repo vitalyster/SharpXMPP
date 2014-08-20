@@ -88,15 +88,20 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="Helpers\DialogCloser.cs" />
+    <Compile Include="Helpers\ParagraphInlineBehavior.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Conversation.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\RawXml.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\XmlLogger.cs" />
     <Compile Include="Models\XMPPContext.cs" />
     <Compile Include="ViewModels\AccountsListViewModel.cs" />
     <Compile Include="ViewModels\ConversationsViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NewAccountViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\XmlViewerViewModel.cs" />
     <Compile Include="Views\AccountsList.xaml.cs">
       <DependentUpon>AccountsList.xaml</DependentUpon>
     </Compile>
@@ -105,6 +110,9 @@
     </Compile>
     <Compile Include="Views\NewAccount.xaml.cs">
       <DependentUpon>NewAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\XmlLog.xaml.cs">
+      <DependentUpon>XmlLog.xaml</DependentUpon>
     </Compile>
     <Compile Include="XmlTokenizer.cs" />
     <Page Include="MainWindow.xaml">
@@ -128,6 +136,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\XmlLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

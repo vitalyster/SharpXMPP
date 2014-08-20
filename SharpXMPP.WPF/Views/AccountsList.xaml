@@ -3,12 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:models="clr-namespace:SharpXMPP.WPF.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.DataContext>
-        <models:AccountsListViewModel/>
-    </UserControl.DataContext>
+   
     <DockPanel>
         <ToolBar Margin="5 5 5 5" DockPanel.Dock="Top">
             <Button Content="Add" Padding="5 5 5 5" Margin="5 5 5 5" Command="{Binding AddAccountCommand}" />

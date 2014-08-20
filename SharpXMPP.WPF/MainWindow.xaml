@@ -6,21 +6,31 @@
         mc:Ignorable="d"  
         xmlns:controls="clr-namespace:SharpXMPP.WPF.Views"
         Title="MainWindow" d:DesignHeight="350" d:DesignWidth="525" TextOptions.TextFormattingMode="Display"> 
-    <DockPanel>        
+    <DockPanel>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
-            <StatusBarItem Content="Ready" />
+            <StatusBarItem>
+                <TextBlock>Ready</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="1">
+                <ProgressBar Value="20" Width="80" Height="18" Visibility="Hidden" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="2">
+                <Button Content="Log" Padding="10 3 10 3" Margin="3 3 3 3" Command="{Binding ShowLogCommand}" />
+            </StatusBarItem>
         </StatusBar>
         <controls:Conversations />
     </DockPanel>

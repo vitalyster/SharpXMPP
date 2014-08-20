@@ -9,9 +9,6 @@
         ResizeMode="NoResize"
         TextOptions.TextFormattingMode="Display"
         WindowStyle="ToolWindow">
-    <Window.DataContext>
-        <viewmodels:NewAccountViewModel />
-    </Window.DataContext>
     <StackPanel Orientation="Vertical">
         <TextBox TabIndex="0" Text="{Binding JID,Mode=TwoWay}" Width="200" Padding="5 5 5 5" Margin="5 5 5 5" />
         <TextBox TabIndex="1" Text="{Binding Password,Mode=TwoWay}" Padding="5 5 5 5" Margin="5 5 5 5" />

@@ -15,6 +15,8 @@ namespace SharpXMPP.WPF.Models
 
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<RawXml> Log { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -27,16 +29,19 @@ namespace SharpXMPP.WPF.Models
         {
             var vasya = new User {JID = new JID("vasya@xmpp.ru"), Name = "Вася" };
             var message = new Message { From = vasya.JID, Text = "Hello, world!", To = new JID("throwable@jabber.ru")};
-            
+            var account = new Account { JID = new JID("throwable@jabber.ru"), Password = "IOException" };
+
             var conversation = new Conversation
             {
+                Account = account,
                 User = vasya,                
                 Messages = new List<Message>
                 {
                     message
                 }
             };
-
+            
+            context.Accounts.Add(account);
             context.Users.Add(vasya);
             context.SaveChanges();
             context.Messages.Add(message);
@@ -61,7 +66,7 @@ namespace SharpXMPP.WPF.Models
             context.SaveChanges();
             context.Conversations.Add(conversation2);
 
-            //All standards will
+            
             base.Seed(context);
         }
     }
