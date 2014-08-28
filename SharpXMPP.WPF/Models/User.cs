@@ -5,9 +5,7 @@ namespace SharpXMPP.WPF.Models
 {
     public class User
     {
-        public int UserID { get; set; }
-        [Column(TypeName="nvarchar")]
-        public JID JID { get; set; }
+        public string JID { get; set; }
         public string Name { get; set; }
     }
 }

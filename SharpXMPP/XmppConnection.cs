@@ -5,6 +5,7 @@ using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Client.Capabities;
 using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
+using System;
 
 namespace SharpXMPP
 {
@@ -22,12 +23,23 @@ namespace SharpXMPP
     public class SignedInArgs
     {
         public JID Jid { get; set; }
-    }
+    }   
 
     public abstract class XmppConnection
     {
-        protected XmppConnection()
+        private string _ns;
+
+        public string Namespace
         {
+            get
+            {
+                return _ns;
+            }
+        }
+        protected XmppConnection(string ns)
+        {
+            queries = new Dictionary<string, Action<XMPP.Client.Elements.Iq>>();
+            _ns = ns;
             Capabilities = new CapabilitiesManager
             {
                 Identity = new Identity
@@ -85,11 +97,23 @@ namespace SharpXMPP
 
         public delegate void IqHandler(object sender, Iq e);
 
-        public event IqHandler Iq = delegate {};
+        protected event IqHandler Iq = delegate {};
 
         protected void OnIq(Iq e)
         {
-            Iq(this, e);
+            if (e.IqType == XMPP.Client.Elements.Iq.IqTypes.result 
+                || e.IqType == XMPP.Client.Elements.Iq.IqTypes.error
+                && queries.ContainsKey(e.ID))
+            {
+                queries[e.ID](e);
+                queries.Remove(e.ID);
+            }
+            else
+            {
+                // get, set
+                Iq(this, e);
+            }
+            
         }
 
         public delegate void MessageHandler(object sender, Message e);
@@ -115,6 +139,15 @@ namespace SharpXMPP
             OnElement(new ElementArgs { Stanza = data, IsInput = false });
         }
 
+        Dictionary<string, Action<Iq>> queries;
+
+        public void Query(Iq request, Action<Iq> response)
+        {
+            queries.Add(request.ID, response);
+            Send(request);
+        }
+
+        
         public abstract void Connect();
     }
 }

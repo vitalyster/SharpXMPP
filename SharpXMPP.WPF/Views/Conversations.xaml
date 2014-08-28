@@ -20,7 +20,7 @@
                   Grid.Column="0" Grid.Row="0" Width="200">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding User.Name}"/>
+                    <TextBlock Text="{Binding Name}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -31,7 +31,7 @@
                         DockPanel.Dock="Right" Command="{Binding SendMessageCommand}" 
                         CommandParameter="{Binding ElementName=ConversationsList,Path=SelectedItem}" />
                 <TextBox Padding="5" Margin="5" AcceptsReturn="True" TextWrapping="Wrap"
-                         DataContext="{Binding Source={x:Reference ConversationsList},Path=SelectedItem}" 
+                         DataContext="{Binding ElementName=ConversationsList,Path=SelectedItem}" 
                          Text="{Binding Draft,Mode=TwoWay}" />                
             </DockPanel>
             <ListView Padding="5 5 5 5" Margin="5 5 5 5" ItemsSource="{Binding ElementName=ConversationsList,Path=SelectedItem.Messages}">

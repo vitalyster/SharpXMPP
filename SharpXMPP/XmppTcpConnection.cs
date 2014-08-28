@@ -16,6 +16,7 @@ using SharpXMPP.XMPP.SASL;
 using SharpXMPP.XMPP.SASL.Elements;
 using SharpXMPP.XMPP.Stream.Elements;
 using SharpXMPP.XMPP.TLS.Elements;
+using System.Threading;
 
 namespace SharpXMPP
 {
@@ -32,7 +33,7 @@ namespace SharpXMPP
 
         protected abstract IEnumerable<IPAddress> HostAddresses { get; set; }
     
-        protected XmppTcpConnection(JID jid, string password)
+        protected XmppTcpConnection(string ns, JID jid, string password) : base(ns)
         {
             Jid = jid;
             
@@ -65,7 +66,15 @@ namespace SharpXMPP
 
         }
 
-        protected abstract void OpenXmppStream();
+        protected void OpenXmppStream()
+        {
+            Writer.WriteStartElement("stream", "stream", Namespaces.Streams);
+            Writer.WriteAttributeString("xmlns", Namespace);
+            Writer.WriteAttributeString("version", "1.0");
+            Writer.WriteAttributeString("to", Jid.Domain);
+            Writer.WriteRaw("");
+            Writer.Flush();
+        }
 
         public override XElement NextElement()
         {
@@ -124,13 +133,8 @@ namespace SharpXMPP
         public override void Connect()
         {
             RestartXmlStreams();
-            /*if (true)
-            {
-                var handshake = Stanza.Parse<Handshake>(NextElement());
-                return;
-            }*/
             var features = Stanza.Parse<Features>(NextElement());
-            if (features.TlsRequired || true)
+            if (features.Tls)
             {
                 Send(new StartTLS());
                 var res = Stanza.Parse<Proceed>(NextElement());
@@ -162,28 +166,40 @@ namespace SharpXMPP
                 authResponse = NextElement();
             }
             RestartXmlStreams();
-            NextElement(); // skip features
-            var bind = new Bind(Jid.Resource);
-            var iq = new Iq(XMPP.Client.Elements.Iq.IqTypes.set);
-            iq.Add(bind);
-            Send(iq);
-            var el4 = NextElement();
-            var jid = el4.Element(XNamespace.Get(Namespaces.XmppBind) + "bind");
-            if (jid == null)
+            var features2 = Stanza.Parse<Features>(NextElement());
+            if (features2.Bind)
             {
-                OnConnectionFailed(new ConnFailedArgs { Message = "bind failed" });
-                return;
+                var bind = new Bind(Jid.Resource);
+                var iq = new Iq(XMPP.Client.Elements.Iq.IqTypes.set);
+                iq.Add(bind);
+                ThreadPool.QueueUserWorkItem((e) => SessionLoop());
+                Query(iq, (bindResult) =>
+                {
+                    var jid = bindResult.Element(XNamespace.Get(Namespaces.XmppBind) + "bind");
+                    if (jid == null)
+                    {
+                        OnConnectionFailed(new ConnFailedArgs { Message = "bind failed" });
+                        return;
+                    }
+                    else
+                    {
+                        Jid = new JID(jid.Element(XNamespace.Get(Namespaces.XmppBind) + "jid").Value);
+                        if (features2.Session)
+                        {
+                            var sess = new XElement(XNamespace.Get(Namespaces.XmppSession) + "session");
+                            var sessIq = new Iq(XMPP.Client.Elements.Iq.IqTypes.set);
+                            sessIq.Add(sess);
+                            Query(sessIq, (sessionResponse) => {
+                                OnSignedIn(new SignedInArgs { Jid = Jid });
+                            });
+                        }
+                        else
+                        {
+                            OnSignedIn(new SignedInArgs { Jid = Jid });
+                        }
+                    }
+                });                
             }
-            var sess = new XElement(XNamespace.Get(Namespaces.XmppSession) + "session");
-            var sessIq = new Iq(XMPP.Client.Elements.Iq.IqTypes.set);
-            sessIq.Add(sess);
-            Send(sessIq);
-            NextElement(); // skip session result
-            Jid = new JID(jid.Element(XNamespace.Get(Namespaces.XmppBind) + "jid").Value);
-            OnSignedIn(new SignedInArgs { Jid = Jid });
-            if (InitialPresence)
-                Send(new Presence(Capabilities));
-            SessionLoop();
         }
 
     }

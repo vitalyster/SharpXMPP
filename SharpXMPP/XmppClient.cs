@@ -4,15 +4,24 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using SharpXMPP.XMPP;
+using SharpXMPP.XMPP.Client.Elements;
+using SharpXMPP.XMPP.Client.MUC.Bookmarks;
 
 namespace SharpXMPP
 {
-    public class XmppClientConnection : XmppTcpConnection
+    public class XmppClient : XmppTcpConnection
     {
-        public XmppClientConnection(JID jid, string password)
-            : base(jid, password)
+        public XmppClient(JID jid, string password)
+            : base(Namespaces.JabberClient, jid, password)
         {
+            SignedIn += (sender, args) =>
+            {
+                Send(new Presence());
+            };
+            bookmarkManager = new BookmarksManager(this);
         }
+
+        public BookmarksManager bookmarkManager;
 
         protected override int TcpPort
         {
@@ -29,16 +38,6 @@ namespace SharpXMPP
                 return addresses;
             }
             set { throw new NotImplementedException(); }
-        }
-
-        protected override void OpenXmppStream()
-        {
-            Writer.WriteStartElement("stream", "stream", Namespaces.Streams);
-            Writer.WriteAttributeString("xmlns", Namespaces.JabberClient);
-            Writer.WriteAttributeString("version", "1.0");
-            Writer.WriteAttributeString("to", Jid.Domain);
-            Writer.WriteRaw("");
-            Writer.Flush();
-        }
+        }        
     }
 }

@@ -14,22 +14,22 @@ namespace SharpXMPP.WPF.ViewModels
     {
         public ConversationsViewModel()
         {
-            Db.Conversations.Include("User").Include("Messages").Load();
-            _chatsSource = new CollectionViewSource { Source = Db.Conversations.Local };
+            App.DB.Conversations.Include("Users").Include("Messages").Load();
+            _chatsSource = new CollectionViewSource { Source = App.DB.Conversations.Local };
             Chats = _chatsSource.View;
             SendMessageCommand = new DelegateCommand<Conversation>((conversation) =>
             {                
                 var message = new Message
                 {
-                    To = conversation.User.JID,
-                    From = new JID("throwable@jabber.ru"),
+                    To = conversation.JID,
+                    From = "throwable@jabber.ru",
                     Text = conversation.Draft
                 };
-                Db.Messages.Add(message);
-                Db.SaveChanges();
+                App.DB.Messages.Add(message);
+                App.DB.SaveChanges();
                 conversation.Messages.Add(message);
                 conversation.Draft = null;
-                Db.SaveChanges();
+                App.DB.SaveChanges();
             }, ()=> true);
         }
         public JID JID { get; set; }

@@ -66,9 +66,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PipeStream.cs" />
-    <Compile Include="XmppClientConnection.cs" />
-    <Compile Include="XmppComponentConnection.cs" />
+    <Compile Include="XmppClient.cs" />
+    <Compile Include="XmppComponent.cs" />
     <Compile Include="XMPP\Bind\Elements\Bind.cs" />
     <Compile Include="XMPP\Client\Capabities\CapabilitiesManager.cs" />
     <Compile Include="XMPP\Client\Capabities\Elements\Caps.cs" />
@@ -77,7 +76,7 @@
     <Compile Include="XMPP\Client\Disco\Elements\Identity.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\ItemsHandler.cs" />
     <Compile Include="XMPP\Client\Disco\InfoHandler.cs" />
-    <Compile Include="XMPP\Client\MUC\Bookmarks\BookmarksHandler.cs" />
+    <Compile Include="XMPP\Client\MUC\Bookmarks\BookmarksManager.cs" />
     <Compile Include="XMPP\Client\MUC\Bookmarks\Elements\BookmarkedCoference.cs" />
     <Compile Include="XMPP\Client\Register\IRegistrationHandler.cs" />
     <Compile Include="XMPP\Client\Register\XmppRegisterHandler.cs" />

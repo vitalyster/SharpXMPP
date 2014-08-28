@@ -15,8 +15,8 @@ namespace SharpXMPP.WPF.ViewModels
         {
             SaveAccountCommand = new DelegateCommand<RoutedEventArgs>((e) =>
             {
-                Db.Accounts.Add(new Account { JID = new JID(JID), Password = Password });
-                Db.SaveChanges();
+                App.DB.Accounts.Add(new Account { JID = JID, Password = Password });
+                App.DB.SaveChanges();
                 CloseAction();
                 DialogResult = true;
             }, () => true);

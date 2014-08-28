@@ -7,10 +7,8 @@ namespace SharpXMPP.WPF.Models
     {
         public long MessageID { get; set; }
         public string Text { get; set; }
-        [Column(TypeName = "nvarchar")]
-        public JID To { get; set; }
-        [Column(TypeName = "nvarchar")]
-        public JID From { get; set; }
+        public string To { get; set; }
+        public string From { get; set; }
 
         public bool Delivered { get; set; }
         public bool Read { get; set; }

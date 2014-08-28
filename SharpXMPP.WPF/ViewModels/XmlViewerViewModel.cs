@@ -17,13 +17,13 @@ namespace SharpXMPP.WPF.ViewModels
     {
         public XmlViewerViewModel()
         {
-            Db.Log.Load();
-            _log = new CollectionViewSource {Source = Db.Log.Local};
+            App.DB.Log.Load();
+            _log = new CollectionViewSource { Source = App.DB.Log.Local };
             Log = _log.View;
             ClearLogCommand = new DelegateCommand<RoutedEventArgs>((e) =>
                                                                        {
-                                                                           Db.Log.RemoveRange(Db.Log.Local);
-                                                                           Db.SaveChanges();
+                                                                           App.DB.Log.RemoveRange(App.DB.Log.Local);
+                                                                           App.DB.SaveChanges();
                                                                        }, () => true);
         }
         private readonly CollectionViewSource _log;

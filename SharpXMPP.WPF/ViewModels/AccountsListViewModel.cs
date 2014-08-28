@@ -13,8 +13,8 @@ namespace SharpXMPP.WPF.ViewModels
     {
         public AccountsListViewModel()
         {
-            Db.Accounts.Load();
-            Accounts = new CollectionViewSource { Source = Db.Accounts.Local }.View;
+            App.DB.Accounts.Load();
+            Accounts = new CollectionViewSource { Source = App.DB.Accounts.Local }.View;
             AddAccountCommand = new DelegateCommand<RoutedEventArgs>((e) => {
                 var newaw = new NewAccount();
                 newaw.ShowDialog();
@@ -23,8 +23,8 @@ namespace SharpXMPP.WPF.ViewModels
             {
                 if (account != null)
                 {
-                    Db.Accounts.Remove(account);
-                    Db.SaveChanges();
+                    App.DB.Accounts.Remove(account);
+                    App.DB.SaveChanges();
                     Accounts.Refresh();
                 }
             }, () => true);

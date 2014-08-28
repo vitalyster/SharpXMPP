@@ -8,9 +8,9 @@ namespace SharpXMPP.WPF.Models
 {
     public class XmlLogger
     {
-        private readonly XmppClientConnection _connection;
+        private readonly XmppClient _connection;
         private readonly XMPPContext _context;
-        public XmlLogger(XmppClientConnection connection, XMPPContext context)
+        public XmlLogger(XmppClient connection, XMPPContext context)
         {
             _connection = connection;
             _context = context;

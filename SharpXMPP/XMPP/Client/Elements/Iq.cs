@@ -11,17 +11,26 @@ namespace SharpXMPP.XMPP.Client.Elements
             get, set, result, error
         }
 
-        private IqTypes _type;
-
         public IqTypes IqType 
         { 
             get
             {
-                return _type;
+                var iqtype = Attribute("type").Value;
+                switch (iqtype)
+                {
+                    case "get":
+                        return IqTypes.get;
+                    case "set":
+                        return IqTypes.set;
+                    case "result":
+                        return IqTypes.result;
+                    default:
+                        return IqTypes.error;
+                }
+
             }
             set
             {
-                _type = value;
                 SetAttributeValue("type", value); 
             }
         }
@@ -32,6 +41,14 @@ namespace SharpXMPP.XMPP.Client.Elements
         }
 
         public Iq() : base(XNamespace.Get(Namespaces.JabberClient) + "iq") { }
+
+        public string ID
+        {
+            get
+            {
+                return Attribute("id").Value;
+            }
+        }
 
         public Iq Reply()
         {

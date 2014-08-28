@@ -4,8 +4,7 @@ using System.ComponentModel;
 namespace SharpXMPP.WPF.ViewModels
 {
     public class ViewModelBase : INotifyPropertyChanged
-    {
-        protected XMPPContext Db = new XMPPContext();
+    {       
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
