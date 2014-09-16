@@ -6,6 +6,8 @@ using System.Text;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.Client.MUC.Bookmarks;
+using SharpXMPP.XMPP.Client;
+using SharpXMPP.XMPP.Client.Roster;
 
 namespace SharpXMPP
 {
@@ -16,12 +18,14 @@ namespace SharpXMPP
         {
             SignedIn += (sender, args) =>
             {
-                Send(new Presence());
+                Send(new XMPPPresence());
             };
             bookmarkManager = new BookmarksManager(this);
+            rosterManager = new RosterManager(this);	    
         }
 
         public BookmarksManager bookmarkManager;
+        public RosterManager rosterManager;
 
         protected override int TcpPort
         {

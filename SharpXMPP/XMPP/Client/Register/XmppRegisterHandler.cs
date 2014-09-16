@@ -49,7 +49,7 @@ namespace SharpXMPP.XMPP.Client.Register
             get { return new[] {"jabber:iq:register"}; }
         }
 
-        public override bool Handle(XmppConnection sender, Iq element)
+        public override bool Handle(XmppConnection sender, XMPPIq element)
         {
             var type = element.Attribute("type");
             if (type == null) return false;
@@ -97,7 +97,7 @@ namespace SharpXMPP.XMPP.Client.Register
                             {
                                 var reply = element.Reply();
                                 sender.Send(reply);
-                                var subscribe = new Presence();
+                                var subscribe = new XMPPPresence();
                                 subscribe.SetAttributeValue("to", from.BareJid);
                                 subscribe.SetAttributeValue("from", sender.Jid.BareJid);
                                 if (queryFields.ContainsKey("remove"))

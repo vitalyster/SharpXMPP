@@ -8,7 +8,7 @@ namespace SharpXMPP.XMPP.Client.Disco.Elements
 {
     public class ItemsHandler : PayloadHandler
     {
-        public override bool Handle(XmppConnection sender, Iq element)
+        public override bool Handle(XmppConnection sender, XMPPIq element)
         {
             if (Stanza.Parse<DiscoItems>(element.Elements().FirstOrDefault()) != null)
             {

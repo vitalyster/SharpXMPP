@@ -27,5 +27,10 @@ namespace SharpXMPP.WPF.Models
                 OnPropertyChanged("Draft");
             }
         }
+        public Conversation()
+        {
+            Users = new ObservableCollection<User>();
+            Messages = new ObservableCollection<Message>();
+        }
     }
 }

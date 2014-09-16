@@ -13,6 +13,29 @@ namespace SharpXMPP.XMPP
             
         }
 
+        public string ID
+        {
+            get
+            {
+                return Attribute("id") == null ? null : Attribute("id").Value;
+            }
+        }
+
+        public JID From
+        {
+            get
+            {
+                return Attribute("from") == null ? null : new JID(Attribute("from").Value);
+            }
+        }
+        public JID To
+        {
+            get
+            {
+                return Attribute("to") == null ? null : new JID(Attribute("to").Value);
+            }
+        }
+
         public static T Parse<T>(XElement src) where T : XElement, new()
         {
             

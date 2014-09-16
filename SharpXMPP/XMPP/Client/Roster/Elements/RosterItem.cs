@@ -4,30 +4,28 @@ using System.Xml.Serialization;
 
 namespace SharpXMPP.XMPP.Client.Roster.Elements
 {
-    public class Roster : Stanza
+    public class RosterItem : XElement
     {
-        public Roster() : base(XNamespace.Get("jabber:iq:roster") + "query")
-        {
-            Items = new RosterItem[1];
-        }
-
-        [XmlArrayItem(ElementName = "item", Namespace = "jabber:iq:roster")]
-        public RosterItem[] Items { get; set; }
-    }
-    public class RosterItem : Stanza
-    {
-        public RosterItem() : base(XNamespace.Get("jabber:iq:roster") + "item")
+        public RosterItem()
+            : base(XNamespace.Get(Namespaces.JabberRoster) + "item")
         {
             
         }
 
-        [XmlAttribute("jid")]
-        public string JID { get; set; }
-        [XmlAttribute("name")]
-        public string Name { get; set; }
-        [XmlAttribute("subscription")]
-        public string Subscription { get; set; }
-        [XmlAttribute("ask")]
-        public string SubscriptionAsk { get; set; }
+        public string JID 
+        { 
+            get 
+            {
+                return Attribute("jid") == null ? null : Attribute("jid").Value;
+            }    
+        }
+        public string Name
+        {
+            get
+            {
+                return Attribute("name") == null ? JID : Attribute("name").Value;
+            }
+        }
+        
     }
 }

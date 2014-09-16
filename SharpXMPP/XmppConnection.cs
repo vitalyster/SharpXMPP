@@ -38,7 +38,7 @@ namespace SharpXMPP
         }
         protected XmppConnection(string ns)
         {
-            queries = new Dictionary<string, Action<XMPP.Client.Elements.Iq>>();
+            queries = new Dictionary<string, Action<XMPP.Client.Elements.XMPPIq>>();
             _ns = ns;
             Capabilities = new CapabilitiesManager
             {
@@ -59,7 +59,7 @@ namespace SharpXMPP
         }
         public JID Jid { get; set; }
 
-        public delegate void ConnectionFailedHandler(object sender, ConnFailedArgs e);
+        public delegate void ConnectionFailedHandler(XmppConnection sender, ConnFailedArgs e);
 
         public event ConnectionFailedHandler ConnectionFailed = delegate {};
 
@@ -68,7 +68,7 @@ namespace SharpXMPP
             ConnectionFailed(this, e);
         }
 
-        public delegate void StreamStartHandler(object sender, string streamID);
+        public delegate void StreamStartHandler(XmppConnection sender, string streamID);
 
         public event StreamStartHandler StreamStart = delegate { };
  
@@ -77,7 +77,7 @@ namespace SharpXMPP
             StreamStart(this, streamID);
         }
 
-        public delegate void SignedInHandler(object sender, SignedInArgs e);
+        public delegate void SignedInHandler(XmppConnection sender, SignedInArgs e);
 
         public event SignedInHandler SignedIn = delegate {};
 
@@ -86,7 +86,7 @@ namespace SharpXMPP
             SignedIn(this, e);
         }
 
-        public delegate void ElementHandler(object sender, ElementArgs e);
+        public delegate void ElementHandler(XmppConnection sender, ElementArgs e);
 
         public event ElementHandler Element = delegate {};
 
@@ -95,14 +95,14 @@ namespace SharpXMPP
             Element(this, e);
         }
 
-        public delegate void IqHandler(object sender, Iq e);
+        public delegate void IqHandler(XmppConnection sender, XMPPIq e);
 
         protected event IqHandler Iq = delegate {};
 
-        protected void OnIq(Iq e)
+        protected void OnIq(XMPPIq e)
         {
-            if (e.IqType == XMPP.Client.Elements.Iq.IqTypes.result 
-                || e.IqType == XMPP.Client.Elements.Iq.IqTypes.error
+            if (e.IqType == XMPP.Client.Elements.XMPPIq.IqTypes.result 
+                || e.IqType == XMPP.Client.Elements.XMPPIq.IqTypes.error
                 && queries.ContainsKey(e.ID))
             {
                 queries[e.ID](e);
@@ -116,11 +116,11 @@ namespace SharpXMPP
             
         }
 
-        public delegate void MessageHandler(object sender, Message e);
+        public delegate void MessageHandler(XmppConnection sender, XMPPMessage e);
 
         public event MessageHandler Message = delegate { };
 
-        protected void OnMessage(Message e)
+        protected void OnMessage(XMPPMessage e)
         {
             Message(this, e);
         }
@@ -139,9 +139,9 @@ namespace SharpXMPP
             OnElement(new ElementArgs { Stanza = data, IsInput = false });
         }
 
-        Dictionary<string, Action<Iq>> queries;
+        Dictionary<string, Action<XMPPIq>> queries;
 
-        public void Query(Iq request, Action<Iq> response)
+        public void Query(XMPPIq request, Action<XMPPIq> response)
         {
             queries.Add(request.ID, response);
             Send(request);

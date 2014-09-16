@@ -4,8 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         mc:Ignorable="d"  
+        Style="{StaticResource ModernWindowStyle}"
         xmlns:controls="clr-namespace:SharpXMPP.WPF.Views"
-        Title="MainWindow" d:DesignHeight="350" d:DesignWidth="525" TextOptions.TextFormattingMode="Display"> 
+        xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
+        Title="MainWindow" d:DesignHeight="350" d:DesignWidth="525" TextOptions.TextFormattingMode="Display">
+    
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBar.ItemsPanel>
@@ -33,6 +36,7 @@
             </StatusBarItem>
         </StatusBar>
         <controls:Conversations />
+
     </DockPanel>
         
 </Window>

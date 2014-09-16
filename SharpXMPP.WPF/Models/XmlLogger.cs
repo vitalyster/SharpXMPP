@@ -3,22 +3,29 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace SharpXMPP.WPF.Models
 {
     public class XmlLogger
     {
-        private readonly XmppClient _connection;
-        private readonly XMPPContext _context;
         public XmlLogger(XmppClient connection, XMPPContext context)
         {
-            _connection = connection;
-            _context = context;
-            _connection.Element += (sender, args) =>
+            connection.Element += (sender, args) =>
                                        {
-                                           var raw = new RawXml {IsInput = args.IsInput, Data = args.Stanza.ToString()};
-                                           _context.Log.Add(raw);
-                                           _context.SaveChanges();
+                                           var raw = new RawXml 
+                                           { 
+                                               IsInput = args.IsInput, 
+                                               Data = args.Stanza.ToString() 
+                                           };
+                                           Application.Current.Dispatcher.BeginInvoke(
+                                               new Action(() => 
+                                               { 
+                                                   context.Log.Add(raw);
+                                                   context.SaveChanges();
+                                               }));
+                                           
                                        };
         }
     }
