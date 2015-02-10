@@ -20,14 +20,16 @@ namespace SharpXMPP.XMPP.Client.Roster
             RosterUpdated(sender);
         }
         public ObservableCollection<RosterItem> Roster {get;set;}
-        public RosterManager(XmppConnection conn)
+        public RosterManager(XmppConnection conn, bool autoAsk = true)
         {
             Roster = new ObservableCollection<RosterItem>();
             conn.SignedIn += (sender, e) =>
                 {
-                    var query = new XMPPIq(XMPPIq.IqTypes.get);
-                    query.Add(new XElement(XNamespace.Get(Namespaces.JabberRoster) + "query"));
-                    conn.Query(query, (response) =>
+                    if (autoAsk)
+                    {
+                        var query = new XMPPIq(XMPPIq.IqTypes.get);
+                        query.Add(new XElement(XNamespace.Get(Namespaces.JabberRoster) + "query"));
+                        conn.Query(query, (response) =>
                         {
                             var roster = response.Element(XNamespace.Get(Namespaces.JabberRoster) + "query")
                                 .Elements(XNamespace.Get(Namespaces.JabberRoster) + "item");
@@ -37,6 +39,7 @@ namespace SharpXMPP.XMPP.Client.Roster
                             }
                             OnRosterUpdated(conn);
                         });
+                    }
                 };
         }
     }

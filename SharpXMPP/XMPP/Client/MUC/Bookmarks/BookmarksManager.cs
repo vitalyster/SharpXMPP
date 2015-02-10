@@ -22,27 +22,29 @@ namespace SharpXMPP.XMPP.Client.MUC.Bookmarks
             BookmarksSynced(sender);
         }
 
-        public BookmarksManager(XmppConnection conn)
+        public BookmarksManager(XmppConnection conn, bool autoAsk = true)
         {
             conn.SignedIn += (sender, e) => 
             {
-                var query = new XMPPIq(XMPPIq.IqTypes.get);
-                var priv = new XElement(XNamespace.Get("jabber:iq:private") + "query", 
-                    new XElement(XNamespace.Get(Namespaces.StorageBookmarks) + "storage")
-                    );
-                query.Add(priv);
-                conn.Query(query, (response) =>
+                if (autoAsk)
                 {
-                    var roomsXML = response.Element(XNamespace.Get("jabber:iq:private") + "query")
-                        .Element(XNamespace.Get(Namespaces.StorageBookmarks) + "storage")
-                        .Elements(XNamespace.Get(Namespaces.StorageBookmarks) + "conference");
-                    foreach (var room in roomsXML)
+                    var query = new XMPPIq(XMPPIq.IqTypes.get);
+                    var priv = new XElement(XNamespace.Get("jabber:iq:private") + "query",
+                        new XElement(XNamespace.Get(Namespaces.StorageBookmarks) + "storage")
+                        );
+                    query.Add(priv);
+                    conn.Query(query, (response) =>
                     {
-                        rooms.Add(Stanza.Parse<BookmarkedConference>(room));   
-                    }
-                    OnBookmarksSynced(conn);
-                });
-
+                        var roomsXML = response.Element(XNamespace.Get("jabber:iq:private") + "query")
+                            .Element(XNamespace.Get(Namespaces.StorageBookmarks) + "storage")
+                            .Elements(XNamespace.Get(Namespaces.StorageBookmarks) + "conference");
+                        foreach (var room in roomsXML)
+                        {
+                            rooms.Add(Stanza.Parse<BookmarkedConference>(room));
+                        }
+                        OnBookmarksSynced(conn);
+                    });
+                }
             };
         }
     }

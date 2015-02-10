@@ -15,7 +15,14 @@ namespace SharpXMPP.XMPP.Client.Elements
         {
             get
             {
-                return Element(XNamespace.Get(Namespaces.JabberClient) + "body") == null ? null : Element(XNamespace.Get(Namespaces.JabberClient) + "body").Value;
+                return Element(XNamespace.Get(Namespaces.JabberClient) + "body") == null ? string.Empty : Element(XNamespace.Get(Namespaces.JabberClient) + "body").Value;
+            }
+            set
+            {
+                var body = Element(XNamespace.Get(Namespaces.JabberClient) + "body") ??
+                           new XElement(XNamespace.Get(Namespaces.JabberClient) + "body");
+                body.SetValue(new XCData(value));
+                Add(body);
             }
         }
     }

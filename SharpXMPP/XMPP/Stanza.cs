@@ -34,6 +34,10 @@ namespace SharpXMPP.XMPP
             {
                 return Attribute("to") == null ? null : new JID(Attribute("to").Value);
             }
+            set
+            {
+                SetAttributeValue("to", value.FullJid);
+            }
         }
 
         public static T Parse<T>(XElement src) where T : XElement, new()

@@ -29,8 +29,6 @@ namespace SharpXMPP
     
         protected readonly string Password;
 
-        public bool InitialPresence { get; set; }
-
         protected abstract IEnumerable<IPAddress> HostAddresses { get; set; }
     
         protected XmppTcpConnection(string ns, JID jid, string password) : base(ns)
@@ -38,10 +36,9 @@ namespace SharpXMPP
             Jid = jid;
             
             Password = password;	    
-	    _client = new TcpClient();
-	    _client.Connect(HostAddresses.ToArray(), TcpPort); // TODO: check ports
-	    _client.Close();
-            ConnectionStream = _client.GetStream();
+	        _client = new TcpClient();
+	        _client.Connect(HostAddresses.ToArray(), TcpPort); // TODO: check ports
+	        ConnectionStream = _client.GetStream();
             Iq += (sender, iq) => new XMPP.Client.IqManager(this)
             {
                 PayloadHandlers = new List<PayloadHandler>
@@ -159,10 +156,11 @@ namespace SharpXMPP
             auth.SetValue(authenticator.Initiate());
             Send(auth);
             var authResponse = NextElement();
-            while (authResponse.Name.LocalName != "success")
+            var nextResponse = string.Empty;
+            while ((nextResponse = authenticator.NextChallenge(authResponse.Value)) != "")
             {
                 var response = new SASLResponse();
-                response.SetValue(authenticator.NextChallenge(authResponse.Value));
+                response.SetValue(nextResponse);
                 Send(response);
                 authResponse = NextElement();
             }
@@ -171,7 +169,7 @@ namespace SharpXMPP
             if (features2.Bind)
             {
                 var bind = new Bind(Jid.Resource);
-                var iq = new XMPPIq(XMPP.Client.Elements.XMPPIq.IqTypes.set);
+                var iq = new XMPPIq(XMPPIq.IqTypes.set);
                 iq.Add(bind);
                 ThreadPool.QueueUserWorkItem((e) => SessionLoop());
                 Query(iq, (bindResult) =>
@@ -188,11 +186,9 @@ namespace SharpXMPP
                         if (features2.Session)
                         {
                             var sess = new XElement(XNamespace.Get(Namespaces.XmppSession) + "session");
-                            var sessIq = new XMPPIq(XMPP.Client.Elements.XMPPIq.IqTypes.set);
+                            var sessIq = new XMPPIq(XMPPIq.IqTypes.set);
                             sessIq.Add(sess);
-                            Query(sessIq, (sessionResponse) => {
-                                OnSignedIn(new SignedInArgs { Jid = Jid });
-                            });
+                            Query(sessIq, (sessionResponse) => OnSignedIn(new SignedInArgs { Jid = Jid }));
                         }
                         else
                         {

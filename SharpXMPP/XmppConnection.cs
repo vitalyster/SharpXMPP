@@ -27,7 +27,7 @@ namespace SharpXMPP
 
     public abstract class XmppConnection
     {
-        private string _ns;
+        private readonly string _ns;
 
         public string Namespace
         {
@@ -38,7 +38,7 @@ namespace SharpXMPP
         }
         protected XmppConnection(string ns)
         {
-            queries = new Dictionary<string, Action<XMPP.Client.Elements.XMPPIq>>();
+            queries = new Dictionary<string, Action<XMPPIq>>();
             _ns = ns;
             Capabilities = new CapabilitiesManager
             {
@@ -68,13 +68,13 @@ namespace SharpXMPP
             ConnectionFailed(this, e);
         }
 
-        public delegate void StreamStartHandler(XmppConnection sender, string streamID);
+        public delegate void StreamStartHandler(XmppConnection sender, string streamId);
 
         public event StreamStartHandler StreamStart = delegate { };
  
-        protected void OnStreamStart(string streamID)
+        protected void OnStreamStart(string streamId)
         {
-            StreamStart(this, streamID);
+            StreamStart(this, streamId);
         }
 
         public delegate void SignedInHandler(XmppConnection sender, SignedInArgs e);
@@ -101,8 +101,8 @@ namespace SharpXMPP
 
         protected void OnIq(XMPPIq e)
         {
-            if (e.IqType == XMPP.Client.Elements.XMPPIq.IqTypes.result 
-                || e.IqType == XMPP.Client.Elements.XMPPIq.IqTypes.error
+            if (e.IqType == XMPPIq.IqTypes.result 
+                || e.IqType == XMPPIq.IqTypes.error
                 && queries.ContainsKey(e.ID))
             {
                 queries[e.ID](e);
