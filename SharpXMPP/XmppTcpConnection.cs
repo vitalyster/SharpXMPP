@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Xml;
 using System.Xml.Linq;
 using SharpXMPP.XMPP;
+using SharpXMPP.XMPP.Bind;
 using SharpXMPP.XMPP.Bind.Elements;
 using SharpXMPP.XMPP.Client;
 using SharpXMPP.XMPP.Client.Disco;
@@ -25,11 +26,26 @@ namespace SharpXMPP
 
         private readonly TcpClient _client;
 
-        protected abstract int TcpPort { get; set; }
+        protected virtual int TcpPort
+        {
+            get { return 5222; }
+            set { throw new NotImplementedException(); }
+        }
+
+        protected virtual IEnumerable<IPAddress> HostAddresses
+        {
+            get
+            {
+                var addresses = new List<IPAddress>();
+                DNS.ResolveXMPPClient(Jid.Domain).ForEach(d => addresses.AddRange(Dns.GetHostAddresses(d.Host)));
+                return addresses;
+            }
+            set { throw new NotImplementedException(); }
+        }
     
         protected readonly string Password;
 
-        protected abstract IEnumerable<IPAddress> HostAddresses { get; set; }
+        
     
         protected XmppTcpConnection(string ns, JID jid, string password) : base(ns)
         {
@@ -103,7 +119,7 @@ namespace SharpXMPP
             Writer.WriteEndElement();
         }
 
-        protected void SessionLoop()
+        public override void SessionLoop()
         {
             while (true)
             {
@@ -151,53 +167,14 @@ namespace SharpXMPP
                 OnConnectionFailed(new ConnFailedArgs { Message = "supported sasl mechanism not available" });
                 return;
             }
-            var auth = new SASLAuth();
-            auth.SetAttributeValue("mechanism", authenticator.SASLMethod);
-            auth.SetValue(authenticator.Initiate());
-            Send(auth);
-            var authResponse = NextElement();
-            var nextResponse = string.Empty;
-            while ((nextResponse = authenticator.NextChallenge(authResponse.Value)) != "")
+            authenticator.Authenticated += sender =>
             {
-                var response = new SASLResponse();
-                response.SetValue(nextResponse);
-                Send(response);
-                authResponse = NextElement();
-            }
-            RestartXmlStreams();
-            var features2 = Stanza.Parse<Features>(NextElement());
-            if (features2.Bind)
-            {
-                var bind = new Bind(Jid.Resource);
-                var iq = new XMPPIq(XMPPIq.IqTypes.set);
-                iq.Add(bind);
-                ThreadPool.QueueUserWorkItem((e) => SessionLoop());
-                Query(iq, (bindResult) =>
-                {
-                    var jid = bindResult.Element(XNamespace.Get(Namespaces.XmppBind) + "bind");
-                    if (jid == null)
-                    {
-                        OnConnectionFailed(new ConnFailedArgs { Message = "bind failed" });
-                        return;
-                    }
-                    else
-                    {
-                        Jid = new JID(jid.Element(XNamespace.Get(Namespaces.XmppBind) + "jid").Value);
-                        if (features2.Session)
-                        {
-                            var sess = new XElement(XNamespace.Get(Namespaces.XmppSession) + "session");
-                            var sessIq = new XMPPIq(XMPPIq.IqTypes.set);
-                            sessIq.Add(sess);
-                            Query(sessIq, (sessionResponse) => OnSignedIn(new SignedInArgs { Jid = Jid }));
-                        }
-                        else
-                        {
-                            OnSignedIn(new SignedInArgs { Jid = Jid });
-                        }
-                    }
-                });                
-            }
+                RestartXmlStreams();
+                var session = new SessionHandler();
+                session.SessionStarted += connection => OnSignedIn(new SignedInArgs {Jid = connection.Jid});
+                session.Start(this);
+            };
+            authenticator.Start(this);
         }
-
     }
 }

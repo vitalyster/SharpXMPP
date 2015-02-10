@@ -74,6 +74,7 @@
     <Compile Include="XmppClient.cs" />
     <Compile Include="XmppComponent.cs" />
     <Compile Include="XMPP\Bind\Elements\Bind.cs" />
+    <Compile Include="XMPP\Bind\SessionHandler.cs" />
     <Compile Include="XMPP\Client\Capabities\CapabilitiesManager.cs" />
     <Compile Include="XMPP\Client\Capabities\Elements\Caps.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\DiscoInfo.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="XMPP\SASL\SASLDigestMD5.cs" />
     <Compile Include="XMPP\SASL\SASLHandler.cs" />
     <Compile Include="XMPP\SASL\SASLPlainHandler.cs" />
+    <Compile Include="XMPP\SASL\SASLSCRAM.cs" />
     <Compile Include="XMPP\Stanza.cs" />
     <Compile Include="XMPP\Stream\Elements\StreamError.cs" />
     <Compile Include="XMPP\Stream\Elements\Features.cs" />

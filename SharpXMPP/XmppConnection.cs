@@ -6,6 +6,7 @@ using SharpXMPP.XMPP.Client.Capabities;
 using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
 using System;
+using SharpXMPP.XMPP.Stream.Elements;
 
 namespace SharpXMPP
 {
@@ -57,6 +58,9 @@ namespace SharpXMPP
                 }
             };
         }
+
+        public Features Features { get; set; }
+
         public JID Jid { get; set; }
 
         public delegate void ConnectionFailedHandler(XmppConnection sender, ConnFailedArgs e);
@@ -147,7 +151,7 @@ namespace SharpXMPP
             Send(request);
         }
 
-        
+        public abstract void SessionLoop();
         public abstract void Connect();
     }
 }
