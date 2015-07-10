@@ -56,6 +56,10 @@ namespace SharpXMPP.WPF
             _conn.Message += (conn, message) =>
                 {
                     if (message.Text == null) return;
+                    if (string.IsNullOrEmpty(message.ID))
+                    {
+                        message.ID = Guid.NewGuid().ToString();
+                    }
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
                         var exist = DB.Messages.FirstOrDefault(m => m.MessageID == message.ID);
@@ -87,45 +91,45 @@ namespace SharpXMPP.WPF
                         }
                     }));
                 };
-            //_conn.bookmarkManager.BookmarksSynced += (conn) =>
-            //{
-            //    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            //        {
-            //            foreach (var room in _conn.bookmarkManager.rooms)
-            //            {
-            //                var exist = DB.Conversations.FirstOrDefault(r => r.JID == room.JID.FullJid);
-            //                if (exist == null)
-            //                {
-            //                    DB.Conversations.Add(new Conversation
-            //                    {
-            //                        JID = room.JID.FullJid,
-            //                        Name = room.Name
-            //                    });
-            //                }
-            //            }
-            //            DB.SaveChanges();
-            //        }));
+            _conn.BookmarkManager.BookmarksSynced += (conn) =>
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        foreach (var room in _conn.BookmarkManager.rooms)
+                        {
+                            var exist = DB.Conversations.FirstOrDefault(r => r.JID == room.JID.FullJid);
+                            if (exist == null)
+                            {
+                                DB.Conversations.Add(new Conversation
+                                {
+                                    JID = room.JID.FullJid,
+                                    Name = room.Name
+                                });
+                            }
+                        }
+                        DB.SaveChanges();
+                    }));
 
-            //};
-            //_conn.rosterManager.RosterUpdated += (conn) =>
-            //    {
-            //        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            //            {
-            //                foreach (var user in _conn.rosterManager.Roster)
-            //                {
-            //                    var exist = DB.Users.FirstOrDefault(u => u.JID == user.JID);
-            //                    if (exist == null)
-            //                    {
-            //                        DB.Users.Add(new User
-            //                        {
-            //                            JID = user.JID,
-            //                            Name = user.Name
-            //                        });
-            //                    }
-            //                }
-            //                DB.SaveChanges();
-            //            }));
-            //    };
+            };
+            _conn.RosterManager.RosterUpdated += (conn) =>
+                {
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            foreach (var user in _conn.RosterManager.Roster)
+                            {
+                                var exist = DB.Users.FirstOrDefault(u => u.JID == user.JID);
+                                if (exist == null)
+                                {
+                                    DB.Users.Add(new User
+                                    {
+                                        JID = user.JID,
+                                        Name = user.Name
+                                    });
+                                }
+                            }
+                            DB.SaveChanges();
+                        }));
+                };
             ThreadPool.QueueUserWorkItem((o) => _conn.Connect());
             //Trace.Listeners.Add(new ConsoleTraceListener());
         }

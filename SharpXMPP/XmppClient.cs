@@ -23,12 +23,12 @@ namespace SharpXMPP
                     Send(new XMPPPresence());
                 }
             };
-            _bookmarkManager = new BookmarksManager(this, autoPresence);
-            _rosterManager = new RosterManager(this, autoPresence);	    
+            BookmarkManager = new BookmarksManager(this, autoPresence);
+            RosterManager = new RosterManager(this, autoPresence);	    
         }
 
-        private BookmarksManager _bookmarkManager;
-        private RosterManager _rosterManager;
+        public BookmarksManager BookmarkManager;
+        public RosterManager RosterManager;
 
         
     }
