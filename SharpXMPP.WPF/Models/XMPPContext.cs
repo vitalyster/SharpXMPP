@@ -1,15 +1,7 @@
-﻿using SharpXMPP.XMPP;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.Entity.Migrations;
-using System.Data.Entity.ModelConfiguration;
-using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
+using SharpXMPP.XMPP;
 
 namespace SharpXMPP.WPF.Models
 {

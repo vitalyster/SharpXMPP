@@ -70,7 +70,6 @@ namespace SharpXMPP.WPF
                             {
                                 user = new User { JID = message.From.BareJid, Name = message.From.FullJid };
                                 DB.Entry(user).State = EntityState.Added;
-                                DB.SaveChanges();
                             }
                             var conversation = DB.Conversations.FirstOrDefault(c => c.JID == user.JID);
                             if (conversation == null)
@@ -111,6 +110,7 @@ namespace SharpXMPP.WPF
                     }));
 
             };
+            DateTime lastUpdateTime = DateTime.Now;
             _conn.RosterManager.RosterUpdated += (conn) =>
                 {
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
@@ -127,7 +127,12 @@ namespace SharpXMPP.WPF
                                     });
                                 }
                             }
-                            DB.SaveChanges();
+                            if ((lastUpdateTime - DateTime.Now).TotalMilliseconds > 500)
+                            {
+                                DB.SaveChanges();
+                                lastUpdateTime = DateTime.Now;
+                            }
+                            
                         }));
                 };
             ThreadPool.QueueUserWorkItem((o) => _conn.Connect());

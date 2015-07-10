@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace SharpXMPP.WPF.Models
 {
     public class XmlLogger
     {
+        DateTime _lastUpDateTime = DateTime.Now;
         public XmlLogger(XmppClient connection, XMPPContext context)
         {
             connection.Element += (sender, args) =>
@@ -23,7 +19,11 @@ namespace SharpXMPP.WPF.Models
                                                new Action(() => 
                                                { 
                                                    context.Log.Add(raw);
-                                                   context.SaveChanges();
+                                                   if ((_lastUpDateTime - DateTime.Now).TotalMilliseconds > 500)
+                                                   {
+                                                       context.SaveChanges();
+                                                       _lastUpDateTime = DateTime.Now;
+                                                   }
                                                }));
                                            
                                        };
