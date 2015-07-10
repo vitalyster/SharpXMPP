@@ -87,45 +87,45 @@ namespace SharpXMPP.WPF
                         }
                     }));
                 };
-            _conn.bookmarkManager.BookmarksSynced += (conn) =>
-            {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        foreach (var room in _conn.bookmarkManager.rooms)
-                        {
-                            var exist = DB.Conversations.FirstOrDefault(r => r.JID == room.JID.FullJid);
-                            if (exist == null)
-                            {
-                                DB.Conversations.Add(new Conversation
-                                {
-                                    JID = room.JID.FullJid,
-                                    Name = room.Name
-                                });
-                            }
-                        }
-                        DB.SaveChanges();
-                    }));
+            //_conn.bookmarkManager.BookmarksSynced += (conn) =>
+            //{
+            //    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            //        {
+            //            foreach (var room in _conn.bookmarkManager.rooms)
+            //            {
+            //                var exist = DB.Conversations.FirstOrDefault(r => r.JID == room.JID.FullJid);
+            //                if (exist == null)
+            //                {
+            //                    DB.Conversations.Add(new Conversation
+            //                    {
+            //                        JID = room.JID.FullJid,
+            //                        Name = room.Name
+            //                    });
+            //                }
+            //            }
+            //            DB.SaveChanges();
+            //        }));
 
-            };
-            _conn.rosterManager.RosterUpdated += (conn) =>
-                {
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            foreach (var user in _conn.rosterManager.Roster)
-                            {
-                                var exist = DB.Users.FirstOrDefault(u => u.JID == user.JID);
-                                if (exist == null)
-                                {
-                                    DB.Users.Add(new User
-                                    {
-                                        JID = user.JID,
-                                        Name = user.Name
-                                    });
-                                }
-                            }
-                            DB.SaveChanges();
-                        }));
-                };
+            //};
+            //_conn.rosterManager.RosterUpdated += (conn) =>
+            //    {
+            //        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            //            {
+            //                foreach (var user in _conn.rosterManager.Roster)
+            //                {
+            //                    var exist = DB.Users.FirstOrDefault(u => u.JID == user.JID);
+            //                    if (exist == null)
+            //                    {
+            //                        DB.Users.Add(new User
+            //                        {
+            //                            JID = user.JID,
+            //                            Name = user.Name
+            //                        });
+            //                    }
+            //                }
+            //                DB.SaveChanges();
+            //            }));
+            //    };
             ThreadPool.QueueUserWorkItem((o) => _conn.Connect());
             //Trace.Listeners.Add(new ConsoleTraceListener());
         }
