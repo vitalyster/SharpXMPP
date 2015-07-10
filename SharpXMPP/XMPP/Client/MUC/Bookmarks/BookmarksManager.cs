@@ -1,17 +1,13 @@
-﻿using SharpXMPP.XMPP.Client.Elements;
-using SharpXMPP.XMPP.Client.MUC.Bookmarks.Elements;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
+using SharpXMPP.XMPP.Client.Elements;
+using SharpXMPP.XMPP.Client.MUC.Bookmarks.Elements;
 
 namespace SharpXMPP.XMPP.Client.MUC.Bookmarks
 {
     public class BookmarksManager
     {
-        public List<BookmarkedConference> rooms = new List<BookmarkedConference>();
+        public List<BookmarkedConference> Rooms = new List<BookmarkedConference>();
 
         public delegate void BookmarksSyncedHandler(XmppConnection sender);
 
@@ -22,9 +18,12 @@ namespace SharpXMPP.XMPP.Client.MUC.Bookmarks
             BookmarksSynced(sender);
         }
 
+        private readonly XmppConnection connection;
+
         public BookmarksManager(XmppConnection conn, bool autoAsk = true)
         {
-            conn.SignedIn += (sender, e) => 
+            connection = conn;
+            connection.SignedIn += (sender, e) => 
             {
                 if (autoAsk)
                 {
@@ -33,19 +32,34 @@ namespace SharpXMPP.XMPP.Client.MUC.Bookmarks
                         new XElement(XNamespace.Get(Namespaces.StorageBookmarks) + "storage")
                         );
                     query.Add(priv);
-                    conn.Query(query, (response) =>
+                    connection.Query(query, (response) =>
                     {
                         var roomsXML = response.Element(XNamespace.Get("jabber:iq:private") + "query")
                             .Element(XNamespace.Get(Namespaces.StorageBookmarks) + "storage")
                             .Elements(XNamespace.Get(Namespaces.StorageBookmarks) + "conference");
-                        foreach (var room in roomsXML)
+                        foreach (var roomObj in roomsXML)
                         {
-                            rooms.Add(Stanza.Parse<BookmarkedConference>(room));
+                            var room = Stanza.Parse<BookmarkedConference>(roomObj);
+                            Rooms.Add(room);
+                            if (room.IsAutojoin)
+                            {
+                                Join(room);
+                            }
                         }
                         OnBookmarksSynced(conn);
                     });
                 }
             };
+        }
+
+        public void Join(BookmarkedConference room)
+        {
+            var mucPresence = new XMPPPresence(connection.Capabilities)
+            {
+                To = new JID(string.Format("{0}/{1}", room.JID.BareJid, room.Nick))
+            };
+            mucPresence.Add(new XElement(XNamespace.Get(Namespaces.MUC) + "x"));
+            connection.Send(mucPresence);
         }
     }
 }

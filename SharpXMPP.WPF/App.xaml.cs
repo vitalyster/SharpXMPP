@@ -94,7 +94,7 @@ namespace SharpXMPP.WPF
             {
                 Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        foreach (var room in _conn.BookmarkManager.rooms)
+                        foreach (var room in _conn.BookmarkManager.Rooms)
                         {
                             var exist = DB.Conversations.FirstOrDefault(r => r.JID == room.JID.FullJid);
                             if (exist == null)
