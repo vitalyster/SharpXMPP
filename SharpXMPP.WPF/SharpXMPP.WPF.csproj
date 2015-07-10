@@ -123,7 +123,6 @@
     <Compile Include="Views\NewAccount.xaml.cs">
       <DependentUpon>NewAccount.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Styles\ModernStyle.cs" />
     <Compile Include="Views\XmlLog.xaml.cs">
       <DependentUpon>XmlLog.xaml</DependentUpon>
     </Compile>
@@ -149,10 +148,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewAccount.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Styles\ModernStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
