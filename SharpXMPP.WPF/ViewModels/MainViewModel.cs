@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using SharpXMPP.WPF.Helpers;
 using SharpXMPP.WPF.Views;
 

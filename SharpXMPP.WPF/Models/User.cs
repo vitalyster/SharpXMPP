@@ -1,7 +1,4 @@
-﻿using SharpXMPP.XMPP;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SharpXMPP.WPF.Models
+﻿namespace SharpXMPP.WPF.Models
 {
     public class User
     {

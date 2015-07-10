@@ -1,8 +1,7 @@
-﻿using SharpXMPP.WPF.Helpers;
-using SharpXMPP.WPF.Models;
-using SharpXMPP.XMPP;
-using System;
+﻿using System;
 using System.Windows;
+using SharpXMPP.WPF.Helpers;
+using SharpXMPP.WPF.Models;
 
 namespace SharpXMPP.WPF.ViewModels
 {
