@@ -27,6 +27,11 @@ namespace SharpXMPP.XMPP.Client.MUC.Bookmarks.Elements
                 return name == null ? null : new JID(name.Value);
             }
         }
+
+        public string Nick
+        {
+            get { return Element(XNamespace.Get(Namespaces.StorageBookmarks) + "nick").Value; }
+        }
         public bool IsAutojoin
         {
             get

@@ -56,6 +56,10 @@ namespace SharpXMPP.WPF
             _conn.Message += (conn, message) =>
                 {
                     if (message.Text == null) return;
+                    if (string.IsNullOrEmpty(message.ID))
+                    {
+                        message.ID = Guid.NewGuid().ToString();
+                    }
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
                         var exist = DB.Messages.FirstOrDefault(m => m.MessageID == message.ID);
@@ -66,7 +70,6 @@ namespace SharpXMPP.WPF
                             {
                                 user = new User { JID = message.From.BareJid, Name = message.From.FullJid };
                                 DB.Entry(user).State = EntityState.Added;
-                                DB.SaveChanges();
                             }
                             var conversation = DB.Conversations.FirstOrDefault(c => c.JID == user.JID);
                             if (conversation == null)
@@ -87,11 +90,11 @@ namespace SharpXMPP.WPF
                         }
                     }));
                 };
-            _conn.bookmarkManager.BookmarksSynced += (conn) =>
+            _conn.BookmarkManager.BookmarksSynced += (conn) =>
             {
                 Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        foreach (var room in _conn.bookmarkManager.rooms)
+                        foreach (var room in _conn.BookmarkManager.Rooms)
                         {
                             var exist = DB.Conversations.FirstOrDefault(r => r.JID == room.JID.FullJid);
                             if (exist == null)
@@ -107,11 +110,12 @@ namespace SharpXMPP.WPF
                     }));
 
             };
-            _conn.rosterManager.RosterUpdated += (conn) =>
+            DateTime lastUpdateTime = DateTime.Now;
+            _conn.RosterManager.RosterUpdated += (conn) =>
                 {
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                         {
-                            foreach (var user in _conn.rosterManager.Roster)
+                            foreach (var user in _conn.RosterManager.Roster)
                             {
                                 var exist = DB.Users.FirstOrDefault(u => u.JID == user.JID);
                                 if (exist == null)
@@ -123,7 +127,12 @@ namespace SharpXMPP.WPF
                                     });
                                 }
                             }
-                            DB.SaveChanges();
+                            if ((lastUpdateTime - DateTime.Now).TotalMilliseconds > 500)
+                            {
+                                DB.SaveChanges();
+                                lastUpdateTime = DateTime.Now;
+                            }
+                            
                         }));
                 };
             ThreadPool.QueueUserWorkItem((o) => _conn.Connect());

@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Xml;
 using System.Xml.Linq;
 using SharpXMPP.XMPP;
+using SharpXMPP.XMPP.Bind;
 using SharpXMPP.XMPP.Bind.Elements;
 using SharpXMPP.XMPP.Client;
 using SharpXMPP.XMPP.Client.Disco;
@@ -17,6 +18,7 @@ using SharpXMPP.XMPP.SASL.Elements;
 using SharpXMPP.XMPP.Stream.Elements;
 using SharpXMPP.XMPP.TLS.Elements;
 using System.Threading;
+using ARSoft.Tools.Net.Dns;
 
 namespace SharpXMPP
 {
@@ -25,23 +27,34 @@ namespace SharpXMPP
 
         private readonly TcpClient _client;
 
-        protected abstract int TcpPort { get; set; }
+        protected virtual int TcpPort
+        {
+            get { return 5222; }
+            set { throw new NotImplementedException(); }
+        }
+
+        protected virtual IEnumerable<IPAddress> HostAddresses
+        {
+            get
+            {
+                var addresses = DnsClient.Default.Resolve(string.Format("_xmpp-client._tcp.{0}", Jid.Domain), RecordType.Srv);
+                return addresses.AnswerRecords.OfType<SrvRecord>().SelectMany(x => Dns.GetHostAddresses(x.Target));                
+            }
+            set { throw new NotImplementedException(); }
+        }
     
         protected readonly string Password;
 
-        public bool InitialPresence { get; set; }
-
-        protected abstract IEnumerable<IPAddress> HostAddresses { get; set; }
+        
     
         protected XmppTcpConnection(string ns, JID jid, string password) : base(ns)
         {
             Jid = jid;
             
             Password = password;	    
-	    _client = new TcpClient();
-	    _client.Connect(HostAddresses.ToArray(), TcpPort); // TODO: check ports
-	    _client.Close();
-            ConnectionStream = _client.GetStream();
+	        _client = new TcpClient();
+	        _client.Connect(HostAddresses.ToArray(), TcpPort); // TODO: check ports
+	        ConnectionStream = _client.GetStream();
             Iq += (sender, iq) => new XMPP.Client.IqManager(this)
             {
                 PayloadHandlers = new List<PayloadHandler>
@@ -106,7 +119,7 @@ namespace SharpXMPP
             Writer.WriteEndElement();
         }
 
-        protected void SessionLoop()
+        public override void SessionLoop()
         {
             while (true)
             {
@@ -154,54 +167,14 @@ namespace SharpXMPP
                 OnConnectionFailed(new ConnFailedArgs { Message = "supported sasl mechanism not available" });
                 return;
             }
-            var auth = new SASLAuth();
-            auth.SetAttributeValue("mechanism", authenticator.SASLMethod);
-            auth.SetValue(authenticator.Initiate());
-            Send(auth);
-            var authResponse = NextElement();
-            while (authResponse.Name.LocalName != "success")
+            authenticator.Authenticated += sender =>
             {
-                var response = new SASLResponse();
-                response.SetValue(authenticator.NextChallenge(authResponse.Value));
-                Send(response);
-                authResponse = NextElement();
-            }
-            RestartXmlStreams();
-            var features2 = Stanza.Parse<Features>(NextElement());
-            if (features2.Bind)
-            {
-                var bind = new Bind(Jid.Resource);
-                var iq = new XMPPIq(XMPP.Client.Elements.XMPPIq.IqTypes.set);
-                iq.Add(bind);
-                ThreadPool.QueueUserWorkItem((e) => SessionLoop());
-                Query(iq, (bindResult) =>
-                {
-                    var jid = bindResult.Element(XNamespace.Get(Namespaces.XmppBind) + "bind");
-                    if (jid == null)
-                    {
-                        OnConnectionFailed(new ConnFailedArgs { Message = "bind failed" });
-                        return;
-                    }
-                    else
-                    {
-                        Jid = new JID(jid.Element(XNamespace.Get(Namespaces.XmppBind) + "jid").Value);
-                        if (features2.Session)
-                        {
-                            var sess = new XElement(XNamespace.Get(Namespaces.XmppSession) + "session");
-                            var sessIq = new XMPPIq(XMPP.Client.Elements.XMPPIq.IqTypes.set);
-                            sessIq.Add(sess);
-                            Query(sessIq, (sessionResponse) => {
-                                OnSignedIn(new SignedInArgs { Jid = Jid });
-                            });
-                        }
-                        else
-                        {
-                            OnSignedIn(new SignedInArgs { Jid = Jid });
-                        }
-                    }
-                });                
-            }
+                RestartXmlStreams();
+                var session = new SessionHandler();
+                session.SessionStarted += connection => OnSignedIn(new SignedInArgs {Jid = connection.Jid});
+                session.Start(this);
+            };
+            authenticator.Start(this);
         }
-
     }
 }

@@ -13,35 +13,23 @@ namespace SharpXMPP
 {
     public class XmppClient : XmppTcpConnection
     {
-        public XmppClient(JID jid, string password)
+        public XmppClient(JID jid, string password, bool autoPresence = true)
             : base(Namespaces.JabberClient, jid, password)
         {
             SignedIn += (sender, args) =>
             {
-                Send(new XMPPPresence());
+                if (autoPresence)
+                {
+                    Send(new XMPPPresence());
+                }
             };
-            bookmarkManager = new BookmarksManager(this);
-            rosterManager = new RosterManager(this);	    
+            BookmarkManager = new BookmarksManager(this, autoPresence);
+            RosterManager = new RosterManager(this, autoPresence);	    
         }
 
-        public BookmarksManager bookmarkManager;
-        public RosterManager rosterManager;
+        public BookmarksManager BookmarkManager;
+        public RosterManager RosterManager;
 
-        protected override int TcpPort
-        {
-            get { return 5222; }
-            set { throw new NotImplementedException(); }
-        }
-
-        protected override IEnumerable<IPAddress> HostAddresses
-        {
-            get
-            {
-                var addresses = new List<IPAddress>();
-                DNS.ResolveXMPPClient(Jid.Domain).ForEach(d => addresses.AddRange(Dns.GetHostAddresses(d.Host)));
-                return addresses;
-            }
-            set { throw new NotImplementedException(); }
-        }        
+        
     }
 }

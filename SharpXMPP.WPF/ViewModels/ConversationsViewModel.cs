@@ -1,12 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.ComponentModel;
+using System.Data.Entity;
+using System.Windows.Data;
 using SharpXMPP.WPF.Helpers;
 using SharpXMPP.WPF.Models;
 using SharpXMPP.XMPP;
-using System.ComponentModel;
-using System.Data.Entity;
-using System.Windows.Data;
-using System;
-using System.Windows.Threading;
 
 namespace SharpXMPP.WPF.ViewModels
 {

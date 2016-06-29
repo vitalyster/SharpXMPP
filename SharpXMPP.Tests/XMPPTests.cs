@@ -30,12 +30,7 @@ namespace SharpXMPP.Tests
             Assert.AreEqual("icq.org", new JID("icq.org").ToString());
             Assert.AreEqual("icq.org/registered", new JID("icq.org/registered").ToString());
         }
-        [TestMethod]
-        public void DNSTests()
-        {
-            DNS.ResolveXMPPClient("gmail.com").ForEach(r => Trace.WriteLine(r.Host + ":" + r.Port));
-        }
-
+        
         [TestMethod]
         public void StanzaTests()
         {

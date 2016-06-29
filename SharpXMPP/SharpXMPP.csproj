@@ -14,6 +14,8 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -62,7 +64,11 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ARSoft.Tools.Net">
+      <HintPath>..\packages\ARSoft.Tools.Net.2.1.3\lib\net45\ARSoft.Tools.Net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -74,6 +80,7 @@
     <Compile Include="XmppClient.cs" />
     <Compile Include="XmppComponent.cs" />
     <Compile Include="XMPP\Bind\Elements\Bind.cs" />
+    <Compile Include="XMPP\Bind\SessionHandler.cs" />
     <Compile Include="XMPP\Client\Capabities\CapabilitiesManager.cs" />
     <Compile Include="XMPP\Client\Capabities\Elements\Caps.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\DiscoInfo.cs" />
@@ -90,7 +97,6 @@
     <Compile Include="XMPP\JID.cs" />
     <Compile Include="XMPP\Client\Elements\XMPPMessage.cs" />
     <Compile Include="XMPP\Client\Elements\XMPPPresence.cs" />
-    <Compile Include="DNS.cs" />
     <Compile Include="XMPP\Client\IqManager.cs" />
     <Compile Include="Namespaces.cs" />
     <Compile Include="XMPP\Client\Roster\Elements\RosterItem.cs" />
@@ -104,6 +110,7 @@
     <Compile Include="XMPP\SASL\SASLDigestMD5.cs" />
     <Compile Include="XMPP\SASL\SASLHandler.cs" />
     <Compile Include="XMPP\SASL\SASLPlainHandler.cs" />
+    <Compile Include="XMPP\SASL\SASLSCRAM.cs" />
     <Compile Include="XMPP\Stanza.cs" />
     <Compile Include="XMPP\Stream\Elements\StreamError.cs" />
     <Compile Include="XMPP\Stream\Elements\Features.cs" />
@@ -112,8 +119,21 @@
     <Compile Include="XMPP\TLS\Elements\Proceed.cs" />
     <Compile Include="XMPP\TLS\Elements\StartTLS.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

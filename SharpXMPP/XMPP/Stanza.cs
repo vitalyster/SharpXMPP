@@ -19,6 +19,10 @@ namespace SharpXMPP.XMPP
             {
                 return Attribute("id") == null ? null : Attribute("id").Value;
             }
+            set
+            {
+                SetAttributeValue("id", value);
+            }
         }
 
         public JID From
@@ -33,6 +37,10 @@ namespace SharpXMPP.XMPP
             get
             {
                 return Attribute("to") == null ? null : new JID(Attribute("to").Value);
+            }
+            set
+            {
+                SetAttributeValue("to", value.FullJid);
             }
         }
 

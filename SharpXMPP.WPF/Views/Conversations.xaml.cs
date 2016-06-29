@@ -10,7 +10,6 @@ namespace SharpXMPP.WPF.Views
         public Conversations()
         {
             InitializeComponent();
-            DataContext = new ConversationsViewModel();
         }
     }
 }

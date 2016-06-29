@@ -15,6 +15,7 @@ namespace SharpXMPP
         public const string DiscoInfo = "http://jabber.org/protocol/disco#info";
         public const string DiscoItems = "http://jabber.org/protocol/disco#items";
         public const string EntityCaps = "http://jabber.org/protocol/caps";
+        public const string MUC = "http://jabber.org/protocol/muc";
         public const string StorageBookmarks = "storage:bookmarks";        
     }
 }
