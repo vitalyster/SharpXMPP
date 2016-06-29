@@ -6,7 +6,6 @@
         mc:Ignorable="d"  
         Style="{StaticResource ModernWindowStyle}"
         xmlns:controls="clr-namespace:SharpXMPP.WPF.Views"
-        xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
         Title="MainWindow" d:DesignHeight="350" d:DesignWidth="525" TextOptions.TextFormattingMode="Display">
     
     <DockPanel>

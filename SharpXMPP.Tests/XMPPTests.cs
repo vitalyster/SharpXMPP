@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Client.Disco.Elements;
-using SharpXMPP.XMPP.Stream;
 using SharpXMPP.XMPP.Stream.Elements;
 using SharpXMPP.XMPP.TLS.Elements;
 using SharpXMPP.XMPP.Client.MUC.Bookmarks.Elements;
