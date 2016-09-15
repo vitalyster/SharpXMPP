@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using DnsClient;
 using SharpXMPP.Errors;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Bind;
@@ -21,7 +22,7 @@ using SharpXMPP.XMPP.TLS.Elements;
 
 namespace SharpXMPP
 {
-    public abstract class XmppTcpConnection : XmppConnection
+    public class XmppTcpConnection : XmppConnection
     {
 
         private TcpClient _client;
@@ -32,11 +33,8 @@ namespace SharpXMPP
             set { throw new NotImplementedException(); }
         }
 
-        protected readonly string Password;
 
-
-
-        protected XmppTcpConnection(string ns, JID jid, string password) : base(ns)
+        public XmppTcpConnection(string ns, JID jid, string password) : base(ns)
         {
             Jid = jid;
             Password = password;
@@ -120,7 +118,7 @@ namespace SharpXMPP
             base.Dispose();
         }
 
-        public override void SessionLoop()
+        public void SessionLoop()
         {
             while (true)
             {
@@ -166,7 +164,9 @@ namespace SharpXMPP
             await StartAuthentication(features);
         }
 
-        public override Task SessionLoopAsync(CancellationToken token)
+        public Task SessionLoopAsync() => SessionLoopAsync(CancellationToken.None);
+
+        public Task SessionLoopAsync(CancellationToken token)
         {
             return Task.Run(() =>
             {
@@ -254,12 +254,14 @@ namespace SharpXMPP
         {
             List<IPAddress> HostAddresses = new List<IPAddress>();
 
-            var srvs = await Resolver.ResolveXMPPClient(Jid.Domain);
-            if (srvs.Any())
+            var lookup = new LookupClient();
+
+            var response = await lookup.QueryAsync("_xmpp-client._tcp." + Jid.Domain, QueryType.SRV);
+            if (response.Answers.SrvRecords().Any())
             {
-                foreach (var srv in srvs)
+                foreach (var srv in response.Answers.SrvRecords())
                 {
-                    var addresses = await Dns.GetHostAddressesAsync(srv.Host);
+                    var addresses = await Dns.GetHostAddressesAsync(srv.Target.Value);
                     HostAddresses.AddRange(addresses);
                 }
             }
