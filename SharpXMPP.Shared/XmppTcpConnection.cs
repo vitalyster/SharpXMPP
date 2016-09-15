@@ -38,8 +38,12 @@ namespace SharpXMPP
         {
             get
             {
-                var addresses = DnsClient.Default.Resolve(DomainName.Parse(string.Format("_xmpp-client._tcp.{0}", Jid.Domain)), RecordType.Srv);
-                return addresses.AnswerRecords.OfType<SrvRecord>().SelectMany(x => Dns.GetHostAddresses(x.Target.ToString()));
+				var addresses = DnsClient.Default.Resolve(DomainName.Parse(string.Format("_xmpp-client._tcp.{0}", Jid.Domain)), RecordType.Srv);
+				if (addresses != null)
+				{
+					return addresses.AnswerRecords.OfType<SrvRecord>().SelectMany(x => Dns.GetHostAddresses(x.Target.ToString()));
+				}
+				return Dns.GetHostAddresses(Jid.Domain);
             }
             set { throw new NotImplementedException(); }
         }
