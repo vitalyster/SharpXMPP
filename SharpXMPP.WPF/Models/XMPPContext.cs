@@ -32,7 +32,7 @@ namespace SharpXMPP.WPF.Models
     {
         protected override void Seed(XMPPContext context)
         {
-            var account = new Account { JID = "_vt@xmpp.ru", Password = "***REMOVED***" };
+            var account = new Account { JID = "_vt@xmpp.ru", Password = "secret" };
             context.Accounts.AddOrUpdate(a => a.JID, account);
             context.SaveChanges();           
             
