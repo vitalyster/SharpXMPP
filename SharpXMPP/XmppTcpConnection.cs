@@ -19,6 +19,7 @@ using SharpXMPP.XMPP.Stream.Elements;
 using SharpXMPP.XMPP.TLS.Elements;
 using System.Threading;
 using ARSoft.Tools.Net.Dns;
+using ARSoft.Tools.Net;
 
 namespace SharpXMPP
 {
@@ -37,8 +38,8 @@ namespace SharpXMPP
         {
             get
             {
-                var addresses = DnsClient.Default.Resolve(string.Format("_xmpp-client._tcp.{0}", Jid.Domain), RecordType.Srv);
-                return addresses.AnswerRecords.OfType<SrvRecord>().SelectMany(x => Dns.GetHostAddresses(x.Target));                
+                var addresses = DnsClient.Default.Resolve(DomainName.Parse(string.Format("_xmpp-client._tcp.{0}", Jid.Domain)), RecordType.Srv);
+                return addresses.AnswerRecords.OfType<SrvRecord>().SelectMany(x => Dns.GetHostAddresses(x.Target.ToString()));
             }
             set { throw new NotImplementedException(); }
         }
