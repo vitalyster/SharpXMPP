@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -29,8 +28,8 @@ namespace SharpXMPP.Tests
             Assert.AreEqual("vasya@icq.org", new JID("vasya@icq.org").ToString());
             Assert.AreEqual("icq.org", new JID("icq.org").ToString());
             Assert.AreEqual("icq.org/registered", new JID("icq.org/registered").ToString());
-            Assert.AreEqual(new JID("vasya@msn.com"), new JID("VASYA@msn.com"));
-            Assert.AreNotEqual(new JID("vasya@msn.com/QQ"), new JID("VASYA@msn.com/qq"));            
+            Assert.AreEqual(new JID("vasya@msn.com").FullJid, new JID("VASYA@msn.com").FullJid);
+            Assert.AreNotEqual(new JID("vasya@msn.com/QQ").FullJid, new JID("VASYA@msn.com/qq").FullJid);
         }
         
         [TestMethod]
