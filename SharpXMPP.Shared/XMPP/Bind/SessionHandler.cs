@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +20,7 @@ namespace SharpXMPP.XMPP.Bind
         {
             SessionStarted(sender);
         }
-        public void Start(XmppConnection connection)
+        public void Start(XmppTcpConnection connection)
         {
             connection.Features = Stanza.Parse<Features>(connection.NextElement());
             if (connection.Features.Bind)

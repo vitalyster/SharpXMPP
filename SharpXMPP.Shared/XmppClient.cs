@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.Client.MUC.Bookmarks;
-using SharpXMPP.XMPP.Client;
 using SharpXMPP.XMPP.Client.Roster;
 
 namespace SharpXMPP
@@ -27,8 +21,8 @@ namespace SharpXMPP
             RosterManager = new RosterManager(this, autoPresence);	    
         }
 
-        public BookmarksManager BookmarkManager;
-        public RosterManager RosterManager;
+        public BookmarksManager BookmarkManager { get; private set; }
+        public RosterManager RosterManager { get; private set; }
 
         
     }

@@ -69,7 +69,9 @@ namespace SharpXMPP
 
         public JID Jid { get; set; }
 
-        public delegate void ConnectionFailedHandler(XmppConnection sender, ConnFailedArgs e);
+		protected string Password { get; set; }
+
+		public delegate void ConnectionFailedHandler(XmppConnection sender, ConnFailedArgs e);
 
         public event ConnectionFailedHandler ConnectionFailed = delegate { };
 
@@ -165,11 +167,6 @@ namespace SharpXMPP
             queries.Add(request.ID, response);
             Send(request);
         }
-
-        public abstract void SessionLoop();
-
-        public Task SessionLoopAsync() => SessionLoopAsync(CancellationToken.None);
-        public abstract Task SessionLoopAsync(CancellationToken token);
 
         public Task ConnectAsync() => ConnectAsync(CancellationToken.None);
         public abstract Task ConnectAsync(CancellationToken token);
