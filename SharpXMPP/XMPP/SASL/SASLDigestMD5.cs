@@ -40,7 +40,7 @@ namespace SharpXMPP.XMPP.SASL
                 fields["digest-uri"] = string.Format("xmpp/{0}", fields["realm"]);
                 // fields["authzid"] = realm.connectionJid.FullJid;
                 var x = string.Format("{0}:{1}:{2}", ClientJID.User, ClientJID.Domain, Password);
-                var md5 = new MD5Managed();
+                var md5 = MD5.Create();
                 var y = md5.ComputeHash(Encoding.UTF8.GetBytes(x));
                 var a1 = y.Concat(Encoding.UTF8.GetBytes(string.Format(":{0}:{1}", fields["nonce"], fields["cnonce"])));
                 var a2 = string.Format("AUTHENTICATE:{0}", fields["digest-uri"]);

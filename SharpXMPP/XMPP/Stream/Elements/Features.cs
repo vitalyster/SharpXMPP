@@ -11,16 +11,28 @@ namespace SharpXMPP.XMPP.Stream.Elements
             
         }
         
-        public bool TlsRequired
+        public bool Tls
         {
             get
             {
                 var tls = Element(XNamespace.Get(Namespaces.XmppTls) + "starttls");
-                if (tls != null)
-                {
-                    return tls.Attribute("required") != null;
-                }
-                return false;
+                return (tls != null);
+            }
+        }
+        public bool Bind
+        {
+            get
+            {
+                var bind = Element(XNamespace.Get(Namespaces.XmppBind) + "bind");
+                return bind != null;
+            }
+        }
+        public bool Session
+        {
+            get
+            {
+                var session = Element(XNamespace.Get(Namespaces.XmppSession) + "session");
+                return session != null;
             }
         }
         public List<string> SaslMechanisms

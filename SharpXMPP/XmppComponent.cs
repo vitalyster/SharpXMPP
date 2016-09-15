@@ -9,7 +9,7 @@ using SharpXMPP.XMPP.Component.Elements;
 
 namespace SharpXMPP
 {
-    public class XmppComponentConnection : XmppTcpConnection
+    public class XmppComponent : XmppTcpConnection
     {
         protected override int TcpPort
         {
@@ -23,7 +23,8 @@ namespace SharpXMPP
             set { throw new NotImplementedException(); }
         }
 
-        public XmppComponentConnection(JID jid, string secret) : base(jid, secret)
+        public XmppComponent(JID jid, string secret)
+            : base(Namespaces.JabberComponentAccept, jid, secret)
         {
             StreamStart += (sender, id) => SendHandshake(id);
         }
@@ -35,16 +36,6 @@ namespace SharpXMPP
             var shaHash = sha.ComputeHash(Encoding.UTF8.GetBytes(string.Concat(streamID, Password)));
             handshake.Value = BitConverter.ToString(shaHash).Replace("-", "").ToLower();
             Send(handshake);
-        }
-
-        protected override void OpenXmppStream()
-        {
-            Writer.WriteStartElement("stream", "stream", Namespaces.Streams);
-            Writer.WriteAttributeString("xmlns", Namespaces.JabberComponentAccept);
-            Writer.WriteAttributeString("version", "1.0");
-            Writer.WriteAttributeString("to", Jid.Domain);
-            Writer.WriteRaw("");
-            Writer.Flush();
         }
     }
 }

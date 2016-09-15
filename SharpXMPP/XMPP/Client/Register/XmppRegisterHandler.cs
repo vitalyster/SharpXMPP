@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Specialized;
 using SharpXMPP.XMPP.Client.Elements;
-using System.Collections.Generic;
 
 namespace SharpXMPP.XMPP.Client.Register
 {
@@ -16,18 +15,18 @@ namespace SharpXMPP.XMPP.Client.Register
 
         public class RegistrationEventArgs
         {
-            public RegistrationEventArgs(Dictionary<string, string> fields) { Fields = fields; }
-            public Dictionary<string, string> Fields { get; private set; } // readonly
+            public RegistrationEventArgs(StringDictionary fields) { Fields = fields; }
+            public StringDictionary Fields { get; private set; } // readonly
         }
 
         public delegate bool RegistrationEventHandler (object sender, RegistrationEventArgs args);
+        
+        
+        private StringDictionary _fields;
 
-
-        private Dictionary<string, string> _fields;
-
-        private static Dictionary<string, string> FilterFields(Stanza query, Dictionary<string, string> requestFields)
+        private static StringDictionary FilterFields(Stanza query, StringDictionary requestFields)
         {
-            var filtered = new Dictionary<string, string>();
+            var filtered = new StringDictionary();
             foreach (string field in requestFields.Keys)
             {
                 foreach (var val in query.Elements())
@@ -50,7 +49,7 @@ namespace SharpXMPP.XMPP.Client.Register
             get { return new[] {"jabber:iq:register"}; }
         }
 
-        public override bool Handle(XmppConnection sender, Iq element)
+        public override bool Handle(XmppConnection sender, XMPPIq element)
         {
             var type = element.Attribute("type");
             if (type == null) return false;
@@ -59,8 +58,8 @@ namespace SharpXMPP.XMPP.Client.Register
                 var query = element.Element("query");
                 if (query != null)
                 {
-                    var ns = query.Attribute("xmlns").Value;
-                    var num = Array.IndexOf<string>(Features, ns);
+                    var ns = query.Attribute("xmlns");
+                    var num = Array.IndexOf(Features, ns);
                     switch (num)
                     {
                         case 0:
@@ -85,8 +84,8 @@ namespace SharpXMPP.XMPP.Client.Register
                 var query = element.Element("query");
                 if (query != null)
                 {
-                    var ns = query.Attribute("xmlns").Value;
-                    var num = Array.IndexOf<string>(Features, ns);
+                    var ns = query.Attribute("xmlns");
+                    var num = Array.IndexOf(Features, ns);
                     switch (num)
                     {
                         case 0:
@@ -98,7 +97,7 @@ namespace SharpXMPP.XMPP.Client.Register
                             {
                                 var reply = element.Reply();
                                 sender.Send(reply);
-                                var subscribe = new Presence();
+                                var subscribe = new XMPPPresence();
                                 subscribe.SetAttributeValue("to", from.BareJid);
                                 subscribe.SetAttributeValue("from", sender.Jid.BareJid);
                                 if (queryFields.ContainsKey("remove"))

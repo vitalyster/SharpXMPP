@@ -2,12 +2,17 @@
 
 namespace SharpXMPP.XMPP
 {
-    public class JID : IComparable<JID>, IEquatable<JID>
+    public partial class JID
     {
         public string User { get; set; }
         public string Domain { get; set; }
         public string Resource { get; set; }
 
+        public JID()
+        {
+
+        }
+        
         public JID(string jid)
         {
             var domainWithResource = string.Empty;
@@ -46,39 +51,9 @@ namespace SharpXMPP.XMPP
             get { return string.IsNullOrEmpty(Resource) ? BareJid : string.Format(@"{0}/{1}", BareJid, Resource); }
         }
 
-        public int CompareTo(JID obj)
-        {
-            return obj.FullJid.CompareTo(FullJid);
-        }
-
-        public override bool Equals(object obj)
-        {
-            return FullJid.Equals((obj as JID).FullJid);
-        }
-
-        public bool Equals(JID obj)
-        {
-            // If parameter is null, return false.
-            if (Object.ReferenceEquals(obj, null))
-            {
-                return false;
-            }
-
-            // Optimization for a common success case.
-            if (Object.ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            // If run-time types are not exactly the same, return false.
-            if (this.GetType() != obj.GetType())
-                return false;
-            return obj.FullJid.Equals(FullJid);
-        }
-
         public string ToString()
         {
-            return FullJid;
+            return FullJid;            
         }
     }
 }

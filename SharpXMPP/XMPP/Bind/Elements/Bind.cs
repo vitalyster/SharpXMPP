@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace SharpXMPP.XMPP.Bind.Elements
 {
@@ -10,7 +11,10 @@ namespace SharpXMPP.XMPP.Bind.Elements
         }
         public Bind(string resource) : this()
         {
-            Add(new XElement(XNamespace.Get(Namespaces.XmppBind) + "resource", resource));
+            if (!String.IsNullOrEmpty(resource))
+            {
+                Add(new XElement(XNamespace.Get(Namespaces.XmppBind) + "resource", resource));
+            }
         }
     }
 }

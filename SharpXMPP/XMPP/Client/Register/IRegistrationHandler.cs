@@ -5,9 +5,9 @@ namespace SharpXMPP.XMPP.Client.Register
 {
     public interface IRegistrationHandler
     {
-        bool OnRegistrationRequest(JID requester, Dictionary<string, string> fields);
+        bool OnRegistrationRequest(JID requester, StringDictionary fields);
         bool OnRegistrationRemove(JID requester);
         string GetInstructions();
-        Dictionary<string, string> GetCredentials(JID requester);
+        StringDictionary GetCredentials(JID requester);
     }
 }

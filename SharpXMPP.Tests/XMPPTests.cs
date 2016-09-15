@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Security;
-using System.Text;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Client.Disco.Elements;
-using SharpXMPP.XMPP.Stream;
 using SharpXMPP.XMPP.Stream.Elements;
 using SharpXMPP.XMPP.TLS.Elements;
+using SharpXMPP.XMPP.Client.MUC.Bookmarks.Elements;
 
 namespace SharpXMPP.Tests
 {
@@ -37,12 +32,7 @@ namespace SharpXMPP.Tests
             Assert.AreEqual(new JID("vasya@msn.com"), new JID("VASYA@msn.com"));
             Assert.AreNotEqual(new JID("vasya@msn.com/QQ"), new JID("VASYA@msn.com/qq"));            
         }
-        [TestMethod]
-        public void DNSTests()
-        {
-            DNS.ResolveXMPPClient("gmail.com").ForEach(r => Trace.WriteLine(r.Host + ":" + r.Port));
-        }
-
+        
         [TestMethod]
         public void StanzaTests()
         {
@@ -77,6 +67,18 @@ namespace SharpXMPP.Tests
                                                   Namespaces.DiscoInfo
                                               }
                            };
+            var cf = new XElement(XNamespace.Get("storage:bookmarks") + "conference");
+            cf.SetAttributeValue("jid", "to@to.ti");
+            cf.SetAttributeValue("name", "lalallaa");
+            cf.SetAttributeValue("autojoin", "false");
+            var room = Stanza.Parse<BookmarkedConference>(cf);
+            Assert.IsFalse(room.IsAutojoin);
+            var cf2 = new XElement(XNamespace.Get("storage:bookmarks") + "conference");
+            cf2.SetAttributeValue("jid", "to@to.ti");
+            cf2.SetAttributeValue("name", "lalallaa");
+            cf2.SetAttributeValue("autojoin", "1");
+            var room2 = Stanza.Parse<BookmarkedConference>(cf2);
+            Assert.IsTrue(room2.IsAutojoin);            
         }
     }
 }

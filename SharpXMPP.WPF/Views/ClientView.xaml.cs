@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
+using System.Windows;
+using SharpXMPP.WPF.ViewModels;
 
 namespace SharpXMPP.WPF.Views
 {
@@ -10,9 +8,23 @@ namespace SharpXMPP.WPF.Views
     /// </summary>
     public partial class ClientView : UserControl
     {
-        public ClientView()
+        public delegate void MessageDelegate(string block);
+        public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
+        }
+        /*
+        void LogXml(XElement args)
+        {
+            Dispatcher.Invoke(new MessageDelegate(AddStanza), args.ToString());
+        }
+
+        private void Button1Click(object sender, RoutedEventArgs e)
+        {
+            client = new XmppClientConnection(new JID(textBox1.Text), passwordBox1.Password) { InitialPresence = true};
+            client.Element += (o, args) => Dispatcher.Invoke((Action)(() => LogXml(args.Stanza)));
+            ThreadPool.QueueUserWorkItem((o) => client.Connect());
         }
 
         private static Color ColorForToken(XmlToken token, string tokenText)
@@ -96,5 +108,6 @@ namespace SharpXMPP.WPF.Views
 
             sv.ScrollToBottom();*/
         }
+         */
     }
 }

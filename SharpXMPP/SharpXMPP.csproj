@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SharpXMPP</RootNamespace>
     <AssemblyName>SharpXMPP</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -25,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -34,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +47,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -54,35 +58,29 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SuperSocket.ClientEngine.Common">
-      <HintPath>..\..\ClientEngine\Core\bin\Debug\SuperSocket.ClientEngine.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.ClientEngine.Core">
-      <HintPath>..\..\ClientEngine\Core\bin\Debug\SuperSocket.ClientEngine.Core.dll</HintPath>
+    <Reference Include="ARSoft.Tools.Net">
+      <HintPath>..\packages\ARSoft.Tools.Net.2.1.3\lib\net45\ARSoft.Tools.Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebSocket4Net">
-      <HintPath>..\packages\WebSocket4Net.0.8\lib\net40\WebSocket4Net.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Crypto\MD5.cs" />
-    <Compile Include="Crypto\MD5Managed.cs" />
-    <Compile Include="XmppClientConnection.cs" />
-    <Compile Include="XmppComponentConnection.cs" />
-    <Compile Include="XmppWebSocketConnection.cs" />
+    <Compile Include="XmppClient.cs" />
+    <Compile Include="XmppComponent.cs" />
     <Compile Include="XMPP\Bind\Elements\Bind.cs" />
+    <Compile Include="XMPP\Bind\SessionHandler.cs" />
     <Compile Include="XMPP\Client\Capabities\CapabilitiesManager.cs" />
     <Compile Include="XMPP\Client\Capabities\Elements\Caps.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\DiscoInfo.cs" />
@@ -90,17 +88,19 @@
     <Compile Include="XMPP\Client\Disco\Elements\Identity.cs" />
     <Compile Include="XMPP\Client\Disco\Elements\ItemsHandler.cs" />
     <Compile Include="XMPP\Client\Disco\InfoHandler.cs" />
+    <Compile Include="XMPP\Client\MUC\Bookmarks\BookmarksManager.cs" />
+    <Compile Include="XMPP\Client\MUC\Bookmarks\Elements\BookmarkedCoference.cs" />
     <Compile Include="XMPP\Client\Register\IRegistrationHandler.cs" />
     <Compile Include="XMPP\Client\Register\XmppRegisterHandler.cs" />
+    <Compile Include="XMPP\Client\Roster\RosterManager.cs" />
     <Compile Include="XMPP\Component\Elements\Handshake.cs" />
     <Compile Include="XMPP\JID.cs" />
-    <Compile Include="XMPP\Client\Elements\Message.cs" />
-    <Compile Include="XMPP\Client\Elements\Presence.cs" />
-    <Compile Include="DNS.cs" />
-    <Compile Include="XMPP\Client\IqHandler.cs" />
+    <Compile Include="XMPP\Client\Elements\XMPPMessage.cs" />
+    <Compile Include="XMPP\Client\Elements\XMPPPresence.cs" />
+    <Compile Include="XMPP\Client\IqManager.cs" />
     <Compile Include="Namespaces.cs" />
     <Compile Include="XMPP\Client\Roster\Elements\RosterItem.cs" />
-    <Compile Include="XMPP\Client\Elements\Iq.cs" />
+    <Compile Include="XMPP\Client\Elements\XMPPIq.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XMPP\SASL\Elements\SASLAuth.cs" />
     <Compile Include="XMPP\SASL\Elements\SASLChallenge.cs" />
@@ -110,6 +110,7 @@
     <Compile Include="XMPP\SASL\SASLDigestMD5.cs" />
     <Compile Include="XMPP\SASL\SASLHandler.cs" />
     <Compile Include="XMPP\SASL\SASLPlainHandler.cs" />
+    <Compile Include="XMPP\SASL\SASLSCRAM.cs" />
     <Compile Include="XMPP\Stanza.cs" />
     <Compile Include="XMPP\Stream\Elements\StreamError.cs" />
     <Compile Include="XMPP\Stream\Elements\Features.cs" />
@@ -119,11 +120,20 @@
     <Compile Include="XMPP\TLS\Elements\StartTLS.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.Phone.config" />
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

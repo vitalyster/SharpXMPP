@@ -13,7 +13,7 @@ namespace SharpXMPP.XMPP.Client.Disco
         {
             _capabilities = capabilities;
         }
-        public override bool Handle(XmppConnection connection, Iq element)
+        public override bool Handle(XmppConnection connection, XMPPIq element)
         {
             var info = Stanza.Parse<DiscoInfo>(element.Elements().FirstOrDefault());
             if (info != null)
