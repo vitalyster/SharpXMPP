@@ -17,12 +17,6 @@ namespace SharpXMPP
             set { throw new NotImplementedException(); }
         }
 
-        protected override IEnumerable<IPAddress> HostAddresses
-        {
-            get { return new Collection<IPAddress> { IPAddress.Loopback }; }
-            set { throw new NotImplementedException(); }
-        }
-
         public XmppComponent(JID jid, string secret)
             : base(Namespaces.JabberComponentAccept, jid, secret)
         {

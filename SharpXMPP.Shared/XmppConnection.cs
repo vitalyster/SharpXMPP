@@ -129,6 +129,15 @@ namespace SharpXMPP
             Message(this, e);
         }
 
+        public delegate void PresenceHandler(XmppConnection sender, XMPPPresence e);
+
+        public event PresenceHandler Presence = delegate { };
+
+        protected void OnPresence(XMPPPresence e)
+        {
+            Presence(this, e);
+        }
+
         private CapabilitiesManager _caps;
         public CapabilitiesManager Capabilities
         {

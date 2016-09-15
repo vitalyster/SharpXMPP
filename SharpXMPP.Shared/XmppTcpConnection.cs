@@ -8,43 +8,24 @@ using System.Xml;
 using System.Xml.Linq;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Bind;
-using SharpXMPP.XMPP.Bind.Elements;
 using SharpXMPP.XMPP.Client;
 using SharpXMPP.XMPP.Client.Disco;
 using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.SASL;
-using SharpXMPP.XMPP.SASL.Elements;
 using SharpXMPP.XMPP.Stream.Elements;
 using SharpXMPP.XMPP.TLS.Elements;
-using System.Threading;
-using ARSoft.Tools.Net.Dns;
-using ARSoft.Tools.Net;
 
 namespace SharpXMPP
 {
     public abstract class XmppTcpConnection : XmppConnection
     {
 
-        private readonly TcpClient _client;
+        private TcpClient _client;
 
         protected virtual int TcpPort
         {
             get { return 5222; }
-            set { throw new NotImplementedException(); }
-        }
-
-        protected virtual IEnumerable<IPAddress> HostAddresses
-        {
-            get
-            {
-				var addresses = DnsClient.Default.Resolve(DomainName.Parse(string.Format("_xmpp-client._tcp.{0}", Jid.Domain)), RecordType.Srv);
-				if (addresses != null)
-				{
-					return addresses.AnswerRecords.OfType<SrvRecord>().SelectMany(x => Dns.GetHostAddresses(x.Target.ToString()));
-				}
-				return Dns.GetHostAddresses(Jid.Domain);
-            }
             set { throw new NotImplementedException(); }
         }
     
@@ -54,20 +35,8 @@ namespace SharpXMPP
     
         protected XmppTcpConnection(string ns, JID jid, string password) : base(ns)
         {
-            Jid = jid;
-            
-            Password = password;	    
-	        _client = new TcpClient();
-	        _client.Connect(HostAddresses.ToArray(), TcpPort); // TODO: check ports
-	        ConnectionStream = _client.GetStream();
-            Iq += (sender, iq) => new XMPP.Client.IqManager(this)
-            {
-                PayloadHandlers = new List<PayloadHandler>
-                          {
-                              new InfoHandler(Capabilities),
-                              new ItemsHandler()
-                          }
-            }.Handle(iq);
+            Jid = jid;           
+            Password = password;	    	        
         }
 
         public System.IO.Stream ConnectionStream;
@@ -139,7 +108,10 @@ namespace SharpXMPP
                     {
                         OnMessage(Stanza.Parse<XMPPMessage>(el));
                     }
-
+                    if (el.Name.LocalName.Equals("presence"))
+                    {
+                        OnPresence(Stanza.Parse<XMPPPresence>(el));
+                    }
                 }
                 catch (Exception e)
                 {
@@ -149,8 +121,29 @@ namespace SharpXMPP
             }
         }
 
-        public override void Connect()
+        public override async void Connect()
         {
+            List<IPAddress> HostAddresses = new List<IPAddress>();
+
+            var srvs = await Resolver.ResolveXMPPClient(Jid.Domain);
+            if (srvs.Any()) {
+                foreach (var srv in srvs)
+                {
+                    var addresses = await Dns.GetHostAddressesAsync(srv.Host);
+                    HostAddresses.AddRange(addresses);
+                }
+            }
+            _client = new TcpClient();            
+            await _client.ConnectAsync(HostAddresses.ToArray(), TcpPort); // TODO: check ports
+            ConnectionStream = _client.GetStream();
+            Iq += (sender, iq) => new IqManager(this)
+            {
+                PayloadHandlers = new List<PayloadHandler>
+                          {
+                              new InfoHandler(Capabilities),
+                              new ItemsHandler()
+                          }
+            }.Handle(iq);
             RestartXmlStreams();
             var features = Stanza.Parse<Features>(NextElement());
             if (features.Tls)
@@ -160,7 +153,7 @@ namespace SharpXMPP
                 if (res != null)
                 {
                     ConnectionStream = new SslStream(ConnectionStream, true);
-                    ((SslStream)ConnectionStream).AuthenticateAsClient(Jid.Domain);
+                    await ((SslStream)ConnectionStream).AuthenticateAsClientAsync(Jid.Domain);
                     RestartXmlStreams();
                     NextElement();
                 }

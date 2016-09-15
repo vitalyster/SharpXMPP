@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using SharpXMPP.XMPP.Client.Elements;
+using System.Collections.Generic;
 
 namespace SharpXMPP.XMPP.Client.Register
 {
@@ -15,18 +16,18 @@ namespace SharpXMPP.XMPP.Client.Register
 
         public class RegistrationEventArgs
         {
-            public RegistrationEventArgs(StringDictionary fields) { Fields = fields; }
-            public StringDictionary Fields { get; private set; } // readonly
+            public RegistrationEventArgs(Dictionary<string, string> fields) { Fields = fields; }
+            public Dictionary<string, string> Fields { get; private set; } // readonly
         }
 
         public delegate bool RegistrationEventHandler (object sender, RegistrationEventArgs args);
         
         
-        private StringDictionary _fields;
+        private Dictionary<string, string> _fields;
 
-        private static StringDictionary FilterFields(Stanza query, StringDictionary requestFields)
+        private static Dictionary<string, string> FilterFields(Stanza query, Dictionary<string, string> requestFields)
         {
-            var filtered = new StringDictionary();
+            var filtered = new Dictionary<string, string>();
             foreach (string field in requestFields.Keys)
             {
                 foreach (var val in query.Elements())

@@ -25,9 +25,9 @@ namespace SharpXMPP.XMPP.SASL
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("n,,{0}", _clientFirstMessageBare)));
         }
 
-        NameValueCollection parseResponse(string arr)
+        Dictionary<string, string> parseResponse(string arr)
         {
-            var result = new NameValueCollection();
+            var result = new Dictionary<string, string>();
             var parts = arr.Split(',');
             foreach (var part in parts)
             {
@@ -52,7 +52,7 @@ namespace SharpXMPP.XMPP.SASL
             var clientFinalMessageWithoutProof = string.Format("c={0},r={1}", "biws", parts["r"]);
             var authMessage = string.Format("{0},{1},{2}", _clientFirstMessageBare, serverResponse,
                 clientFinalMessageWithoutProof);
-            var hmac2 = new HMACSHA1(new SHA1Managed().ComputeHash(clientKey));
+            var hmac2 = new HMACSHA1(SHA1.Create().ComputeHash(clientKey));
             var clientSignature = hmac2.ComputeHash(Encoding.UTF8.GetBytes(authMessage));
             var clientProof = clientKey.Zip(clientSignature, (x, y) => (byte)(x ^ y)).ToArray();
             var serverKey = new HMACSHA1(saltedPassword).ComputeHash(Encoding.UTF8.GetBytes("Server Key"));

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
@@ -9,6 +9,7 @@
     <Import_RootNamespace>SharpXMPP.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Resolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XMPP\Bind\Elements\Bind.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XMPP\Bind\SessionHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XMPP\Client\Capabities\CapabilitiesManager.cs" />
@@ -49,8 +50,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)XmppComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XmppConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XmppTcpConnection.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Crypto\MD5.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Crypto\MD5Managed.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)XMPP\" />
