@@ -41,5 +41,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <Import Project="..\SharpXMPP.Shared\SharpXMPP.Shared.projitems" Label="Shared" Condition="Exists('..\SharpXMPP.Shared\SharpXMPP.Shared.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
