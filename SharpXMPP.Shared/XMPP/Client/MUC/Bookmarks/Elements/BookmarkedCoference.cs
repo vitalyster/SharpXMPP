@@ -30,7 +30,11 @@ namespace SharpXMPP.XMPP.Client.MUC.Bookmarks.Elements
 
         public string Nick
         {
-            get { return Element(XNamespace.Get(Namespaces.StorageBookmarks) + "nick").Value; }
+            get
+            {
+                var nick = Element(XNamespace.Get(Namespaces.StorageBookmarks) + "nick");
+                return nick == null ? null : nick.Value;
+            }
         }
         public bool IsAutojoin
         {
