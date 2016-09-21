@@ -9,8 +9,10 @@ matrix:
       env: DOTNETCORE=1
     - mono: latest
 install:
-  - nuget restore SharpXMPP.sln
-  - nuget install NUnit.Runners -Version 3.4.1 -OutputDirectory testrunner
+  - if [ -z "$DOTNETCORE" ]; then nuget restore SharpXMPP.sln; fi
+  - if [ -z "$DOTNETCORE" ]; then nuget install NUnit.Runners -Version 3.4.1 -OutputDirectory testrunner; fi
+  - if [[ "$DOTNETCORE" == 1 ]]; then dotnet restore SharpXMPP.NUnit; fi
 script:
-  - xbuild /p:Configuration=Release SharpXMPP.NUnit/SharpXMPP.NUnit.csproj
-  - mono ./testrunner/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./SharpXMPP.NUnit/bin/Release/SharpXMPP.NUnit.dll
+  - if [ -z "$DOTNETCORE" ]; then xbuild /p:Configuration=Release SharpXMPP.NUnit/SharpXMPP.NUnit.csproj; fi
+  - if [ -z "$DOTNETCORE" ]; then mono ./testrunner/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./SharpXMPP.NUnit/bin/Release/SharpXMPP.NUnit.dll; fi
+  - if [[ "$DOTNETCORE" == 1 ]]; then dotnet test SharpXMPP.NUnit; fi
