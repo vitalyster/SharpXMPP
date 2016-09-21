@@ -8,6 +8,5 @@ install:
   - nuget restore SharpXMPP.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - cp `which nuget` .nuget/NuGet.exe
-  - xbuild /p:Configuration=Release SharpXMPP.sln
+  - xbuild /p:Configuration=Release SharpXMPP.NUnit/SharpXMPP.NUnit.csproj
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./SharpXMPP.NUnit/bin/Release/SharpXMPP.NUnit.dll
