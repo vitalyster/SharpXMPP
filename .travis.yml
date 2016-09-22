@@ -15,4 +15,4 @@ install:
 script:
   - if [ -z "$DOTNETCORE" ]; then xbuild /p:Configuration=Release SharpXMPP.NUnit/SharpXMPP.NUnit.csproj; fi
   - if [ -z "$DOTNETCORE" ]; then mono ./testrunner/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./SharpXMPP.NUnit/bin/Release/SharpXMPP.NUnit.dll; fi
-  - if [[ "$DOTNETCORE" == 1 ]]; then dotnet test SharpXMPP.NUnit; fi
+  - if [[ "$DOTNETCORE" == 1 ]]; then dotnet test SharpXMPP.NUnit -f netcoreapp1.0; fi
