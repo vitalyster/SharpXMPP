@@ -1,12 +1,12 @@
 {
     "version": "0.0.1-*",
     "frameworks": {
-        "net40": {
+        "net45": {
             "frameworkAssemblies": {
-                "System.Xml": "4.0.0.0"
+                "System.Xml": "4.0.0.0",
+                "System.Xml.Linq": "4.0.0.0"
             }
-        },
-        "netcoreapp1.0": {}
+        }
     },
     "buildOptions": {
         "debugType": "portable"
