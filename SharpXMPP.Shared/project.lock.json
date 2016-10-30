@@ -1,0 +1,16 @@
+{
+  "locked": false,
+  "version": 2,
+  "targets": {
+    ".NETCoreApp,Version=v1.0": {},
+    ".NETFramework,Version=v4.5.1": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "": [],
+    ".NETCoreApp,Version=v1.0": [],
+    ".NETFramework,Version=v4.5.1": []
+  },
+  "tools": {},
+  "projectFileToolGroups": {}
+}
