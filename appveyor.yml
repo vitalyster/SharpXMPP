@@ -4,3 +4,5 @@ before_build:
     - dotnet build SharpXMPP.Shared -f netstandard1.6
 build:
     project: SharpXMPP.sln
+test:
+    assemblies: SharpXMPP.NUnit/bin/Debug/net451/win7-x64/SharpXMPP.NUnit.dll
