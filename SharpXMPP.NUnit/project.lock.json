@@ -3,7 +3,7 @@
   "version": 2,
   "targets": {
     ".NETFramework,Version=v4.5.1": {
-      "NUnit/3.5.0": {
+      "NUnit/3.4.1": {
         "type": "package",
         "compile": {
           "lib/net45/nunit.framework.dll": {}
@@ -14,26 +14,30 @@
       },
       "SharpXMPP.Shared/0.0.1": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
+        "frameworkAssemblies": [
+          "System.Xml",
+          "System.Xml.Linq"
+        ],
         "compile": {
-          "net451/SharpXMPP.Shared.dll": {}
+          "net45/SharpXMPP.Shared.dll": {}
         },
         "runtime": {
-          "net451/SharpXMPP.Shared.dll": {}
+          "net45/SharpXMPP.Shared.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "NUnit/3.5.0": {
-      "sha512": "z/03NfC+ci3/OzlIlClH+nd0LZ99OU3wS74nAtLVnPo1oq6nvd+CGxTHZAc8n8xxDLeLMofZ8AjahxlROEhf/Q==",
+    "NUnit/3.4.1": {
+      "sha512": "G/9h/ENn8+GvT5DvBqVNrUhIWuxtAr0/oVGN2ljKVUw50EAZYBzeWSy9s6nqMswaQACpQzljql1sWQ/peE2eJg==",
       "type": "package",
-      "path": "NUnit/3.5.0",
+      "path": "NUnit/3.4.1",
       "files": [
         "CHANGES.txt",
         "LICENSE.txt",
         "NOTICES.txt",
-        "NUnit.3.5.0.nupkg.sha512",
+        "NUnit.3.4.1.nupkg.sha512",
         "NUnit.nuspec",
         "lib/dotnet/nunit.framework.dll",
         "lib/dotnet/nunit.framework.xml",
@@ -58,7 +62,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "NUnit >= 3.5.0",
+      "NUnit >= 3.4.1",
       "SharpXMPP.Shared"
     ],
     ".NETFramework,Version=v4.5.1": []
