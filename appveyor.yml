@@ -1,5 +1,6 @@
 before_build:
     - dotnet restore
     - nuget install SharpXMPP.WPF/packages.config -SolutionDirectory .
+    - dotnet build SharpXMPP.Shared -f netstandard1.6
 build:
     project: SharpXMPP.sln
