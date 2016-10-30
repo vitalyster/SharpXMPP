@@ -184,7 +184,12 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <Import Project="..\SharpXMPP.Shared\SharpXMPP.Shared.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\SharpXMPP.Shared\SharpXMPP.Shared.xproj">
+      <Project>{8ba87246-b76c-437c-b891-a62ff976f216}</Project>
+      <Name>SharpXMPP.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

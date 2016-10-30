@@ -1,30 +1,18 @@
 {
-  "version": "1.0.0-*",
-  "buildOptions": {
-    "debugType": "portable",
-    "compilationOptions": {
-      "emitEntryPoint": true
+    "version": "0.0.1-*",
+    "frameworks": {
+        "net451": {}
     },
-    "compile": {
-      "include": ["../SharpXMPP.Shared/**/*.cs", "Test.cs"],
-      "exclude": ["../SharpXMPP.Shared/XmppWebSocketConnection.cs"]
-    }
-  },
-  "dependencies": {
-    "NUnit": "3.4.1",
-    "dotnet-test-nunit": "3.4.0-beta-2"
-  },
-  "testRunner": "nunit",
-  "frameworks": {
-    "net451": {},
-    "netcoreapp1.0": {
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "type": "platform",
-          "version": "1.0.1"
-        }
-      },
-      "imports": "dnxcore50"
-    }
-  }
+    "dependencies": {
+        "NUnit": "3.5.0",
+
+        "SharpXMPP.Shared": "*"
+    },
+    "tools": {
+        "dotnet-test-nunit": "3.4.0-beta-2"
+    },
+    "buildOptions": {
+        "debugType": "portable"
+    },
+    "testRunner": "nunit"
 }
