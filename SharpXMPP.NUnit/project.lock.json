@@ -67,28 +67,6 @@
     ],
     ".NETFramework,Version=v4.5.1": []
   },
-  "tools": {
-    ".NETCoreApp,Version=v1.0": {
-      "dotnet-test-nunit/3.4.0-beta-2": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.DependencyModel": "1.0.0",
-          "Microsoft.Extensions.Testing.Abstractions": "1.0.0-preview2-003121",
-          "Microsoft.NETCore.App": "1.0.0",
-          "NUnit.Portable.Agent": "3.4.0-beta-2"
-        },
-        "compile": {
-          "lib/netcoreapp1.0/dotnet-test-nunit.dll": {}
-        },
-        "runtime": {
-          "lib/netcoreapp1.0/dotnet-test-nunit.dll": {}
-        }
-      }
-    }
-  },
-  "projectFileToolGroups": {
-    ".NETCoreApp,Version=v1.0": [
-      "dotnet-test-nunit >= 3.4.0-beta-2"
-    ]
-  }
+  "tools": {},
+  "projectFileToolGroups": {}
 }
