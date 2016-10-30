@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpXMPP.WPF", "SharpXMPP.WPF\SharpXMPP.WPF.csproj", "{85EC4306-BA3B-4F47-8354-EEE4DDEBCD59}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8BA87246-B76C-437C-B891-A62FF976F216} = {8BA87246-B76C-437C-B891-A62FF976F216}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0D9279EF-8944-48C7-8B47-18FD35FAC5E1}"
 	ProjectSection(SolutionItems) = preProject
