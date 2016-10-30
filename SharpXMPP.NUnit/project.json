@@ -1,14 +1,28 @@
 {
     "version": "0.0.1-*",
     "frameworks": {
-        "net451": {}
+        "net451": {},
+        "netcoreapp1.0": {
+            "dependencies": {
+                "Microsoft.NETCore.App": {
+                    "type": "platform",
+                    "version": "1.0.1"
+                }
+            },
+            "imports": "dnxcore50"
+        }
     },
     "dependencies": {
         "NUnit": "3.4.1",
+        "dotnet-test-nunit": "3.4.0-beta-2",
 
         "SharpXMPP.Shared": "*"
     },
     "buildOptions": {
-        "debugType": "portable"
-    }
+        "debugType": "portable",
+        "compilationOptions": {
+            "emitEntryPoint": true
+        }
+    },
+    "testRunner": "nunit"
 }
