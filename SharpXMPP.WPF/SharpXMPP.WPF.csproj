@@ -71,7 +71,7 @@
       <HintPath>..\packages\EntityFramework.SqlServerCompact.6.1.3\lib\net45\EntityFramework.SqlServerCompact.dll</HintPath>
     </Reference>
     <Reference Include="SharpXMPP.Shared">
-      <HintPath>..\SharpXMPP.Shared\bin\Debug\net45\SharpXMPP.Shared.dll</HintPath>
+      <HintPath>..\SharpXMPP.Shared\bin\Debug\net451\SharpXMPP.Shared.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
