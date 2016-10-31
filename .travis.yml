@@ -1,0 +1,13 @@
+sudo: required
+dist: trusty
+language: csharp
+solution: SharpXMPP.sln
+dotnet: 1.0.0-preview2-003131
+mono: latest
+install:
+  - dotnet restore
+  - nuget install NUnit.Runners -Version 3.4.1 -OutputDirectory testrunner
+script:
+  - dotnet test SharpXMPP.NUnit -f netcoreapp1.0
+  - dotnet build SharpXMPP.NUnit -f net451
+  - mono ./testrunner/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./SharpXMPP.NUnit/bin/Debug/net451/ubuntu.14.04-x64/SharpXMPP.NUnit.dll
