@@ -1,13 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpXMPP.WPF", "SharpXMPP.WPF\SharpXMPP.WPF.csproj", "{85EC4306-BA3B-4F47-8354-EEE4DDEBCD59}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8BA87246-B76C-437C-B891-A62FF976F216} = {8BA87246-B76C-437C-B891-A62FF976F216}
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0D9279EF-8944-48C7-8B47-18FD35FAC5E1}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -15,9 +10,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0D9279
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SharpXMPP.NUnit", "SharpXMPP.NUnit\SharpXMPP.NUnit.xproj", "{6C300F8A-DC85-4B53-AD7B-D67D484C60FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpXMPP.WPF", "SharpXMPP.WPF\SharpXMPP.WPF.csproj", "{85EC4306-BA3B-4F47-8354-EEE4DDEBCD59}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8BA87246-B76C-437C-B891-A62FF976F216} = {8BA87246-B76C-437C-B891-A62FF976F216}
+	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SharpXMPP.Shared", "SharpXMPP.Shared\SharpXMPP.Shared.xproj", "{8BA87246-B76C-437C-B891-A62FF976F216}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpXMPP.NUnit", "SharpXMPP.NUnit\SharpXMPP.NUnit.csproj", "{6C300F8A-DC85-4B53-AD7B-D67D484C60FF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpXMPP.Shared", "SharpXMPP.Shared\SharpXMPP.Shared.csproj", "{8BA87246-B76C-437C-B891-A62FF976F216}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
