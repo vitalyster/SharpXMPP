@@ -3,7 +3,7 @@ dist: trusty
 language: csharp
 solution: SharpXMPP.sln
 dotnet: 1.0.4
-mono: latest
+mono: 4.2.3
 install:
   - dotnet restore
   - nuget install NUnit.Runners -Version 3.4.1 -OutputDirectory testrunner
