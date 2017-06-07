@@ -2,7 +2,7 @@ sudo: required
 dist: trusty
 language: csharp
 solution: SharpXMPP.sln
-dotnet: 1.0.0-preview2-003131
+dotnet: 1.0.4
 mono: latest
 install:
   - dotnet restore
