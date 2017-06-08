@@ -7,7 +7,9 @@ mono: 4.2.3
 install:
   - dotnet restore
   - nuget install NUnit.Runners -Version 3.4.1 -OutputDirectory testrunner
+before_script:
+  - export FrameworkPathOverride=/usr/lib/mono/4.5/
 script:
-  - dotnet test SharpXMPP.NUnit\SharpXMPP.NUnit.csproj -f netcoreapp1.1
+  - dotnet test ./SharpXMPP.NUnit/SharpXMPP.NUnit.csproj -f netcoreapp1.1
   - dotnet build SharpXMPP.NUnit -f net451
-  - mono ./testrunner/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./SharpXMPP.NUnit/bin/Debug/net451/ubuntu.14.04-x64/SharpXMPP.NUnit.dll
+  - mono ./testrunner/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./SharpXMPP.NUnit/bin/Debug/net451/SharpXMPP.NUnit.dll
