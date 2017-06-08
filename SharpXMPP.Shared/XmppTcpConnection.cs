@@ -132,6 +132,9 @@ namespace SharpXMPP
                     var addresses = await Dns.GetHostAddressesAsync(srv.Host);
                     HostAddresses.AddRange(addresses);
                 }
+            } else
+            {
+                HostAddresses.AddRange(await Dns.GetHostAddressesAsync(Jid.Domain));
             }
             _client = new TcpClient();            
             await _client.ConnectAsync(HostAddresses.ToArray(), TcpPort); // TODO: check ports
