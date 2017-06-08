@@ -1,11 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SharpXMPP.XMPP.SASL
 {
@@ -32,7 +29,10 @@ namespace SharpXMPP.XMPP.SASL
             foreach (var part in parts)
             {
                 var item = part.Split(new[] {'='}, 2);
-                result.Add(item[0], item[1]);
+                if (item.Count() == 2)
+                {
+                    result.Add(item[0], item[1]);
+                }
             }
             return result;
         }
@@ -41,7 +41,14 @@ namespace SharpXMPP.XMPP.SASL
         {
             var serverResponse = Encoding.UTF8.GetString(Convert.FromBase64String(previousResponse));
             var parts = parseResponse(serverResponse);
-            if (_verifystep) return Convert.FromBase64String(parts["v"]).SequenceEqual(_serverSignature) ? "" : "error";
+            if (_verifystep)
+            {
+                if (parts.ContainsKey("v"))
+                {
+                    return Convert.FromBase64String(parts["v"]).SequenceEqual(_serverSignature) ? "" : "error";
+                }
+                return "error";
+            };
             _verifystep = true;
             var iters = int.Parse(parts["i"]);
             var saltedPassword = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(Password),

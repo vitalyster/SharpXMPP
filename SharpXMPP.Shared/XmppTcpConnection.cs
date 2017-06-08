@@ -175,6 +175,11 @@ namespace SharpXMPP
                 session.SessionStarted += connection => OnSignedIn(new SignedInArgs {Jid = connection.Jid});
                 session.Start(this);
             };
+            authenticator.AuthenticationFailed += sender =>
+            {
+                OnConnectionFailed(new ConnFailedArgs { Message = "Authentication failed" });
+                return;
+            };
             authenticator.Start(this);
         }
     }

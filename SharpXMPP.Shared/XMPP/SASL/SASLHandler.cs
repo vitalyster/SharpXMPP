@@ -19,6 +19,15 @@ namespace SharpXMPP.XMPP.SASL
             Authenticated(sender);
         }
 
+        public delegate void AuthenticationFailedHandler(XmppConnection sender);
+
+        public event AuthenticationFailedHandler AuthenticationFailed = delegate { };
+
+        protected virtual void OnAuthenticationFailed(XmppConnection sender)
+        {
+            AuthenticationFailed(sender);
+        }
+
         public abstract string NextChallenge(string previousResponse);
 
         public static SASLHandler Create(List<string> availableMethods, JID clientJID, string password)
@@ -36,6 +45,11 @@ namespace SharpXMPP.XMPP.SASL
             var nextResponse = string.Empty;
             while ((nextResponse = NextChallenge(authResponse.Value)) != "")
             {
+                if (nextResponse == "error")
+                {
+                    OnAuthenticationFailed(connection);
+                    return;
+                }
                 var response = new SASLResponse();
                 response.SetValue(nextResponse);
                 connection.Send(response);
