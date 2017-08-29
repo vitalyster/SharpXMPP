@@ -31,3 +31,4 @@ packages/
 .nuget/NuGet.exe
 .vs/**
 /testrunner/
+.idea/
