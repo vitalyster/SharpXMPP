@@ -8,7 +8,7 @@ namespace SharpXMPP.XMPP.Client.Elements
         public XMPPMessage()
             : base(XNamespace.Get(Namespaces.JabberClient) + "message")
         {
-            
+
         }
 
         public string Text
@@ -21,7 +21,7 @@ namespace SharpXMPP.XMPP.Client.Elements
             {
                 var body = Element(XNamespace.Get(Namespaces.JabberClient) + "body") ??
                            new XElement(XNamespace.Get(Namespaces.JabberClient) + "body");
-                body.SetValue(new XCData(value));
+                body.SetValue(value);
                 Add(body);
             }
         }
