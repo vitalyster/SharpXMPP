@@ -1,12 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.0.1-pre02</VersionPrefix>
+    <VersionPrefix>0.0.1</VersionPrefix>
     <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
     <AssemblyName>SharpXMPP.Shared</AssemblyName>
-    <PackageId>SharpXMPP.Shared</PackageId>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.6' ">1.6.0</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>SharpXMPP</PackageId>
+    <Authors>ForNeVeR</Authors>
+    <Description>Managed XMPP (Jabber) client library.</Description>
+    <PackageReleaseNotes>0.0.1 – initial release.</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/vitalyster/SharpXMPP</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/vitalyster/SharpXMPP/blob/276429d82753c255ac62b22a4fc73119e244472e/LICENSE.md</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/vitalyster/SharpXMPP.git</RepositoryUrl>
+    <PackageTags>XMPP; Jabber</PackageTags>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
