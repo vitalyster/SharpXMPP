@@ -158,7 +158,7 @@ namespace SharpXMPP
                     ConnectionStream = new SslStream(ConnectionStream, true);
                     await ((SslStream)ConnectionStream).AuthenticateAsClientAsync(Jid.Domain);
                     RestartXmlStreams();
-                    NextElement();
+                    features = Stanza.Parse<Features>(NextElement());
                 }
             }
 
