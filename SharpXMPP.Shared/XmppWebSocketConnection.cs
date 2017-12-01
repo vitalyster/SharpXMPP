@@ -1,4 +1,4 @@
-﻿#if WEB_SOCKET
+#if WEB_SOCKET
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -277,6 +277,17 @@ namespace SharpXMPP
         public override void Connect()
         {
             _connection.Open();
+        }
+
+        
+        public override Task ConnectAsync(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task SessionLoopAsync(CancellationToken token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

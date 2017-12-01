@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using SharpXMPP.XMPP;
@@ -39,10 +41,11 @@ namespace SharpXMPP
             Password = password;	    	        
         }
 
-        public System.IO.Stream ConnectionStream;
+        public System.IO.Stream ConnectionStream { get; private set; }
 
         protected XmlReader Reader;
         protected XmlWriter Writer;
+        private bool _disposed;
 
         protected void RestartXmlStreams()
         {
@@ -88,9 +91,29 @@ namespace SharpXMPP
             Writer.Flush();
         }
 
+        // In what context this method should be used?
         public void Close()
         {
             Writer.WriteEndElement();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && !_disposed)
+            {
+                _disposed = true;
+                // NOTE: used this statement because faced issue with compilation under net451 
+                (_client as IDisposable)?.Dispose();
+                _client = null;
+                Writer?.Dispose();
+                Writer = null;
+                Reader?.Dispose();
+                Reader = null;
+                ConnectionStream?.Dispose();
+                ConnectionStream = null;
+                Iq -= OnIqHandler;
+            }
+            base.Dispose(disposing);
         }
 
         public override void SessionLoop()
@@ -121,34 +144,128 @@ namespace SharpXMPP
             }
         }
 
-        public override async void Connect()
+        // For backward compatibility
+        public override async void Connect() => await ConnectAsync();
+
+        public override async Task ConnectAsync(CancellationToken token)
+        {
+            List<IPAddress> HostAddresses = await ResolveHostAddresses();
+            await ConnectToTcp(HostAddresses);
+            Iq += OnIqHandler;
+
+            RestartXmlStreams();
+
+            var features = Stanza.Parse<Features>(NextElement());
+            await InitTlsIfSupported(features);
+
+            await StartAuthentication(features);
+        }
+
+        public override Task SessionLoopAsync(CancellationToken token)
+        {
+            return Task.Run(() =>
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        var el = NextElement();
+                        token.ThrowIfCancellationRequested();
+                        if (el.Name.LocalName.Equals("iq"))
+                        {
+                            token.ThrowIfCancellationRequested();
+                            OnIq(Stanza.Parse<XMPPIq>(el));
+                        }
+                        if (el.Name.LocalName.Equals("message"))
+                        {
+                            token.ThrowIfCancellationRequested();
+                            OnMessage(Stanza.Parse<XMPPMessage>(el));
+                        }
+                        if (el.Name.LocalName.Equals("presence"))
+                        {
+                            token.ThrowIfCancellationRequested();
+                            OnPresence(Stanza.Parse<XMPPPresence>(el));
+                        }
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        OnConnectionFailed(new ConnFailedArgs { Message = e.Message });
+                        break;
+                    }
+                }
+            }, token);
+        }
+
+
+        private async Task ConnectToTcp(List<IPAddress> HostAddresses)
+        {
+            _client = new TcpClient();
+            await _client.ConnectAsync(HostAddresses.ToArray(), TcpPort); // TODO: check ports
+            ConnectionStream = _client.GetStream();
+        }
+
+        private Task StartAuthentication(Features features)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+            Task.Run(() =>
+            {
+                var authenticator = SASLHandler.Create(features.SaslMechanisms, Jid, Password);
+                if (authenticator == null)
+                {
+                    OnConnectionFailed(new ConnFailedArgs { Message = "supported sasl mechanism not available" });
+                    return;
+                }
+                authenticator.Authenticated += sender =>
+                {
+                    RestartXmlStreams();
+                    var session = new SessionHandler();
+                    session.SessionStarted += connection =>
+                    {
+                        OnSignedIn(new SignedInArgs { Jid = connection.Jid });
+                        tcs.SetResult(true);
+                    };
+                    // TODO make async
+                    // Locks stream with SessionLoop
+                    session.Start(this);
+                };
+                authenticator.AuthenticationFailed += sender =>
+                {
+                    OnConnectionFailed(new ConnFailedArgs { Message = "Authentication failed" });
+                    tcs.SetResult(true);
+                };
+                authenticator.Start(this);
+            });
+            return tcs.Task;
+        }
+
+
+        private async Task<List<IPAddress>> ResolveHostAddresses()
         {
             List<IPAddress> HostAddresses = new List<IPAddress>();
 
             var srvs = await Resolver.ResolveXMPPClient(Jid.Domain);
-            if (srvs.Any()) {
+            if (srvs.Any())
+            {
                 foreach (var srv in srvs)
                 {
                     var addresses = await Dns.GetHostAddressesAsync(srv.Host);
                     HostAddresses.AddRange(addresses);
                 }
-            } else
+            }
+            else
             {
                 HostAddresses.AddRange(await Dns.GetHostAddressesAsync(Jid.Domain));
             }
-            _client = new TcpClient();            
-            await _client.ConnectAsync(HostAddresses.ToArray(), TcpPort); // TODO: check ports
-            ConnectionStream = _client.GetStream();
-            Iq += (sender, iq) => new IqManager(this)
-            {
-                PayloadHandlers = new List<PayloadHandler>
-                          {
-                              new InfoHandler(Capabilities),
-                              new ItemsHandler()
-                          }
-            }.Handle(iq);
-            RestartXmlStreams();
-            var features = Stanza.Parse<Features>(NextElement());
+
+            return HostAddresses;
+        }
+
+        private async Task InitTlsIfSupported(Features features)
+        {
             if (features.Tls)
             {
                 Send(new StartTLS());
@@ -161,26 +278,19 @@ namespace SharpXMPP
                     features = Stanza.Parse<Features>(NextElement());
                 }
             }
+        }
 
-            var authenticator = SASLHandler.Create(features.SaslMechanisms, Jid, Password);
-            if (authenticator == null)
+
+        private void OnIqHandler(XmppConnection sender, XMPPIq iq)
+        {
+            new IqManager(this)
             {
-                OnConnectionFailed(new ConnFailedArgs { Message = "supported sasl mechanism not available" });
-                return;
-            }
-            authenticator.Authenticated += sender =>
-            {
-                RestartXmlStreams();
-                var session = new SessionHandler();
-                session.SessionStarted += connection => OnSignedIn(new SignedInArgs {Jid = connection.Jid});
-                session.Start(this);
-            };
-            authenticator.AuthenticationFailed += sender =>
-            {
-                OnConnectionFailed(new ConnFailedArgs { Message = "Authentication failed" });
-                return;
-            };
-            authenticator.Start(this);
+                PayloadHandlers = new List<PayloadHandler>
+                          {
+                              new InfoHandler(Capabilities),
+                              new ItemsHandler()
+                          }
+            }.Handle(iq);
         }
     }
 }

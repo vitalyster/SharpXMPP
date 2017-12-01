@@ -7,6 +7,8 @@ using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
 using System;
 using SharpXMPP.XMPP.Stream.Elements;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace SharpXMPP
 {
@@ -26,9 +28,24 @@ namespace SharpXMPP
         public JID Jid { get; set; }
     }   
 
-    public abstract class XmppConnection
+    public abstract class XmppConnection : IDisposable
     {
         private readonly string _ns;
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~XmppConnection()
+        {
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+        }
 
         public string Namespace
         {
@@ -162,5 +179,11 @@ namespace SharpXMPP
 
         public abstract void SessionLoop();
         public abstract void Connect();
+
+        public Task SessionLoopAsync() => SessionLoopAsync(CancellationToken.None);
+        public abstract Task SessionLoopAsync(CancellationToken token);
+
+        public Task ConnectAsync() => ConnectAsync(CancellationToken.None);
+        public abstract Task ConnectAsync(CancellationToken token);
     }
 }
