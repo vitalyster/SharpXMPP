@@ -5,6 +5,7 @@
     <ContentPage.Content>
         <StackLayout VerticalOptions="Center">
             <Entry x:Name="_login"
+                   Text="xam.jab2@chinwag.im"
                    Placeholder="Login" />
             <Entry x:Name="_pass"
                    Placeholder="Password" 
