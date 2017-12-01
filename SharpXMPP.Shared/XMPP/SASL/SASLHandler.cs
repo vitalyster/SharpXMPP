@@ -32,7 +32,10 @@ namespace SharpXMPP.XMPP.SASL
 
         public static SASLHandler Create(List<string> availableMethods, JID clientJID, string password)
         {
-            return availableMethods.Contains("SCRAM-SHA-1") ? new SASLSCRAM { ClientJID = clientJID, Password = password} : null;
+            // NOTE: Made SASLSCRAM as default because used free xmpp servers as https://chat.chinwag.im
+            // they dont send any availableMethods
+            // return availableMethods.Contains("SCRAM-SHA-1") ? new SASLSCRAM { ClientJID = clientJID, Password = password} : null;
+            return new SASLSCRAM { ClientJID = clientJID, Password = password };
         }
 
         public void Start(XmppConnection connection)
