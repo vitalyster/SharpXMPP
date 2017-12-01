@@ -26,7 +26,16 @@ namespace SharpXMPP.Client
             var pass = _pass.Text;
 
             IsBusy = true;
-           
+            var client = new XmppClient(new SharpXMPP.XMPP.JID(login), pass);
+            client.ConnectionFailed += Client_ConnectionFailed;
+            await client.ConnectAsync();
+            IsBusy = false;
+            await Navigation.PushModalAsync(new Users(client));
+        }
+
+        private void Client_ConnectionFailed(XmppConnection sender, ConnFailedArgs e)
+        {
+            throw new Exception(e.Message);
         }
     }
 }
