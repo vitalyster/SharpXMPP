@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SharpXMPP.Client.Chat">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+
+            <ListView Grid.Row="0"
+                      x:Name="_msg">
+                
+            </ListView>
+
+            <StackLayout Grid.Row="1"
+                         Orientation="Horizontal">
+                <Entry HorizontalOptions="FillAndExpand"
+                       x:Name="_newMsg"/>
+                <Button Text="SEND" 
+                        HorizontalOptions="End"
+                        Clicked="Send_Clicked"/>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

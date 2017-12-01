@@ -114,6 +114,10 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SharpXMPP.Shared\SharpXMPP.Shared.csproj">
+      <Project>{8ba87246-b76c-437c-b891-a62ff976f216}</Project>
+      <Name>SharpXMPP.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpXMPP.Client\SharpXMPP.Client.csproj">
       <Project>{85a9e08d-c7af-4dd8-9f28-40b70d599ceb}</Project>
       <Name>SharpXMPP.Client</Name>
