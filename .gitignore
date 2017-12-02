@@ -32,3 +32,5 @@ packages/
 .vs/**
 /testrunner/
 .idea/
+
+*.userprefs
