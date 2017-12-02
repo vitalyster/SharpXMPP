@@ -26,24 +26,13 @@ namespace SharpXMPP
     public class SignedInArgs
     {
         public JID Jid { get; set; }
-    }   
+    }
 
     public abstract class XmppConnection : IDisposable
     {
         private readonly string _ns;
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~XmppConnection()
-        {
-            Dispose(false);
-        }
-
-        protected virtual void Dispose(bool disposing)
+        public virtual void Dispose()
         {
         }
 
@@ -82,7 +71,7 @@ namespace SharpXMPP
 
         public delegate void ConnectionFailedHandler(XmppConnection sender, ConnFailedArgs e);
 
-        public event ConnectionFailedHandler ConnectionFailed = delegate {};
+        public event ConnectionFailedHandler ConnectionFailed = delegate { };
 
         protected void OnConnectionFailed(ConnFailedArgs e)
         {
@@ -92,7 +81,7 @@ namespace SharpXMPP
         public delegate void StreamStartHandler(XmppConnection sender, string streamId);
 
         public event StreamStartHandler StreamStart = delegate { };
- 
+
         protected void OnStreamStart(string streamId)
         {
             StreamStart(this, streamId);
@@ -100,7 +89,7 @@ namespace SharpXMPP
 
         public delegate void SignedInHandler(XmppConnection sender, SignedInArgs e);
 
-        public event SignedInHandler SignedIn = delegate {};
+        public event SignedInHandler SignedIn = delegate { };
 
         protected void OnSignedIn(SignedInArgs e)
         {
@@ -109,7 +98,7 @@ namespace SharpXMPP
 
         public delegate void ElementHandler(XmppConnection sender, ElementArgs e);
 
-        public event ElementHandler Element = delegate {};
+        public event ElementHandler Element = delegate { };
 
         protected void OnElement(ElementArgs e)
         {
@@ -118,11 +107,11 @@ namespace SharpXMPP
 
         public delegate void IqHandler(XmppConnection sender, XMPPIq e);
 
-        protected event IqHandler Iq = delegate {};
+        protected event IqHandler Iq = delegate { };
 
         protected void OnIq(XMPPIq e)
         {
-            if (e.IqType == XMPPIq.IqTypes.result 
+            if (e.IqType == XMPPIq.IqTypes.result
                 || e.IqType == XMPPIq.IqTypes.error
                 && queries.ContainsKey(e.ID))
             {
@@ -134,7 +123,7 @@ namespace SharpXMPP
                 // get, set
                 Iq(this, e);
             }
-            
+
         }
 
         public delegate void MessageHandler(XmppConnection sender, XMPPMessage e);

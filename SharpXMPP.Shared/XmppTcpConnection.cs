@@ -30,15 +30,15 @@ namespace SharpXMPP
             get { return 5222; }
             set { throw new NotImplementedException(); }
         }
-    
+
         protected readonly string Password;
 
-        
-    
+
+
         protected XmppTcpConnection(string ns, JID jid, string password) : base(ns)
         {
-            Jid = jid;           
-            Password = password;	    	        
+            Jid = jid;
+            Password = password;
         }
 
         public System.IO.Stream ConnectionStream { get; private set; }
@@ -97,13 +97,13 @@ namespace SharpXMPP
             Writer.WriteEndElement();
         }
 
-        protected override void Dispose(bool disposing)
+        public override void Dispose()
         {
-            if (disposing && !_disposed)
+            if (!_disposed)
             {
                 _disposed = true;
                 // NOTE: used this statement because faced issue with compilation under net451 
-                (_client as IDisposable)?.Dispose();
+                ((IDisposable)_client)?.Dispose();
                 _client = null;
                 Writer?.Dispose();
                 Writer = null;
@@ -113,7 +113,7 @@ namespace SharpXMPP
                 ConnectionStream = null;
                 Iq -= OnIqHandler;
             }
-            base.Dispose(disposing);
+            base.Dispose();
         }
 
         public override void SessionLoop()
