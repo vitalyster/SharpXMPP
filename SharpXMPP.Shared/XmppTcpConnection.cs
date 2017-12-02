@@ -144,19 +144,20 @@ namespace SharpXMPP
             }
         }
 
-        // For backward compatibility
-        public override async void Connect() => await ConnectAsync();
-
         public override async Task ConnectAsync(CancellationToken token)
         {
             List<IPAddress> HostAddresses = await ResolveHostAddresses();
-            await ConnectToTcp(HostAddresses);
+            await ConnectOverTcp(HostAddresses);
             Iq += OnIqHandler;
 
             RestartXmlStreams();
 
-            var features = Stanza.Parse<Features>(NextElement());
-            await InitTlsIfSupported(features);
+            Features features = GetServerFeatures();
+            var tlsSupported = await InitTlsIfSupported(features);
+            if (tlsSupported)
+            {
+                features = GetServerFeatures();
+            }
 
             await StartAuthentication(features);
         }
@@ -187,7 +188,7 @@ namespace SharpXMPP
                             OnPresence(Stanza.Parse<XMPPPresence>(el));
                         }
                     }
-                    catch (OperationCanceledException ex)
+                    catch (OperationCanceledException)
                     {
                         break;
                     }
@@ -200,8 +201,9 @@ namespace SharpXMPP
             }, token);
         }
 
+        private Features GetServerFeatures() => Stanza.Parse<Features>(NextElement());
 
-        private async Task ConnectToTcp(List<IPAddress> HostAddresses)
+        private async Task ConnectOverTcp(List<IPAddress> HostAddresses)
         {
             _client = new TcpClient();
             await _client.ConnectAsync(HostAddresses.ToArray(), TcpPort); // TODO: check ports
@@ -217,6 +219,7 @@ namespace SharpXMPP
                 if (authenticator == null)
                 {
                     OnConnectionFailed(new ConnFailedArgs { Message = "supported sasl mechanism not available" });
+                    tcs.SetResult(false);
                     return;
                 }
                 authenticator.Authenticated += sender =>
@@ -264,20 +267,24 @@ namespace SharpXMPP
             return HostAddresses;
         }
 
-        private async Task InitTlsIfSupported(Features features)
+        private async Task<bool> InitTlsIfSupported(Features features)
         {
-            if (features.Tls)
+            if (!features.Tls)
             {
-                Send(new StartTLS());
-                var res = Stanza.Parse<Proceed>(NextElement());
-                if (res != null)
-                {
-                    ConnectionStream = new SslStream(ConnectionStream, true);
-                    await ((SslStream)ConnectionStream).AuthenticateAsClientAsync(Jid.Domain);
-                    RestartXmlStreams();
-                    features = Stanza.Parse<Features>(NextElement());
-                }
+                return false;
             }
+
+            Send(new StartTLS());
+            var res = Stanza.Parse<Proceed>(NextElement());
+            if (res == null)
+            {
+                return false;
+            }
+
+            ConnectionStream = new SslStream(ConnectionStream, true);
+            await ((SslStream)ConnectionStream).AuthenticateAsClientAsync(Jid.Domain);
+            RestartXmlStreams();
+            return true;
         }
 
 
