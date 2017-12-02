@@ -149,7 +149,7 @@
       <Name>SharpXMPP.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpXMPP.Client\SharpXMPP.Client.csproj">
-      <Project>{85a9e08d-c7af-4dd8-9f28-40b70d599ceb}</Project>
+      <Project>{F8B5D4DE-BFFE-467A-9A91-2F5FE7D65598}</Project>
       <Name>SharpXMPP.Client</Name>
     </ProjectReference>
   </ItemGroup>
