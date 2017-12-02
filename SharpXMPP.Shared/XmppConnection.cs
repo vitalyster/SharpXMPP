@@ -178,7 +178,6 @@ namespace SharpXMPP
         }
 
         public abstract void SessionLoop();
-        public abstract void Connect();
 
         public Task SessionLoopAsync() => SessionLoopAsync(CancellationToken.None);
         public abstract Task SessionLoopAsync(CancellationToken token);
