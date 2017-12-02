@@ -145,7 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SharpXMPP.Shared\SharpXMPP.Shared.csproj">
-      <Project>{8ba87246-b76c-437c-b891-a62ff976f216}</Project>
+      <Project>{382838CC-0C05-4065-9E92-43C0EE29BA26}</Project>
       <Name>SharpXMPP.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpXMPP.Client\SharpXMPP.Client.csproj">
