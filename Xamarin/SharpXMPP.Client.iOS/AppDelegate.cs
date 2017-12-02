@@ -1,33 +1,22 @@
 ﻿using Foundation;
 using UIKit;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 
 namespace SharpXMPP.Client.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the
     // User Interface of the application, as well as listening (and optionally responding) to application events from iOS.
     [Register("AppDelegate")]
-    public class AppDelegate : UIApplicationDelegate
+    public class AppDelegate : FormsApplicationDelegate
     {
-        // class-level declarations
-
-        public override UIWindow Window
-        {
-            get;
-            set;
-        }
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
-            // create a new window instance based on the screen size
-            Window = new UIWindow(UIScreen.MainScreen.Bounds);
+            Forms.Init();
+            LoadApplication(new App());
 
-            // If you have defined a root view controller, set it here:
-            // Window.RootViewController = myViewController;
-
-            // make the window visible
-            Window.MakeKeyAndVisible();
-
-            return true;
+            return base.FinishedLaunching(application, launchOptions);
         }
 
         public override void OnResignActivation(UIApplication application)
