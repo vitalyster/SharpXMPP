@@ -132,10 +132,11 @@ namespace SharpXMPP.WPF
                                 DB.SaveChanges();
                                 lastUpdateTime = DateTime.Now;
                             }
-                            
+
                         }));
                 };
-            ThreadPool.QueueUserWorkItem((o) => _conn.Connect());
+            _conn.ConnectAsync();
+            // ThreadPool.QueueUserWorkItem((o) => _conn.Connect());
             //Trace.Listeners.Add(new ConsoleTraceListener());
         }
 
