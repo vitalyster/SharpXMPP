@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using SharpXMPP.Errors;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Bind;
 using SharpXMPP.XMPP.Client;
@@ -41,7 +42,7 @@ namespace SharpXMPP
             Password = password;
         }
 
-        public System.IO.Stream ConnectionStream { get; private set; }
+        public System.IO.Stream ConnectionStream { get; private protected set; }
 
         protected XmlReader Reader;
         protected XmlWriter Writer;
@@ -76,7 +77,10 @@ namespace SharpXMPP
             }
             do
             {
-                Reader.Read();
+                if (!Reader.Read())
+                {
+                    throw new XmppConnectionTerminatedException();
+                }
             } while (Reader.NodeType != XmlNodeType.Element);
             var result = XElement.Load(Reader.ReadSubtree());
             OnElement(new ElementArgs { Stanza = result, IsInput = true });
