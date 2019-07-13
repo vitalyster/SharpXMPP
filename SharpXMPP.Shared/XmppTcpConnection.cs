@@ -102,7 +102,7 @@ namespace SharpXMPP
             if (!_disposed)
             {
                 _disposed = true;
-                // NOTE: used this statement because faced issue with compilation under net451 
+                // NOTE: used this statement because faced issue with compilation under net451
                 ((IDisposable)_client)?.Dispose();
                 _client = null;
                 Writer?.Dispose();
@@ -138,7 +138,7 @@ namespace SharpXMPP
                 }
                 catch (Exception e)
                 {
-                    OnConnectionFailed(new ConnFailedArgs { Message = e.Message });
+                    OnConnectionFailed(new ConnFailedArgs { Exception = e, Message = e.Message });
                     break;
                 }
             }
@@ -194,7 +194,7 @@ namespace SharpXMPP
                     }
                     catch (Exception e)
                     {
-                        OnConnectionFailed(new ConnFailedArgs { Message = e.Message });
+                        OnConnectionFailed(new ConnFailedArgs { Exception = e, Message = e.Message });
                         break;
                     }
                 }

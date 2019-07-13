@@ -1,19 +1,19 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Client.Capabities;
 using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
-using System;
 using SharpXMPP.XMPP.Stream.Elements;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace SharpXMPP
 {
     public class ConnFailedArgs
     {
+        public Exception Exception { get; set; }
         public string Message { get; set; }
     }
 
