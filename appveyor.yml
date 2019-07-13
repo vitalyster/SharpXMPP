@@ -7,4 +7,6 @@ before_build:
 build:
     project: SharpXMPP.sln
 test:
-    assemblies: SharpXMPP.NUnit/bin/Debug/net451/win7-x64/SharpXMPP.NUnit.dll
+    assemblies:
+        only:
+            - SharpXMPP.NUnit/bin/Debug/**/SharpXMPP.NUnit.dll
