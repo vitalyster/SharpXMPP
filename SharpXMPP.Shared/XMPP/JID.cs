@@ -12,33 +12,36 @@ namespace SharpXMPP.XMPP
         {
 
         }
-        
+
         public JID(string jid)
         {
-            var domainWithResource = string.Empty;
-            var jidParts = jid.Split(new[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
+            if (string.IsNullOrEmpty(jid))
+                return;
+
+            var bareJid = string.Empty;
+            var jidParts = jid.Split(new[] {'/'}, 2);
             switch (jidParts.Length)
             {
                 case 1:
-                    domainWithResource = jidParts[0];
+                    bareJid = jidParts[0];
                     break;
                 case 2:
-                    User = jidParts[0].ToLower();
-                    domainWithResource = jidParts[1];
-                    break;
-            }
-            var resourceParts = domainWithResource.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-            switch (resourceParts.Length)
-            {
-                case 1:
-                    Domain = resourceParts[0].ToLower();
-                    break;
-                case 2:
-                    Domain = resourceParts[0].ToLower();
-                    Resource = resourceParts[1];
+                    bareJid = jidParts[0];
+                    Resource = jidParts[1];
                     break;
             }
 
+            var bareJidParts = bareJid.Split('@');
+            switch (bareJidParts.Length)
+            {
+                case 1:
+                    Domain = bareJidParts[0].ToLower();
+                    break;
+                case 2:
+                    User = bareJidParts[0].ToLower();
+                    Domain = bareJidParts[1].ToLower();
+                    break;
+            }
         }
 
         public string BareJid
@@ -53,7 +56,7 @@ namespace SharpXMPP.XMPP
 
         public string ToString()
         {
-            return FullJid;            
+            return FullJid;
         }
     }
 }
