@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using System.Linq;
 using System.Xml.Linq;
 using SharpXMPP.XMPP;
@@ -31,8 +32,10 @@ namespace SharpXMPP.NUnit
             TestJID(new JID("user@domain.org/user/@"), "user", "domain.org", "user/@");
             TestJID(new JID("user@domain.org/@@@@"), "user", "domain.org", "@@@@");
             TestJID(new JID(""), null, null, null);
-            TestJID(new JID("user@domain@wrong"), null, null, null);
-            TestJID(new JID("user@domain@wrong/resource"), null, null, "resource");
+
+            Assert.Throws<Exception>(() => new JID("user@domain@wrong"));
+            Assert.Throws<Exception>(() => new JID("user@domain@wrong/resource"));
+
             Assert.AreEqual("vasya@icq.org", new JID("vasya@icq.org").ToString());
             Assert.AreEqual("icq.org", new JID("icq.org").ToString());
             Assert.AreEqual("icq.org/registered", new JID("icq.org/registered").ToString());
@@ -70,9 +73,9 @@ namespace SharpXMPP.NUnit
                     Category = "client"
                 },
                 Features = new List<string>
-                                              {
-                                                  Namespaces.DiscoInfo
-                                              }
+                {
+                    Namespaces.DiscoInfo
+                }
             };
             var cf = new XElement(XNamespace.Get("storage:bookmarks") + "conference");
             cf.SetAttributeValue("jid", "to@to.ti");
