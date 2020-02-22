@@ -41,6 +41,8 @@ namespace SharpXMPP.XMPP
                     User = bareJidParts[0].ToLower();
                     Domain = bareJidParts[1].ToLower();
                     break;
+                default:
+                    throw new Exception($"Malformed bare JID: {bareJid}");
             }
         }
 
