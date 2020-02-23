@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.0.2</VersionPrefix>
+    <VersionPrefix>0.0.3</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
     <DebugType>portable</DebugType>
     <AssemblyName>SharpXMPP.Shared</AssemblyName>
@@ -15,8 +15,7 @@
     <Authors>ForNeVeR</Authors>
     <Description>Managed XMPP (Jabber) client library.</Description>
     <PackageReleaseNotes>
-- Fix an endless loop on connection termination
-- Enrich the exception information in ConnectionFailed event
+- Fix parsing for JIDs with at signs
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/vitalyster/SharpXMPP</PackageProjectUrl>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
