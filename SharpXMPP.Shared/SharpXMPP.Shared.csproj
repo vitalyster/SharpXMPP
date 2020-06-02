@@ -6,7 +6,7 @@
     <DebugType>portable</DebugType>
     <AssemblyName>SharpXMPP.Shared</AssemblyName>
     <RootNamespace>SharpXMPP</RootNamespace>
-    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.6' ">1.6.0</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.6' ">1.6.1</NetStandardImplicitPackageVersion>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
