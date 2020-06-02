@@ -1,5 +1,4 @@
 using Android.App;
-using Android.Widget;
 using Android.OS;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
@@ -15,12 +14,12 @@ namespace SharpXMPP.Client.Droid
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            FormsAppCompatActivity.ToolbarResource = Resource.Layout.Toolbar;
-            FormsAppCompatActivity.TabLayoutResource = Resource.Layout.Tabbar;
+            ToolbarResource = Resource.Layout.Toolbar;
+            TabLayoutResource = Resource.Layout.Tabbar;
 
             base.OnCreate(savedInstanceState);
 
-            Forms.SetFlags("FastRenderers_Experimental");
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
 
             LoadApplication(new App());
