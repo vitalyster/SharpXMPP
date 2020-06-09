@@ -94,10 +94,6 @@
     <Folder Include="Resources\mipmap-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SharpXMPP.Shared\SharpXMPP.Shared.csproj">
-      <Project>{382838CC-0C05-4065-9E92-43C0EE29BA26}</Project>
-      <Name>SharpXMPP.Shared</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SharpXMPP.Client\SharpXMPP.Client.csproj">
       <Project>{F8B5D4DE-BFFE-467A-9A91-2F5FE7D65598}</Project>
       <Name>SharpXMPP.Client</Name>
