@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SharpXMPP.XMPP
 {
@@ -56,7 +56,7 @@ namespace SharpXMPP.XMPP
             get { return string.IsNullOrEmpty(Resource) ? BareJid : string.Format(@"{0}/{1}", BareJid, Resource); }
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return FullJid;
         }

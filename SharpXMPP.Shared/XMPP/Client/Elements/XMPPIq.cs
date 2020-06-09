@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Xml.Linq;
 
@@ -42,7 +42,7 @@ namespace SharpXMPP.XMPP.Client.Elements
 
         public XMPPIq() : base(XNamespace.Get(Namespaces.JabberClient) + "iq") { }
 
-        public string ID
+        public new string ID
         {
             get
             {
