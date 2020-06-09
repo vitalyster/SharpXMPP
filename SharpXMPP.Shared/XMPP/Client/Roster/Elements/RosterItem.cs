@@ -19,7 +19,7 @@ namespace SharpXMPP.XMPP.Client.Roster.Elements
                 return Attribute("jid") == null ? null : Attribute("jid").Value;
             }    
         }
-        public string Name
+        public new string Name
         {
             get
             {

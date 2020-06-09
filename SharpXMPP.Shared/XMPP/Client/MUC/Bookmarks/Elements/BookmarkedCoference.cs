@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +11,7 @@ namespace SharpXMPP.XMPP.Client.MUC.Bookmarks.Elements
         public BookmarkedConference()
             : base(XNamespace.Get(Namespaces.StorageBookmarks) + "conference")
         { }
-        public string Name
+        public new string Name
         {
             get
             {
