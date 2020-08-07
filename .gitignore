@@ -33,3 +33,4 @@ packages/
 .idea/
 
 *.userprefs
+*.DS_Store
