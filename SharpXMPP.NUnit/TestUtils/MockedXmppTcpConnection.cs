@@ -6,9 +6,11 @@ namespace SharpXMPP.NUnit.TestUtils
 {
     public class MockedXmppTcpConnection : XmppTcpConnection
     {
-        public MockedXmppTcpConnection(Stream stream) : base("", new JID(), "")
+        public MockedXmppTcpConnection(Stream inputStream = null, Stream outputStream = null)
+            : base("", new JID(), "")
         {
-            Reader = XmlReader.Create(stream);
+            if (inputStream != null) Reader = XmlReader.Create(inputStream);
+            if (outputStream != null) Writer = XmlWriter.Create(outputStream);
         }
     }
 }

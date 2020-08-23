@@ -23,7 +23,7 @@ namespace SharpXMPP.XMPP.Client.MUC.Bookmarks
         public BookmarksManager(XmppConnection conn, bool autoAsk = true)
         {
             connection = conn;
-            connection.SignedIn += (sender, e) => 
+            connection.SignedIn += (sender, e) =>
             {
                 if (autoAsk)
                 {
@@ -58,7 +58,12 @@ namespace SharpXMPP.XMPP.Client.MUC.Bookmarks
             {
                 To = new JID(string.Format("{0}/{1}", room.JID.BareJid, room.Nick))
             };
-            mucPresence.Add(new XElement(XNamespace.Get(Namespaces.MUC) + "x"));
+            var x = new XElement(XNamespace.Get(Namespaces.MUC) + "x");
+            if (room.Password != null)
+            {
+                x.Add(new XElement(XNamespace.Get(Namespaces.MUC) + "password", room.Password));
+            }
+            mucPresence.Add(x);
             connection.Send(mucPresence);
         }
     }
