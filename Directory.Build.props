@@ -1,0 +1,16 @@
+﻿<Project>
+    <PropertyGroup>
+        <VersionPrefix>0.1.0</VersionPrefix>
+        <DebugType>portable</DebugType>
+        <RootNamespace>SharpXMPP</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageProjectUrl>https://github.com/vitalyster/SharpXMPP</PackageProjectUrl>
+        <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/vitalyster/SharpXMPP.git</RepositoryUrl>
+        <PackageTags>XMPP; Jabber</PackageTags>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IncludeSource>true</IncludeSource>
+    </PropertyGroup>
+</Project>

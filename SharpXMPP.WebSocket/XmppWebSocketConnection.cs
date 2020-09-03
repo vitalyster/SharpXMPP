@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using DnsClient;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Bind.Elements;
 using SharpXMPP.XMPP.Client;
@@ -10,16 +15,11 @@ using SharpXMPP.XMPP.Client.Capabities;
 using SharpXMPP.XMPP.Client.Disco;
 using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
+using SharpXMPP.XMPP.Framing.Elements;
 using SharpXMPP.XMPP.SASL;
 using SharpXMPP.XMPP.SASL.Elements;
 using SharpXMPP.XMPP.Stream.Elements;
-using System.Text;
 using WebSocket4Net;
-using System.Threading.Tasks;
-using System.Threading;
-using SharpXMPP.XMPP.Framing.Elements;
-using DnsClient;
-using System.Linq;
 
 namespace SharpXMPP
 {
@@ -86,7 +86,7 @@ namespace SharpXMPP
 
         public void ReadStreamStart(string data, string defaultNamespace = Namespaces.JabberClient)
         {
-            var mngr = Stanza.Parse<Open>(XElement.Parse(data));            
+            var mngr = Stanza.Parse<Open>(XElement.Parse(data));
             OnStreamStart(mngr.ID);
         }
 
@@ -108,7 +108,7 @@ namespace SharpXMPP
             var writer = XmlWriter.Create(sw, xws);
             element.WriteTo(writer);
             writer.WriteRaw("");
-            writer.Flush();            
+            writer.Flush();
             return sw.ToString();
         }
 
@@ -177,7 +177,7 @@ namespace SharpXMPP
                     }
                     else
                     {
-                        var currentStanza = XElement.Parse(args.Message);                        
+                        var currentStanza = XElement.Parse(args.Message);
                         var error = Stanza.Parse<StreamError>(currentStanza);
                         if (error != null)
                         {

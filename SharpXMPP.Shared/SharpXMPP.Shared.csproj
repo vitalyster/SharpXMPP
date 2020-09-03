@@ -1,29 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.1.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
-    <DebugType>portable</DebugType>
     <AssemblyName>SharpXMPP.Shared</AssemblyName>
-    <RootNamespace>SharpXMPP</RootNamespace>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.6' ">1.6.1</NetStandardImplicitPackageVersion>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageId>SharpXMPP</PackageId>
-    <Authors>ForNeVeR</Authors>
     <Description>Managed XMPP (Jabber) client library.</Description>
     <PackageReleaseNotes>
-- XMPP WebSocket support (RFC7395)
 - Support password-protected MUC
     </PackageReleaseNotes>
-    <PackageProjectUrl>https://github.com/vitalyster/SharpXMPP</PackageProjectUrl>
-    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/vitalyster/SharpXMPP.git</RepositoryUrl>
-    <PackageTags>XMPP; Jabber</PackageTags>
-    <IncludeSymbols>true</IncludeSymbols>
-    <IncludeSource>true</IncludeSource>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
@@ -48,7 +37,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="WebSocket4Net" Version="0.15.2" />
   </ItemGroup>
 
 </Project>
