@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SharpXMPP.Shared\SharpXMPP.Shared.csproj" />
+    <ProjectReference Include="..\SharpXMPP.WebSocket\SharpXMPP.WebSocket.csproj" />
   </ItemGroup>
 
 </Project>

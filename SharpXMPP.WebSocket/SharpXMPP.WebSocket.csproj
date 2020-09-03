@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.6;net451</TargetFrameworks>
+    <AssemblyName>SharpXMPP.WebSocket</AssemblyName>
+    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.6' ">1.6.1</NetStandardImplicitPackageVersion>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>SharpXMPP.WebSocket</PackageId>
+    <Description>Managed XMPP (Jabber) client library: WebSocket support.</Description>
+    <PackageReleaseNotes>
+      - Initial release of XMPP WebSocket support (RFC7395)
+    </PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WebSocket4Net" Version="0.15.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SharpXMPP.Shared\SharpXMPP.Shared.csproj" />
+  </ItemGroup>
+</Project>
