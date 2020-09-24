@@ -11,7 +11,7 @@
     <PackageId>SharpXMPP</PackageId>
     <Description>Managed XMPP (Jabber) client library.</Description>
     <PackageReleaseNotes>
-- Support password-protected MUC
+- Bring back handmade DNS resolver for SRV records (fixes crashes on Xamarin)
     </PackageReleaseNotes>
   </PropertyGroup>
 

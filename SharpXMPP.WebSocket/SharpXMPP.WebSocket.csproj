@@ -9,9 +9,7 @@
   <PropertyGroup>
     <PackageId>SharpXMPP.WebSocket</PackageId>
     <Description>Managed XMPP (Jabber) client library: WebSocket support.</Description>
-    <PackageReleaseNotes>
-      - Initial release of XMPP WebSocket support (RFC7395)
-    </PackageReleaseNotes>
+    <PackageReleaseNotes/>
   </PropertyGroup>
 
   <ItemGroup>
