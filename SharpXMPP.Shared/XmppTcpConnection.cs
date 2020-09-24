@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-using DnsClient;
 using SharpXMPP.Errors;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Bind;
@@ -254,14 +253,12 @@ namespace SharpXMPP
         {
             List<IPAddress> HostAddresses = new List<IPAddress>();
 
-            var lookup = new LookupClient();
-
-            var response = await lookup.QueryAsync("_xmpp-client._tcp." + Jid.Domain, QueryType.SRV);
-            if (response.Answers.SrvRecords().Any())
+            var srvs = await Resolver.ResolveXMPPClient(Jid.Domain);
+            if (srvs.Any())
             {
-                foreach (var srv in response.Answers.SrvRecords())
+                foreach (var srv in srvs)
                 {
-                    var addresses = await Dns.GetHostAddressesAsync(srv.Target.Value);
+                    var addresses = await Dns.GetHostAddressesAsync(srv.Host);
                     HostAddresses.AddRange(addresses);
                 }
             }
