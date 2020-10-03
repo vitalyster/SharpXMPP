@@ -10,37 +10,23 @@ namespace SharpXMPP.XMPP.Client
 
     public class IqManager
     {
-        protected readonly XmppConnection Connection;
-        public IqManager(XmppConnection connection)
+        public List<PayloadHandler> PayloadHandlers { get; } = new List<PayloadHandler>();
+
+        public void Handle(XmppConnection sender, XMPPIq element)
         {
-            Connection = connection;
+            bool handled = false;
+            PayloadHandlers.ForEach( (h) =>
+                                         {
+                                             handled |= h.Handle(sender, element);
+                                         });
+            if (!handled)
+                HandleError(sender, element);
         }
 
-        public List<PayloadHandler> PayloadHandlers { get; set; }
-
-        public void Handle(XMPPIq element)
-        {
-            if (PayloadHandlers != null)
-            {
-                bool handled = false;
-                PayloadHandlers.ForEach( (h) =>
-                                             {
-                                                 handled |= h.Handle(Connection, element);
-                                             });
-                if (!handled)
-                    HandleError(element);
-                else
-                {
-                    return;
-                }
-            }
-            HandleError(element);
-        }
-
-        public void HandleError(XMPPIq element)
+        public void HandleError(XmppConnection connection, XMPPIq element)
         {
             if (element.IqType == XMPPIq.IqTypes.get || element.IqType == XMPPIq.IqTypes.set)
-                Connection.Send(element.Error());
+                connection.Send(element.Error());
         }
     }
 }
