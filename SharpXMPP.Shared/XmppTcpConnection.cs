@@ -11,9 +11,6 @@ using System.Xml.Linq;
 using SharpXMPP.Errors;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Bind;
-using SharpXMPP.XMPP.Client;
-using SharpXMPP.XMPP.Client.Disco;
-using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.SASL;
 using SharpXMPP.XMPP.Stream.Elements;
@@ -112,7 +109,6 @@ namespace SharpXMPP
                 Reader = null;
                 ConnectionStream?.Dispose();
                 ConnectionStream = null;
-                Iq -= OnIqHandler;
             }
             base.Dispose();
         }
@@ -149,7 +145,6 @@ namespace SharpXMPP
         {
             List<IPAddress> HostAddresses = await ResolveHostAddresses();
             await ConnectOverTcp(HostAddresses);
-            Iq += OnIqHandler;
 
             RestartXmlStreams();
 
@@ -288,19 +283,6 @@ namespace SharpXMPP
             await ((SslStream)ConnectionStream).AuthenticateAsClientAsync(Jid.Domain);
             RestartXmlStreams();
             return true;
-        }
-
-
-        private void OnIqHandler(XmppConnection sender, XMPPIq iq)
-        {
-            new IqManager(this)
-            {
-                PayloadHandlers = new List<PayloadHandler>
-                          {
-                              new InfoHandler(Capabilities),
-                              new ItemsHandler()
-                          }
-            }.Handle(iq);
         }
     }
 }

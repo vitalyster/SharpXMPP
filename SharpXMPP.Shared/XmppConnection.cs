@@ -4,7 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using SharpXMPP.XMPP;
+using SharpXMPP.XMPP.Client;
 using SharpXMPP.XMPP.Client.Capabities;
+using SharpXMPP.XMPP.Client.Disco;
 using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.Stream.Elements;
@@ -63,6 +65,16 @@ namespace SharpXMPP
                     Namespaces.DiscoItems
                 }
             };
+
+            IqManager = new IqManager
+            {
+                PayloadHandlers =
+                {
+                    new InfoHandler(Capabilities),
+                    new ItemsHandler()
+                }
+            };
+            Iq += IqManager.Handle;
         }
 
         public Features Features { get; set; }
@@ -152,6 +164,8 @@ namespace SharpXMPP
             get { return _caps ?? (_caps = new CapabilitiesManager()); }
             set { _caps = value; }
         }
+
+        public IqManager IqManager { get; }
 
         public abstract XElement NextElement();
 

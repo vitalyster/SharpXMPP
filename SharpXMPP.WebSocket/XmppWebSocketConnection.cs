@@ -10,9 +10,7 @@ using System.Xml.Linq;
 using DnsClient;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Bind.Elements;
-using SharpXMPP.XMPP.Client;
 using SharpXMPP.XMPP.Client.Capabities;
-using SharpXMPP.XMPP.Client.Disco;
 using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
 using SharpXMPP.XMPP.Framing.Elements;
@@ -70,14 +68,6 @@ namespace SharpXMPP
                     Namespaces.DiscoItems
                 }
             };
-            Iq += (sender, iq) => new IqManager(this)
-            {
-                PayloadHandlers = new List<PayloadHandler>
-                          {
-                              new InfoHandler(Capabilities),
-                              new ItemsHandler()
-                          }
-            }.Handle(iq);
         }
         public override XElement NextElement()
         {
