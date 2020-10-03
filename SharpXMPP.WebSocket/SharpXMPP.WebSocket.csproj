@@ -9,7 +9,9 @@
   <PropertyGroup>
     <PackageId>SharpXMPP.WebSocket</PackageId>
     <Description>Managed XMPP (Jabber) client library: WebSocket support.</Description>
-    <PackageReleaseNotes/>
+    <PackageReleaseNotes>
+- Allow to override IQ handlers
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
