@@ -17,14 +17,14 @@ jobs:
     - name: Configure Mono
       if: matrix.os == 'ubuntu-latest'
       run: |
-        echo "/usr/lib/mono/4.5/" >> $mono_path
+        echo "/usr/lib/mono/4.5/" >> $MONO_PATH
     - name: Build tests with .NET 4.8/Mono
       if: matrix.os != 'macos-latest'
       run: dotnet build SharpXMPP.NUnit --no-restore --configuration Release -f net48
       env:
-        FrameworkPathOverride: ${{ env.mono_path }}
+        FrameworkPathOverride: ${{ env.MONO_PATH }}
     - name: Run tests with .NET 4.8/Mono
       if: matrix.os != 'macos-latest'
       run: dotnet test SharpXMPP.NUnit --no-restore --no-build --configuration Release -f net48
       env:
-        FrameworkPathOverride: ${{ env.mono_path }}
+        FrameworkPathOverride: ${{ env.MONO_PATH }}
