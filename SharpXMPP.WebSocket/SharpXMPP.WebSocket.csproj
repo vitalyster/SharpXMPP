@@ -12,6 +12,8 @@
     <PackageReleaseNotes>
 - Allow to override IQ handlers
     </PackageReleaseNotes>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>
