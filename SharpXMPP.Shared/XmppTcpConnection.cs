@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using SharpXMPP.Compat;
 using SharpXMPP.Errors;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Bind;
@@ -143,8 +144,8 @@ namespace SharpXMPP
 
         public override async Task ConnectAsync(CancellationToken token)
         {
-            List<IPAddress> HostAddresses = await ResolveHostAddresses();
-            await ConnectOverTcp(HostAddresses);
+            List<IPAddress> HostAddresses = await ResolveHostAddresses(token);
+            await ConnectOverTcp(HostAddresses, token);
 
             RestartXmlStreams();
 
@@ -201,11 +202,23 @@ namespace SharpXMPP
 
         private Features GetServerFeatures() => Stanza.Parse<Features>(NextElement());
 
-        private async Task ConnectOverTcp(List<IPAddress> HostAddresses)
+        private async Task ConnectOverTcp(List<IPAddress> HostAddresses, CancellationToken cancellationToken)
         {
+            ((IDisposable)_client)?.Dispose();
+
             _client = new TcpClient();
-            await _client.ConnectAsync(HostAddresses.ToArray(), TcpPort); // TODO: check ports
-            ConnectionStream = _client.GetStream();
+            try
+            {
+                // TODO: check ports
+                await _client.ConnectWithCancellationAsync(HostAddresses.ToArray(), TcpPort, cancellationToken);
+                ConnectionStream = _client.GetStream();
+            }
+            catch
+            {
+                ((IDisposable)_client).Dispose();
+                _client = null;
+                throw;
+            }
         }
 
         private Task StartAuthentication(Features features)
@@ -244,21 +257,23 @@ namespace SharpXMPP
         }
 
 
-        private async Task<List<IPAddress>> ResolveHostAddresses()
+        private async Task<List<IPAddress>> ResolveHostAddresses(CancellationToken cancellationToken)
         {
             List<IPAddress> HostAddresses = new List<IPAddress>();
 
-            var srvs = await Resolver.ResolveXMPPClient(Jid.Domain);
+            var srvs = await Resolver.ResolveXMPPClient(Jid.Domain, cancellationToken);
             if (srvs.Any())
             {
                 foreach (var srv in srvs)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     var addresses = await Dns.GetHostAddressesAsync(srv.Host);
                     HostAddresses.AddRange(addresses);
                 }
             }
             else
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 HostAddresses.AddRange(await Dns.GetHostAddressesAsync(Jid.Domain));
             }
 

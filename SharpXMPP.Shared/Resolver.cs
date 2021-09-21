@@ -4,7 +4,9 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using SharpXMPP.Compat;
 
 namespace SharpXMPP
 {
@@ -18,12 +20,15 @@ namespace SharpXMPP
 
     public static class Resolver
     {
-        public async static Task<List<SRVRecord>> ResolveXMPPClient(string domain)
+        [Obsolete("Call overload with CancellationToken")]
+        public static Task<List<SRVRecord>> ResolveXMPPClient(string domain) =>
+            ResolveXMPPClient(domain, default);
+
+        public static async Task<List<SRVRecord>> ResolveXMPPClient(string domain, CancellationToken cancellationToken)
         {
-            var result = new List<SRVRecord>();
-            var client = new TcpClient();
-            await client.ConnectAsync(IPAddress.Parse("1.1.1.1"), 53);
-            var stream = client.GetStream();
+            using var client = new TcpClient();
+            await client.ConnectWithCancellationAsync(IPAddress.Parse("1.1.1.1"), 53, cancellationToken);
+            using var stream = client.GetStream();
             var message = EncodeQuery(domain);
             var lengthPrefix = IPAddress.HostToNetworkOrder((short)message.Length);
             var lengthPrefixBytes = BitConverter.GetBytes(lengthPrefix);
@@ -34,8 +39,7 @@ namespace SharpXMPP
             stream.Read(responseLengthBytes, 0, 2);
             var responseMessage = new byte[IPAddress.NetworkToHostOrder(BitConverter.ToInt16(responseLengthBytes, 0))];
             stream.Read(responseMessage, 0, responseMessage.Length);
-            result = Decode(responseMessage);
-            return result;
+            return Decode(responseMessage);
         }
 
         private static byte[] EncodeQuery(string domain)
