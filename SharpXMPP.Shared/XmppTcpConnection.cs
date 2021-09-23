@@ -21,7 +21,7 @@ namespace SharpXMPP
 {
     public class XmppTcpConnection : XmppConnection
     {
-
+        private object _terminationLock = new object();
         private TcpClient _client;
 
         protected virtual int TcpPort
@@ -90,6 +90,24 @@ namespace SharpXMPP
             Writer.Flush();
         }
 
+        private void TerminateTcpConnection()
+        {
+            // There are two callers for this method: connection timeout and external dispose. This lock is placed in
+            // case of a race condition between the two.
+            lock (_terminationLock)
+            {
+                // NOTE: Client is explicitly Disposable on older runtimes, so cast is required.
+                ((IDisposable)_client)?.Dispose();
+                _client = null;
+                Writer?.Dispose();
+                Writer = null;
+                Reader?.Dispose();
+                Reader = null;
+                ConnectionStream?.Dispose();
+                ConnectionStream = null;
+            }
+        }
+
         // In what context this method should be used?
         public void Close()
         {
@@ -101,15 +119,7 @@ namespace SharpXMPP
             if (!_disposed)
             {
                 _disposed = true;
-                // NOTE: used this statement because faced issue with compilation under net451
-                ((IDisposable)_client)?.Dispose();
-                _client = null;
-                Writer?.Dispose();
-                Writer = null;
-                Reader?.Dispose();
-                Reader = null;
-                ConnectionStream?.Dispose();
-                ConnectionStream = null;
+                TerminateTcpConnection();
             }
             base.Dispose();
         }
@@ -150,13 +160,13 @@ namespace SharpXMPP
             RestartXmlStreams();
 
             Features features = GetServerFeatures();
-            var tlsSupported = await InitTlsIfSupported(features);
+            var tlsSupported = await InitTlsIfSupported(features, token);
             if (tlsSupported)
             {
                 features = GetServerFeatures();
             }
 
-            await StartAuthentication(features);
+            await StartAuthentication(features, token);
         }
 
         public Task SessionLoopAsync() => SessionLoopAsync(CancellationToken.None);
@@ -204,7 +214,7 @@ namespace SharpXMPP
 
         private async Task ConnectOverTcp(List<IPAddress> HostAddresses, CancellationToken cancellationToken)
         {
-            ((IDisposable)_client)?.Dispose();
+            TerminateTcpConnection();
 
             _client = new TcpClient();
             try
@@ -221,38 +231,55 @@ namespace SharpXMPP
             }
         }
 
-        private Task StartAuthentication(Features features)
+        private Task StartAuthentication(Features features, CancellationToken cancellationToken)
         {
             var tcs = new TaskCompletionSource<bool>();
-            Task.Run(() =>
+
+            void RunCatching(Action act)
+            {
+                try
+                {
+                    act();
+                }
+                catch (Exception ex)
+                {
+                    tcs.SetException(ex);
+                }
+            }
+
+            Task.Run(() => RunCatching(() =>
             {
                 var authenticator = SASLHandler.Create(features.SaslMechanisms, Jid, Password);
                 if (authenticator == null)
                 {
                     OnConnectionFailed(new ConnFailedArgs { Message = "supported sasl mechanism not available" });
-                    tcs.SetResult(false);
+                    tcs.TrySetResult(false);
                     return;
                 }
-                authenticator.Authenticated += sender =>
+                authenticator.Authenticated += _ => RunCatching(() =>
                 {
                     RestartXmlStreams();
                     var session = new SessionHandler();
-                    session.SessionStarted += connection =>
+                    session.SessionStarted += connection => RunCatching(() =>
                     {
                         OnSignedIn(new SignedInArgs { Jid = connection.Jid });
-                        tcs.SetResult(true);
-                    };
+                        tcs.TrySetResult(true);
+                    });
                     // TODO make async
                     // Locks stream with SessionLoop
                     session.Start(this);
-                };
-                authenticator.AuthenticationFailed += sender =>
+                });
+                authenticator.AuthenticationFailed += _ => RunCatching(() =>
                 {
                     OnConnectionFailed(new ConnFailedArgs { Message = "Authentication failed" });
-                    tcs.SetResult(true);
-                };
-                authenticator.Start(this);
-            });
+                    tcs.TrySetResult(true);
+                });
+
+                using (cancellationToken.Register(TerminateTcpConnection))
+                    authenticator.Start(this);
+
+                tcs.TrySetResult(false);
+            }), cancellationToken);
             return tcs.Task;
         }
 
@@ -280,7 +307,7 @@ namespace SharpXMPP
             return HostAddresses;
         }
 
-        private async Task<bool> InitTlsIfSupported(Features features)
+        private async Task<bool> InitTlsIfSupported(Features features, CancellationToken cancellationToken)
         {
             if (!features.Tls)
             {
@@ -295,7 +322,9 @@ namespace SharpXMPP
             }
 
             ConnectionStream = new SslStream(ConnectionStream, true);
-            await ((SslStream)ConnectionStream).AuthenticateAsClientAsync(Jid.Domain);
+            await ((SslStream)ConnectionStream).AuthenticateAsClientWithCancellationAsync(
+                Jid.Domain,
+                cancellationToken);
             RestartXmlStreams();
             return true;
         }
