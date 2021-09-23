@@ -40,26 +40,41 @@ namespace SharpXMPP.Compat
 
             // Connecting to a free port takes enough time for the tasks to be cancelled in time.
             var port = GetFreePort();
-            for (int i = 0; i < iterations; ++i)
+            TcpListener host = null;
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
-                Task.Run(async () =>
+                // Since the port trick doesn't work on Linux, do this.
+                host = new TcpListener(new IPEndPoint(IPAddress.Loopback, port));
+                host.Start();
+            }
+
+            try
+            {
+                for (int i = 0; i < iterations; ++i)
                 {
-                    using var cts = new CancellationTokenSource();
-                    var token = cts.Token;
-
-                    using var client = new TcpClient();
-                    var task = client.ConnectWithCancellationAsync(IPAddress.Loopback, port, token);
-                    cts.Cancel();
-
-                    try
+                    Task.Run(async () =>
                     {
-                        await task;
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        ++cancelled;
-                    }
-                }).Wait();
+                        using var cts = new CancellationTokenSource();
+                        var token = cts.Token;
+
+                        using var client = new TcpClient();
+                        var task = client.ConnectWithCancellationAsync(IPAddress.Loopback, port, token);
+                        cts.Cancel();
+
+                        try
+                        {
+                            await task;
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            ++cancelled;
+                        }
+                    }).Wait();
+                }
+            }
+            finally
+            {
+                host?.Stop();
             }
 
             Assert.Greater(cancelled, 0);
