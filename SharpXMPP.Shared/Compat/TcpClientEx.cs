@@ -20,6 +20,8 @@ namespace SharpXMPP.Compat
                     throw new OperationCanceledException(cancellationToken);
                 }
             }
+
+            await task;
         }
 #endif
 
