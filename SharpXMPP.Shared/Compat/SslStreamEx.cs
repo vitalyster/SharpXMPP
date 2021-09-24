@@ -17,6 +17,7 @@ namespace SharpXMPP.Compat
                 cancellationToken);
 #else
             // No cancellation on older runtimes :(
+            cancellationToken.ThrowIfCancellationRequested();
             return sslStream.AuthenticateAsClientAsync(targetHost);
 #endif
         }
