@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using DnsClient;
 using SharpXMPP.Compat;
 using SharpXMPP.Errors;
 using SharpXMPP.XMPP;
@@ -23,6 +24,12 @@ namespace SharpXMPP
     {
         private object _terminationLock = new object();
         private TcpClient _client;
+
+        /// <summary>
+        /// A list of name servers to use for the DNS lookup. Uses 1.1.1.1 by default. If empty, then will use the name
+        /// servers configured by the local network adapter(s).
+        /// </summary>
+        public IPAddress[] NameServers { get; set; } = { IPAddress.Parse("1.1.1.1") };
 
         protected virtual int TcpPort
         {
@@ -288,13 +295,18 @@ namespace SharpXMPP
         {
             List<IPAddress> HostAddresses = new List<IPAddress>();
 
-            var srvs = await Resolver.ResolveXMPPClient(Jid.Domain, cancellationToken);
-            if (srvs.Any())
+            var lookup = NameServers.Length > 0 ? new LookupClient(NameServers) : new LookupClient();
+
+            var response = await lookup.QueryAsync(
+                "_xmpp-client._tcp." + Jid.Domain,
+                QueryType.SRV,
+                cancellationToken: cancellationToken);
+            if (response.Answers.SrvRecords().Any())
             {
-                foreach (var srv in srvs)
+                foreach (var srv in response.Answers.SrvRecords())
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    var addresses = await Dns.GetHostAddressesAsync(srv.Host);
+                    var addresses = await Dns.GetHostAddressesAsync(srv.Target.Value);
                     HostAddresses.AddRange(addresses);
                 }
             }
