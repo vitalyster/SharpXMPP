@@ -35,19 +35,6 @@ namespace SharpXMPP.Compat
 
         public static Task ConnectWithCancellationAsync(
             this TcpClient tcpClient,
-            IPAddress address,
-            int port,
-            CancellationToken cancellationToken)
-        {
-#if NET5_0_OR_GREATER
-            return tcpClient.ConnectAsync(address, port, cancellationToken).AsTask();
-#else
-            return tcpClient.ConnectAsync(address, port).AbandonOnCancel(cancellationToken);
-#endif
-        }
-
-        public static Task ConnectWithCancellationAsync(
-            this TcpClient tcpClient,
             IPAddress[] addresses,
             int port,
             CancellationToken cancellationToken)
