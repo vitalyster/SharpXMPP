@@ -10,7 +10,8 @@
     <PackageId>SharpXMPP.WebSocket</PackageId>
     <Description>Managed XMPP (Jabber) client library: WebSocket support.</Description>
     <PackageReleaseNotes>
-- Allow to override IQ handlers
+[Fixed]
+- Real cancellation for XmppConnection::ConnectAsync (including derived classes)
     </PackageReleaseNotes>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>

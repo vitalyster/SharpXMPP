@@ -12,7 +12,10 @@
     <PackageId>SharpXMPP</PackageId>
     <Description>Managed XMPP (Jabber) client library.</Description>
     <PackageReleaseNotes>
-- Allow to override IQ handlers
+[Added]
+- Separate build for .NET 5
+[Fixed]
+- Real cancellation for XmppConnection::ConnectAsync (including derived classes)
     </PackageReleaseNotes>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
