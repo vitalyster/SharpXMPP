@@ -115,7 +115,10 @@ namespace SharpXMPP
             {
                 if (string.IsNullOrEmpty(websocketUri)) {
                     var lookup = new LookupClient();
-                    var response = await lookup.QueryAsync("_xmppconnect." + Jid.Domain, QueryType.TXT);
+                    var response = await lookup.QueryAsync(
+                        "_xmppconnect." + Jid.Domain,
+                        QueryType.TXT,
+                        cancellationToken: token);
                     if (response.Answers.TxtRecords().Any())
                     {
                         foreach (var srv in response.Answers.TxtRecords())
@@ -285,7 +288,7 @@ namespace SharpXMPP
                     }
                 };
                 _connection.Open();
-            });
+            }, token);
         }
     }
 }
