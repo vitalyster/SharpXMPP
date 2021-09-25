@@ -37,7 +37,7 @@ namespace SharpXMPP.Compat
                         var token = cts.Token;
 
                         using var client = new TcpClient();
-                        var task = client.ConnectWithCancellationAsync(IPAddress.Loopback, port, token);
+                        var task = client.ConnectWithCancellationAsync(new[] { IPAddress.Loopback }, port, token);
                         cts.Cancel();
 
                         try
