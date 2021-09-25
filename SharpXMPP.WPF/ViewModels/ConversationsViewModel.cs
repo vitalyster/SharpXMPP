@@ -1,6 +1,7 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Windows.Data;
+using SharpXMPP.Messaging;
 using SharpXMPP.WPF.Helpers;
 using SharpXMPP.WPF.Models;
 using SharpXMPP.XMPP;
@@ -21,7 +22,6 @@ namespace SharpXMPP.WPF.ViewModels
                 var message = new Message
                 {
                     To = conversation.JID,
-                    From = "throwable@jabber.ru",
                     Text = conversation.Draft
                 };
                 App.DB.Messages.Add(message);

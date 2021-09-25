@@ -1,6 +1,7 @@
-﻿using System.Data.Entity;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using SharpXMPP.Messaging;
 using SharpXMPP.XMPP;
 
 namespace SharpXMPP.WPF.Models

@@ -1,10 +1,6 @@
+using SharpXMPP.Messaging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,14 +11,14 @@ namespace SharpXMPP.Client
     public partial class Chat : ContentPage
     {
         private readonly ObservableCollection<string> _messages = new ObservableCollection<string>();
-        private readonly XMPP.Client.Roster.Elements.RosterItem _rester;
-        private readonly XmppClient _xmppconnetction;
+        private readonly XMPP.Client.Roster.Elements.RosterItem _roster;
+        private readonly XmppClient _connection;
 
-        public Chat(XMPP.Client.Roster.Elements.RosterItem rester, SharpXMPP.XmppClient xmppconnetction)
+        public Chat(XMPP.Client.Roster.Elements.RosterItem rester, XmppClient xmppconnetction)
         {
             InitializeComponent();
-            _rester = rester;
-            _xmppconnetction = xmppconnetction;
+            _roster = rester;
+            _connection = xmppconnetction;
 
             _msg.ItemsSource = _messages;
         }
@@ -30,16 +26,16 @@ namespace SharpXMPP.Client
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _xmppconnetction.Message += _xmppconnetction_Message;
+            _connection.Message += connection_Message;
         }
 
         protected override void OnDisappearing()
         {
-            _xmppconnetction.Message -= _xmppconnetction_Message;
+            _connection.Message -= connection_Message;
             base.OnDisappearing();
         }
 
-        private void _xmppconnetction_Message(SharpXMPP.XmppConnection sender, SharpXMPP.XMPP.Client.Elements.XMPPMessage e)
+        private void connection_Message(XmppConnection sender, XMPP.Client.Elements.XMPPMessage e)
         {
             Device.BeginInvokeOnMainThread(() =>
                 _messages.Add(e.Text)
@@ -55,11 +51,11 @@ namespace SharpXMPP.Client
                 return;
             }
             _messages.Add(text);
-            _xmppconnetction.Send(new XMPP.Client.Elements.XMPPMessage
+            _connection.Send(Message.toXMPP(new Message
             {
                 Text = text,
-                To = new XMPP.JID(_rester.JID)
-            });
+                To = _roster.JID
+            }));
             _newMsg.Text = string.Empty;
         }
     }

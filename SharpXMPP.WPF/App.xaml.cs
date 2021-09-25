@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading;
 using SharpXMPP.WPF.Models;
 using System.Data.Entity;
@@ -10,6 +10,7 @@ using System.Windows.Markup;
 using System.Diagnostics;
 using SharpXMPP.XMPP;
 using System;
+using SharpXMPP.Messaging;
 
 namespace SharpXMPP.WPF
 {

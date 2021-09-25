@@ -85,9 +85,15 @@ namespace SharpXMPP
         public override void Send(XElement data)
         {
             base.Send(data);
-            data.WriteTo(Writer);
-            Writer.WriteRaw("");
-            Writer.Flush();
+            if (Writer != null)
+            {
+                data.WriteTo(Writer);
+                Writer.WriteRaw("");
+                Writer.Flush();
+            } else
+            {
+                OnConnectionFailed(new ConnFailedArgs { Exception = new InvalidOperationException("Not connected"), Message = "Not connected" });
+            }
         }
 
         private void TerminateTcpConnection()
