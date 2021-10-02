@@ -8,6 +8,6 @@
 		<PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\SharpXMPP.Shared\SharpXMPP.Shared.csproj" />
+	  <ProjectReference Include="..\..\SharpXMPP.Shared\SharpXMPP.Shared.csproj" />
 	</ItemGroup>
 </Project>

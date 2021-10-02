@@ -97,16 +97,20 @@
     <Folder Include="Resources\mipmap-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpXMPP.Client\SharpXMPP.Client.csproj">
-      <Project>{F8B5D4DE-BFFE-467A-9A91-2F5FE7D65598}</Project>
-      <Name>SharpXMPP.Client</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\values\colors.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\style.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SharpXMPP.Shared\SharpXMPP.Shared.csproj">
+      <Project>{382838cc-0c05-4065-9e92-43c0ee29ba26}</Project>
+      <Name>SharpXMPP.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpXMPP.Client\SharpXMPP.Client.csproj">
+      <Project>{f8b5d4de-bffe-467a-9a91-2f5fe7d65598}</Project>
+      <Name>SharpXMPP.Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

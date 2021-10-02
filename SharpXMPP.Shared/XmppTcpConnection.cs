@@ -26,10 +26,10 @@ namespace SharpXMPP
         private TcpClient _client;
 
         /// <summary>
-        /// A list of name servers to use for the DNS lookup. Uses 1.1.1.1 by default. If empty, then will use the name
-        /// servers configured by the local network adapter(s).
+        /// A list of nameservers to use for the DNS lookup. If empty, then will use
+        /// the nameservers configured by the local network adapter(s).
         /// </summary>
-        public IPAddress[] NameServers { get; set; } = { IPAddress.Parse("1.1.1.1") };
+        public static IPAddress[] NameServers { get; set; } = { };
 
         protected virtual int TcpPort
         {

@@ -49,6 +49,10 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
+    <MtouchExtraArgs>-v -v -v -v --dlsym:System.dll --dlsym:System.Net.Security.dll --dlsym:System.Security.Principal.Windows.dll --dlsym:Microsoft.Win32.Registry.dll</MtouchExtraArgs>
+    <MtouchInterpreter>
+    </MtouchInterpreter>
+    <MtouchFastDev>true</MtouchFastDev>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
