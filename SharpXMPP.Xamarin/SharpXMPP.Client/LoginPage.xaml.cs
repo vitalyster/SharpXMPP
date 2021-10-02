@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -19,16 +20,17 @@ namespace SharpXMPP.Client
             var pass = _pass.Text;
 
             IsBusy = true;
-            var client = new XmppClient(new XMPP.JID(login), pass);
-            client.ConnectionFailed += Client_ConnectionFailed;
-            client.Element += (s, e) =>
+            var app = Application.Current as App;
+            app.Client = new XmppClient(new XMPP.JID(login), pass);
+            app.Client.ConnectionFailed += Client_ConnectionFailed;
+            app.Client.Element += (s, e) =>
             {
                 var direction = e.IsInput ? "<==" : "==>";
                 Console.WriteLine($"{direction} {e.Stanza}");
             };
-            await client.ConnectAsync();
+            await app.Client.ConnectAsync();
             IsBusy = false;
-            await Navigation.PushModalAsync(new Users(client));
+            await Navigation.PushModalAsync(new Users(app.Client));
         }
 
         private void Client_ConnectionFailed(XmppConnection sender, ConnFailedArgs e)
