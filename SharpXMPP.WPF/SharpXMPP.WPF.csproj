@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SharpXMPP.WPF</RootNamespace>
     <AssemblyName>SharpXMPP.WPF</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -72,9 +72,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SharpXMPP.Shared">
-      <HintPath>..\SharpXMPP.Shared\bin\Debug\net451\SharpXMPP.Shared.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -199,6 +196,12 @@
     <PackageReference Include="EntityFramework.SqlServerCompact">
       <Version>6.4.4</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpXMPP.Shared\SharpXMPP.Shared.csproj">
+      <Project>{382838cc-0c05-4065-9e92-43c0ee29ba26}</Project>
+      <Name>SharpXMPP.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
