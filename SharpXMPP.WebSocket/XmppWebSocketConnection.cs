@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-using DnsClient;
 using SharpXMPP.XMPP;
 using SharpXMPP.XMPP.Bind.Elements;
 using SharpXMPP.XMPP.Client.Capabities;
@@ -113,23 +113,21 @@ namespace SharpXMPP
         {
             return Task.Run(async () =>
             {
-                if (string.IsNullOrEmpty(websocketUri)) {
-                    var lookup = new LookupClient();
-                    var response = await lookup.QueryAsync(
-                        "_xmppconnect." + Jid.Domain,
-                        QueryType.TXT,
-                        cancellationToken: token);
-                    if (response.Answers.TxtRecords().Any())
+                if (string.IsNullOrEmpty(websocketUri))
+                {
+                    using (var client = new HttpClient())
                     {
-                        foreach (var srv in response.Answers.TxtRecords())
+                        var hostMetaUri = $"https://{Jid.Domain}/.well-known/host-meta";
+                        var result = await client.GetAsync(hostMetaUri);
+                        if (result.IsSuccessStatusCode)
                         {
-                            foreach (var addr in srv.Text)
+                            var data = await result.Content.ReadAsStringAsync();
+                            var xrd = XElement.Parse(data);
+                            var websocketLink = xrd.Elements(XNamespace.Get("http://docs.oasis-open.org/ns/xri/xrd-1.0") + "Link")
+                            .FirstOrDefault(link => link.Attribute("rel").Value == "urn:xmpp:alt-connections:websocket");
+                            if (websocketLink != null)
                             {
-                                if (addr.StartsWith("_xmpp-client-websocket"))
-                                {
-                                    websocketUri = addr.Split('=')[1];
-                                    break;
-                                }
+                                websocketUri = websocketLink.Attribute("href").Value;
                             }
                         }
                     }
