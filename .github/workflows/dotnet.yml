@@ -14,25 +14,16 @@ jobs:
       with:
         dotnet-version: '5.0.x'
     - name: Restore dependencies
-      run: nuget restore
-    - name: Run .NET 5.0 tests
-      run: dotnet test SharpXMPP.NUnit --no-restore --configuration Release -f net5.0
-    - name: Configure Mono
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        echo "mono_path=/usr/lib/mono/4.5/" >> $GITHUB_ENV
+      run: nuget restore SharpXMPP.sln
+    - name: Build console app
+      run: msbuild SharpXMPP.Console/SharpXMPP.Console.csproj /p:Configuration=Debug /t:Rebuild
+    - name: Build WPF apps
+      if: matrix.os == 'windows-latest'
+      run: msbuild SharpXMPP.WPF/SharpXMPP.WPF.csproj /p:Configuration=Debug /t:Rebuild
     - name: Build Xamarin apps
       if: matrix.os == 'macos-latest'
       run: |
         msbuild SharpXMPP.Xamarin/SharpXMPP.Client.iOS/SharpXMPP.Client.iOS.csproj /p:Configuration=Debug /p:Platform=iPhoneSimulator /t:Rebuild
         msbuild SharpXMPP.Xamarin/SharpXMPP.Client.Android/SharpXMPP.Client.Android.csproj /p:Configuration=Debug /t:PackageForAndroid
-    - name: Build tests with .NET 4.8/Mono
-      if: matrix.os != 'macos-latest'
-      run: dotnet build SharpXMPP.NUnit --no-restore --configuration Release -f net48
-      env:
-        FrameworkPathOverride: ${{ env.mono_path }}
-    - name: Run tests with .NET 4.8/Mono
-      if: matrix.os != 'macos-latest'
-      run: dotnet test SharpXMPP.NUnit --no-restore --no-build --configuration Release -f net48
-      env:
-        FrameworkPathOverride: ${{ env.mono_path }}
+    - name: Run .NET 5.0 tests
+      run: dotnet test SharpXMPP.NUnit --no-restore --configuration Release -f net5.0
