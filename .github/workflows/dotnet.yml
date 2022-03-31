@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '5.0.x'
     - name: Build console app
       if: matrix.os == 'ubuntu-latest'
       run: dotnet build SharpXMPP.Console
@@ -26,4 +26,4 @@ jobs:
         msbuild SharpXMPP.Xamarin/SharpXMPP.Client.iOS/SharpXMPP.Client.iOS.csproj /p:Configuration=Debug /p:Platform=iPhoneSimulator /t:Rebuild
         msbuild SharpXMPP.Xamarin/SharpXMPP.Client.Droid/SharpXMPP.Client.Droid.csproj /p:Configuration=Debug /t:PackageForAndroid
     - name: Run tests
-      run: dotnet test SharpXMPP.NUnit -f net6.0
+      run: dotnet test SharpXMPP.NUnit -f net5.0
