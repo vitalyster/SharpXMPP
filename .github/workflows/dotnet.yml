@@ -21,6 +21,11 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: |
         echo "mono_path=/usr/lib/mono/4.5/" >> $GITHUB_ENV
+    - name: Build Xamarin apps
+      if: matrix.os == 'macos-latest'
+      run: |
+        msbuild SharpXMPP.Xamarin\SharpXMPP.Client.iOS\SharpXMPP.Client.iOS.csproj /p:Configuration=Debug /p:Platform=iPhoneSimulator /t:Rebuild
+        msbuild SharpXMPP.Xamarin\SharpXMPP.Client.Android\SharpXMPP.Client.Android.csproj /p:Configuration=Debug /t:PackageForAndroid
     - name: Build tests with .NET 4.8/Mono
       if: matrix.os != 'macos-latest'
       run: dotnet build SharpXMPP.NUnit --no-restore --configuration Release -f net48
