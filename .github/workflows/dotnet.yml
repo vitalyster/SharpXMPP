@@ -27,4 +27,4 @@ jobs:
         dotnet build SharpXMPP.Xamarin/SharpXMPP.Client.iOS
         dotnet build SharpXMPP.Xamarin/SharpXMPP.Client.Android
     - name: Run tests
-      run: dotnet test SharpXMPP.NUnit --no-restore
+      run: dotnet test SharpXMPP.NUnit --no-restore -f net6.0
