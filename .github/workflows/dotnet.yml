@@ -13,10 +13,25 @@ jobs:
     - uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '5.0.x'
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Run .NET 5.0 tests
-      run: dotnet test SharpXMPP.NUnit --no-restore --configuration Release -f net5.0
+    - name: Add msbuild to PATH
+      if: matrix.os == 'windows-latest'
+      uses: microsoft/setup-msbuild@v1.1
+    - name: Build console app
+      if: matrix.os == 'ubuntu-latest'
+      run: dotnet build SharpXMPP.Console
+    - name: Build WPF app
+      if: matrix.os == 'windows-latest'
+      run: |
+        nuget restore SharpXMPP.sln
+        msbuild SharpXMPP.WPF/SharpXMPP.WPF.csproj /p:Configuration=Debug /t:Rebuild
+    - name: Build Xamarin apps
+      if: matrix.os == 'macos-latest'
+      run: |
+        nuget restore SharpXMPP.sln
+        msbuild SharpXMPP.Xamarin/SharpXMPP.Client.iOS/SharpXMPP.Client.iOS.csproj /p:Configuration=Debug /p:Platform=iPhoneSimulator /t:Rebuild
+        msbuild SharpXMPP.Xamarin/SharpXMPP.Client.Droid/SharpXMPP.Client.Droid.csproj /p:Configuration=Debug /t:PackageForAndroid
+    - name: Run .NET 5 tests
+      run: dotnet test SharpXMPP.NUnit -f net5.0
     - name: Configure Mono
       if: matrix.os == 'ubuntu-latest'
       run: |
