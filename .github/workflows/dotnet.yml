@@ -13,8 +13,6 @@ jobs:
     - uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '6.0.x'
-    - name: Restore dependencies
-      run: nuget restore SharpXMPP.sln
     - name: Build console app
       if: matrix.os == 'ubuntu-latest'
       run: dotnet build SharpXMPP.Console
@@ -27,4 +25,4 @@ jobs:
         dotnet build SharpXMPP.Xamarin/SharpXMPP.Client.iOS
         dotnet build SharpXMPP.Xamarin/SharpXMPP.Client.Android
     - name: Run tests
-      run: dotnet test SharpXMPP.NUnit --no-restore -f net6.0
+      run: dotnet test SharpXMPP.NUnit -f net6.0
