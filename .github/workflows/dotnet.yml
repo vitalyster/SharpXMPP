@@ -23,7 +23,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: |
         nuget restore SharpXMPP.WPF/SharpXMPP.WPF.csproj
-        msbuild SharpXMPP.WPF/SharpXMPP.WPF.csproj /p:Configuration=Debug /p:Platform="Any CPU" /t:Rebuild
+        msbuild SharpXMPP.WPF/SharpXMPP.WPF.csproj /p:Configuration=Debug /t:Rebuild
     - name: Build Xamarin apps
       if: matrix.os == 'macos-latest'
       run: |
