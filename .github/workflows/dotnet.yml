@@ -16,14 +16,15 @@ jobs:
     - name: Restore dependencies
       run: nuget restore SharpXMPP.sln
     - name: Build console app
-      run: msbuild SharpXMPP.Console/SharpXMPP.Console.csproj /p:Configuration=Debug /t:Rebuild
-    - name: Build WPF apps
+      if: matrix.os == 'ubuntu-latest'
+      run: dotnet build SharpXMPP.Console
+    - name: Build WPF app
       if: matrix.os == 'windows-latest'
-      run: msbuild SharpXMPP.WPF/SharpXMPP.WPF.csproj /p:Configuration=Debug /t:Rebuild
+      run: dotnet build SharpXMPP.WPF
     - name: Build Xamarin apps
       if: matrix.os == 'macos-latest'
       run: |
-        msbuild SharpXMPP.Xamarin/SharpXMPP.Client.iOS/SharpXMPP.Client.iOS.csproj /p:Configuration=Debug /p:Platform=iPhoneSimulator /t:Rebuild
-        msbuild SharpXMPP.Xamarin/SharpXMPP.Client.Android/SharpXMPP.Client.Android.csproj /p:Configuration=Debug /t:PackageForAndroid
-    - name: Run .NET 5.0 tests
-      run: dotnet test SharpXMPP.NUnit --no-restore --configuration Release -f net5.0
+        dotnet build SharpXMPP.Xamarin/SharpXMPP.Client.iOS
+        dotnet build SharpXMPP.Xamarin/SharpXMPP.Client.Android
+    - name: Run tests
+      run: dotnet test SharpXMPP.NUnit --no-restore
