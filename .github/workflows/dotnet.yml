@@ -22,6 +22,7 @@ jobs:
     - name: Build Xamarin apps
       if: matrix.os == 'macos-latest'
       run: |
+        nuget restore SharpXMPP.sln
         msbuild SharpXMPP.Xamarin/SharpXMPP.Client.iOS/SharpXMPP.Client.iOS.csproj /p:Configuration=Debug /p:Platform=iPhoneSimulator /t:Rebuild
         msbuild SharpXMPP.Xamarin/SharpXMPP.Client.Android/SharpXMPP.Client.Android.csproj /p:Configuration=Debug /t:PackageForAndroid
     - name: Run tests
