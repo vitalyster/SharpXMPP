@@ -34,3 +34,4 @@ packages/
 
 *.userprefs
 *.DS_Store
+SharpXMPP.Xamarin/SharpXMPP.Client.Droid/Resources/Resource.Designer.cs
