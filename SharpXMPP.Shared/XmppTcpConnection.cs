@@ -109,15 +109,15 @@ namespace SharpXMPP
             // case of a race condition between the two.
             lock (_terminationLock)
             {
-                // NOTE: Client is explicitly Disposable on older runtimes, so cast is required.
-                ((IDisposable)_client)?.Dispose();
-                _client = null;
                 Writer?.Dispose();
                 Writer = null;
                 Reader?.Dispose();
                 Reader = null;
                 ConnectionStream?.Dispose();
                 ConnectionStream = null;
+                // NOTE: Client is explicitly Disposable on older runtimes, so cast is required.
+                ((IDisposable)_client)?.Dispose();
+                _client = null;
             }
         }
 
