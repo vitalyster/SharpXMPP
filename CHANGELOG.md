@@ -57,7 +57,7 @@ Initial release for .NET 4.5.1 and .NET Standard 1.6.
 [0.0.2]: https://github.com/vitalyster/SharpXMPP/compare/0.0.1...0.0.2
 [0.0.3]: https://github.com/vitalyster/SharpXMPP/compare/0.0.2...0.0.3
 [0.1.0]: https://github.com/vitalyster/SharpXMPP/compare/0.0.3...0.1.0
-[0.1.0]: https://github.com/vitalyster/SharpXMPP/compare/0.1.0...0.1.1
+[0.1.1]: https://github.com/vitalyster/SharpXMPP/compare/0.1.0...0.1.1
 [0.2.0]: https://github.com/vitalyster/SharpXMPP/compare/0.1.1...0.2.0
 [0.3.0]: https://github.com/vitalyster/SharpXMPP/compare/0.2.0...0.3.0
 [0.4.0]: https://github.com/vitalyster/SharpXMPP/compare/0.3.0...0.4.0
