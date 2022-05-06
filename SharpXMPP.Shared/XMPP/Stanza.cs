@@ -10,7 +10,7 @@ namespace SharpXMPP.XMPP
     {
         public Stanza(XName name) : base(name)
         {
-            
+
         }
 
         public string ID
@@ -46,7 +46,8 @@ namespace SharpXMPP.XMPP
 
         public static T Parse<T>(XElement src) where T : XElement, new()
         {
-            
+            if (src == null) return null;
+
             var stanza = src as T;
             if (stanza == null)
             {
