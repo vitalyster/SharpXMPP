@@ -125,11 +125,10 @@ namespace SharpXMPP
 
         protected void OnIq(XMPPIq e)
         {
-            if (e.IqType == XMPPIq.IqTypes.result
-                || e.IqType == XMPPIq.IqTypes.error
-                && queries.ContainsKey(e.ID))
+            if ((e.IqType == XMPPIq.IqTypes.result || e.IqType == XMPPIq.IqTypes.error)
+                && queries.TryGetValue(e.ID, out var handler))
             {
-                queries[e.ID](e);
+                handler(e);
                 queries.Remove(e.ID);
             }
             else
