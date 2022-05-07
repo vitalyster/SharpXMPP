@@ -10,8 +10,15 @@
     <PackageId>SharpXMPP.WebSocket</PackageId>
     <Description>Managed XMPP (Jabber) client library: WebSocket support.</Description>
     <PackageReleaseNotes>
+[Changed]
+- #71 (https://github.com/vitalyster/SharpXMPP/issues/71): add DNS server detection for Android, remove hardcoded server
+- Get rid of .NET Framework 4.5.1 support, only 4.8 is supported from now
+- WebSockets: use HTTP Lookup method for XMPP Websocket URI instead of a DNS-based one
+
 [Fixed]
-- Real cancellation for XmppConnection::ConnectAsync (including derived classes)
+- #155 (https://github.com/vitalyster/SharpXMPP/issues/155): NullReferenceException thrown from InfoHandler::Handle
+- NullReferenceException thrown from XmppConnection::OnIq if there were IQ queries without defined handlers
+- An exception when trying to call XmppTcpConnection::Dispose
     </PackageReleaseNotes>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
