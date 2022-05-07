@@ -45,3 +45,17 @@ jobs:
       run: dotnet test SharpXMPP.NUnit --no-restore --no-build --configuration Release -f net48
       env:
         FrameworkPathOverride: ${{ env.mono_path }}
+
+    - name: Build the SharpXMPP.Shared package
+      run: cd SharpXMPP.Shared && dotnet pack --configuration Release
+      if: matrix.os == 'ubuntu-latest'
+    - name: Build the SharpXMPP.WebSocket package
+      run: cd SharpXMPP.WebSocket && dotnet pack --configuration Release
+      if: matrix.os == 'ubuntu-latest'
+    - name: Upload the NuGet packages
+      uses: actions/upload-artifact@v3
+      with:
+        name: nuget
+        path: |
+          SharpXMPP.Shared/bin/Release/*.nupkg
+          SharpXMPP.WebSocket/bin/Release/*.nupkg

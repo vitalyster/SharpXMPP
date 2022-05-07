@@ -8,6 +8,7 @@
     <LangVersion>9.0</LangVersion>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

@@ -13,4 +13,4 @@ Additional docs
 ---------------
 
 - [Changelog](./CHANGELOG.md)
-- [How to Pack](docs/how-to-pack.md)
+- [Release Instructions](./RELEASE.md)
