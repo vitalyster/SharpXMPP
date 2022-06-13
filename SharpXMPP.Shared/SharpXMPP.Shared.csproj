@@ -38,6 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DnsClient" Version="1.6.0" />
+    <PackageReference Include="DnsClient" Version="1.6.1" />
   </ItemGroup>
 </Project>
