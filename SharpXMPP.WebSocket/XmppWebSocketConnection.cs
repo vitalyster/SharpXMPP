@@ -13,6 +13,7 @@ using SharpXMPP.XMPP.Bind.Elements;
 using SharpXMPP.XMPP.Client.Capabities;
 using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
+using SharpXMPP.XMPP.Client.MUC.Bookmarks;
 using SharpXMPP.XMPP.Framing.Elements;
 using SharpXMPP.XMPP.SASL;
 using SharpXMPP.XMPP.SASL.Elements;
@@ -46,7 +47,7 @@ namespace SharpXMPP
         public XmppWebSocketConnection(JID jid, string password)
         : this (jid, password, string.Empty) { }
 
-        public XmppWebSocketConnection(JID jid, string password, string websocketUri)
+        public XmppWebSocketConnection(JID jid, string password, string websocketUri, bool autoPresence = true)
             : base("")
         {
             this.websocketUri = websocketUri;
@@ -68,6 +69,7 @@ namespace SharpXMPP
                     Namespaces.DiscoItems
                 }
             };
+            BookmarkManager = new BookmarksManager(this, autoPresence);
         }
         public override XElement NextElement()
         {
@@ -107,7 +109,6 @@ namespace SharpXMPP
             _connection.Send(ElementToString(data));
             base.Send(data);
         }
-
 
         public override Task ConnectAsync(CancellationToken token)
         {

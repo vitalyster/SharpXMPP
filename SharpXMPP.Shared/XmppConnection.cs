@@ -9,6 +9,7 @@ using SharpXMPP.XMPP.Client.Capabities;
 using SharpXMPP.XMPP.Client.Disco;
 using SharpXMPP.XMPP.Client.Disco.Elements;
 using SharpXMPP.XMPP.Client.Elements;
+using SharpXMPP.XMPP.Client.MUC.Bookmarks;
 using SharpXMPP.XMPP.Stream.Elements;
 
 namespace SharpXMPP
@@ -82,6 +83,8 @@ namespace SharpXMPP
         public JID Jid { get; set; }
 
 		protected string Password { get; set; }
+
+        public BookmarksManager BookmarkManager { get; protected set; }
 
 		public delegate void ConnectionFailedHandler(XmppConnection sender, ConnFailedArgs e);
 

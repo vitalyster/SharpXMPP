@@ -21,7 +21,6 @@ namespace SharpXMPP
             RosterManager = new RosterManager(this, autoPresence);	    
         }
 
-        public BookmarksManager BookmarkManager { get; private set; }
         public RosterManager RosterManager { get; private set; }
 
         
