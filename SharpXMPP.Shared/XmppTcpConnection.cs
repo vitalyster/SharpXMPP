@@ -105,8 +105,8 @@ namespace SharpXMPP
 
         private void TerminateTcpConnection()
         {
-            // There are two callers for this method: connection timeout and external dispose. This lock is placed in
-            // case of a race condition between the two.
+            // There are three callers for this method: connection timeout, external disconnect, and external dispose.
+            // This lock is placed in case of a race condition between the two.
             lock (_terminationLock)
             {
                 Writer?.Dispose();
@@ -345,6 +345,12 @@ namespace SharpXMPP
                 cancellationToken);
             RestartXmlStreams();
             return true;
+        }
+
+        public override void Disconnect()
+        {
+            TerminateTcpConnection();
+            OnConnectionClosed();
         }
     }
 }

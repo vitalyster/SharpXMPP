@@ -43,6 +43,7 @@ namespace SharpXMPP
         private XmppConnectionState _currentState = XmppConnectionState.Disconnected;
 
         private SASLHandler authenticator;
+        private bool _disposed;
 
         public XmppWebSocketConnection(JID jid, string password)
         : this (jid, password, string.Empty) { }
@@ -71,6 +72,17 @@ namespace SharpXMPP
             };
             BookmarkManager = new BookmarksManager(this, autoPresence);
         }
+
+        public override void Dispose()
+        {
+            if (!_disposed)
+            {
+                _disposed = true;
+                _connection?.Dispose();
+            }
+            base.Dispose();
+        }
+
         public override XElement NextElement()
         {
             throw new NotImplementedException();
@@ -141,6 +153,9 @@ namespace SharpXMPP
                     });
                     return;
                 }
+
+                _connection?.Dispose();
+
                 _connection = new WebSocket(websocketUri, "xmpp", WebSocketVersion.Rfc6455);
                 _connection.Opened += (sender, args) =>
 
@@ -286,8 +301,18 @@ namespace SharpXMPP
                         }
                     }
                 };
+                _connection.Closed += (sender, args) =>
+                {
+                    OnConnectionClosed();
+                    _currentState = XmppConnectionState.Disconnected;
+                };
                 _connection.Open();
             }, token);
+        }
+
+        public override void Disconnect()
+        {
+            _connection.Close("Normal socket shut down");
         }
     }
 }

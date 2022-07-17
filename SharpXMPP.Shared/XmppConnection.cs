@@ -95,6 +95,15 @@ namespace SharpXMPP
             ConnectionFailed(this, e);
         }
 
+        public delegate void ConnectionClosedHandler(XmppConnection sender);
+
+        public event ConnectionClosedHandler ConnectionClosed = delegate { };
+
+        protected void OnConnectionClosed()
+        {
+            ConnectionClosed(this);
+        }
+
         public delegate void StreamStartHandler(XmppConnection sender, string streamId);
 
         public event StreamStartHandler StreamStart = delegate { };
@@ -186,5 +195,6 @@ namespace SharpXMPP
 
         public Task ConnectAsync() => ConnectAsync(CancellationToken.None);
         public abstract Task ConnectAsync(CancellationToken token);
+        public abstract void Disconnect();
     }
 }
