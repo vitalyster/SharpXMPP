@@ -35,6 +35,7 @@ namespace SharpXMPP.XMPP.Client.MUC.Bookmarks.Elements
                 var nick = Element(XNamespace.Get(Namespaces.StorageBookmarks) + "nick");
                 return nick == null ? null : nick.Value;
             }
+            set => SetAttributeValue(XNamespace.Get(Namespaces.StorageBookmarks) + "nick", value);
         }
 
         /// <summary>
