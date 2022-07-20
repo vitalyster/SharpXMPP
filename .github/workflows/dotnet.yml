@@ -1,6 +1,6 @@
 name: .NET
 
-on: 
+on:
   pull_request:
   push:
     branches: master
@@ -57,6 +57,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
     - name: Upload the NuGet packages
       uses: actions/upload-artifact@v3
+      if: matrix.os == 'ubuntu-latest'
       with:
         name: nuget
         path: |
