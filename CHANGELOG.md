@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2022-07-20
+### Added
+- [#163](https://github.com/vitalyster/SharpXMPP/pull/163): `BookmarkManager` is now available in all the classes derived from `XmppConnection`, including `XmppWebSocketConnection`
+- [#164](https://github.com/vitalyster/SharpXMPP/issues/164): it's now possible to subscribe to `XmppConnection::ConnectionClosed`
+- [#164](https://github.com/vitalyster/SharpXMPP/issues/164): a new `XmppConnection::Disconnect` method to temporarily disconnect shut down the connection without disposing it
+- [#166](https://github.com/vitalyster/SharpXMPP/pull/166): `BookmarkedConference::Nick` now has a setter
+
 ## [0.4.0] - 2022-05-07
 ### Changed
 - [#71](https://github.com/vitalyster/SharpXMPP/issues/71): add DNS server detection for Android, remove hardcoded server
@@ -63,4 +70,5 @@ Initial release for .NET 4.5.1 and .NET Standard 1.6.
 [0.2.0]: https://github.com/vitalyster/SharpXMPP/compare/0.1.1...0.2.0
 [0.3.0]: https://github.com/vitalyster/SharpXMPP/compare/0.2.0...0.3.0
 [0.4.0]: https://github.com/vitalyster/SharpXMPP/compare/0.3.0...0.4.0
-[Unreleased]: https://github.com/vitalyster/SharpXMPP/compare/0.4.0...HEAD
+[0.5.0]: https://github.com/vitalyster/SharpXMPP/compare/0.4.0...0.5.0
+[Unreleased]: https://github.com/vitalyster/SharpXMPP/compare/0.5.0...HEAD
