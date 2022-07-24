@@ -10,11 +10,8 @@
     <PackageId>SharpXMPP.WebSocket</PackageId>
     <Description>Managed XMPP (Jabber) client library: WebSocket support.</Description>
     <PackageReleaseNotes>
-[Added]
-- #163 (https://github.com/vitalyster/SharpXMPP/pull/163): BookmarkManager is now available in all the classes derived from XmppConnection, including XmppWebSocketConnection
-- #164 (https://github.com/vitalyster/SharpXMPP/issues/164): it's now possible to subscribe to XmppConnection::ConnectionClosed
-- #164 (https://github.com/vitalyster/SharpXMPP/issues/164): a new XmppConnection::Disconnect method to temporarily disconnect shut down the connection without disposing it
-- #166 (https://github.com/vitalyster/SharpXMPP/pull/166): BookmarkedConference::Nick now has a setter
+[Fixed]
+- #169 (https://github.com/vitalyster/SharpXMPP/pull/169): Nick setter in BookmarkedConference was using an attribute instead of a nested element
     </PackageReleaseNotes>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>

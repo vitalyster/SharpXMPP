@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# [0.5.1] - 2022-07-26
+### Fixed
+- [#169](https://github.com/vitalyster/SharpXMPP/pull/169): `Nick` setter in `BookmarkedConference` was using an attribute instead of a nested element
+
 ## [0.5.0] - 2022-07-20
 ### Added
 - [#163](https://github.com/vitalyster/SharpXMPP/pull/163): `BookmarkManager` is now available in all the classes derived from `XmppConnection`, including `XmppWebSocketConnection`
@@ -71,4 +75,5 @@ Initial release for .NET 4.5.1 and .NET Standard 1.6.
 [0.3.0]: https://github.com/vitalyster/SharpXMPP/compare/0.2.0...0.3.0
 [0.4.0]: https://github.com/vitalyster/SharpXMPP/compare/0.3.0...0.4.0
 [0.5.0]: https://github.com/vitalyster/SharpXMPP/compare/0.4.0...0.5.0
-[Unreleased]: https://github.com/vitalyster/SharpXMPP/compare/0.5.0...HEAD
+[0.5.1]: https://github.com/vitalyster/SharpXMPP/compare/0.5.0...0.5.1
+[Unreleased]: https://github.com/vitalyster/SharpXMPP/compare/0.5.1...HEAD
