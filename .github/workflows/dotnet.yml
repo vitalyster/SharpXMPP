@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '9.0.x'
     - name: Add msbuild to PATH
       if: matrix.os == 'windows-latest'
       uses: microsoft/setup-msbuild@v2
@@ -33,7 +33,7 @@ jobs:
         msbuild SharpXMPP.Xamarin/SharpXMPP.Client.iOS/SharpXMPP.Client.iOS.csproj /p:Configuration=Debug /p:Platform=iPhoneSimulator /t:Rebuild
         msbuild SharpXMPP.Xamarin/SharpXMPP.Client.Droid/SharpXMPP.Client.Droid.csproj /p:Configuration=Debug /t:PackageForAndroid
     - name: Run .NET 5 tests
-      run: dotnet test SharpXMPP.NUnit -f net5.0
+      run: dotnet test SharpXMPP.NUnit -f net9.0
     - name: Configure Mono
       if: matrix.os == 'ubuntu-latest'
       run: |
