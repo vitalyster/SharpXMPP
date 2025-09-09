@@ -256,7 +256,7 @@ namespace SharpXMPP
                 }
                 catch (Exception ex)
                 {
-                    tcs.SetException(ex);
+                    tcs.TrySetException(ex);
                 }
             }
 
