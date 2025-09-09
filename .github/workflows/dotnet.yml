@@ -34,7 +34,7 @@ jobs:
       if: matrix.os == 'macos-latest'
       run: |
         dotnet build SharpXMPP.Mobile --configuration Release --framework net9.0-maccatalyst
-    - name: Run .NET 5 tests
+    - name: Run .NET 9.0 tests
       run: dotnet test SharpXMPP.NUnit -f net9.0
     - name: Configure Mono
       if: matrix.os == 'ubuntu-latest'

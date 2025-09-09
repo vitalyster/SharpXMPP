@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net48;net5.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net48</TargetFrameworks>
     <AssemblyName>SharpXMPP.WebSocket</AssemblyName>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.6' ">1.6.1</NetStandardImplicitPackageVersion>
     <LangVersion>9.0</LangVersion>
