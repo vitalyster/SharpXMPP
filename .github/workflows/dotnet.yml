@@ -9,7 +9,7 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-latest, windows-latest, ubuntu-22.04]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
     - name: Run .NET 9.0 tests
       run: dotnet test SharpXMPP.NUnit -f net9.0
     - name: Configure Mono
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'ubuntu-22.04'
       run: |
         echo "mono_path=/usr/lib/mono/4.5/" >> $GITHUB_ENV
     - name: Build tests with .NET 4.8/Mono
@@ -53,13 +53,13 @@ jobs:
 
     - name: Build the SharpXMPP.Shared package
       run: cd SharpXMPP.Shared && dotnet pack --configuration Release
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'ubuntu-22.04'
     - name: Build the SharpXMPP.WebSocket package
       run: cd SharpXMPP.WebSocket && dotnet pack --configuration Release
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'ubuntu-22.04'
     - name: Upload the NuGet packages
       uses: actions/upload-artifact@v4
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'ubuntu-22.04'
       with:
         name: nuget
         path: |
