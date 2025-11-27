@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+         xmlns='http://usefulinc.com/ns/doap#'
+         xmlns:xmpp='https://linkmauve.fr/ns/xmpp-doap#'
+         xmlns:schema='https://schema.org/'>
+    <Project>
+        <name>SharpXMPP</name>
+        <shortdesc xml:lang='en'>XMPP library for .NET</shortdesc>
+        <homepage rdf:resource='https://github.com/vitalyster/SharpXMPP'/>
+        <download-page rdf:resource='https://github.com/vitalyster/SharpXMPP/releases'/>
+        <bug-database rdf:resource='https://github.com/vitalyster/SharpXMPP/issues'/>
+        <license rdf:resource='https://github.com/vitalyster/SharpXMPP/blob/master/LICENSE.md'/>
+        <language>en</language>
+        <programming-language>C#</programming-language>
+        <category rdf:resource='https://linkmauve.fr/ns/xmpp-doap#category-library'/>
+        <repository>
+            <GitRepository>
+                <browse rdf:resource='https://github.com/vitalyster/SharpXMPP'/>
+                <location rdf:resource='https://github.com/vitalyster/SharpXMPP.git'/>
+            </GitRepository>
+        </repository>
+        <implements rdf:resource='https://xmpp.org/rfcs/rfc5122.html'/>
+        <implements rdf:resource='https://xmpp.org/rfcs/rfc6120.html'/>
+        <implements rdf:resource='https://xmpp.org/rfcs/rfc6121.html'/>
+        <implements rdf:resource='https://xmpp.org/rfcs/rfc7590.html'/>
+        <implements rdf:resource='https://xmpp.org/rfcs/rfc7622.html'/>
+
+        <implements>
+            <xmpp:SupportedXep>
+                <xmpp:xep rdf:resource='https://xmpp.org/extensions/xep-0115.html'/>
+                <xmpp:status>complete</xmpp:status>
+            </xmpp:SupportedXep>
+        </implements>
+    </Project>
+</rdf:RDF>
