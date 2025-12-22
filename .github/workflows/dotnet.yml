@@ -61,7 +61,7 @@ jobs:
       run: cd SharpXMPP.WebSocket && dotnet pack --configuration Release
       if: matrix.os == 'ubuntu-22.04'
     - name: Upload the NuGet packages
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       if: matrix.os == 'ubuntu-22.04'
       with:
         name: nuget
