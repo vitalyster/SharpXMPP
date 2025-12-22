@@ -35,7 +35,7 @@ jobs:
     - name: Build mobile app
       if: matrix.os == 'macos-latest'
       run: |
-        sudo xcode-select -switch /Applications/Xcode_26.1.app/Contents/Developer
+        sudo xcode-select -switch /Applications/Xcode_26.0.app/Contents/Developer
         dotnet build SharpXMPP.Mobile --configuration Release --framework net9.0-maccatalyst
     - name: Run .NET 9.0 tests
       run: dotnet test SharpXMPP.NUnit -f net9.0
