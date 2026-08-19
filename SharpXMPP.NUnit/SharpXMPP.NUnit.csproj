@@ -5,7 +5,7 @@
     <AssemblyName>SharpXMPP.NUnit</AssemblyName>
     <PackageId>SharpXMPP.NUnit</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>14.0</LangVersion>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <IsPackable>false</IsPackable>
